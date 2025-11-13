@@ -28,7 +28,7 @@ implementation{
    pack sendPackage;
 
    // Prototypes
-   void makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t TTL, uint16_t Protocol, uint16_t seq, uint8_t *payload, uint8_t length);
+   void makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t Protocol, uint8_t *payload, uint8_t length);
 
    event void Boot.booted(){
       call AMControl.start();
@@ -61,7 +61,7 @@ implementation{
 
    event void CommandHandler.ping(uint16_t destination, uint8_t *payload){
       dbg(GENERAL_CHANNEL, "PING EVENT \n");
-      makePack(&sendPackage, TOS_NODE_ID, destination, 0, 0, 0, payload, PACKET_MAX_PAYLOAD_SIZE);
+      makePack(&sendPackage, TOS_NODE_ID, destination, 0, payload, PACKET_MAX_PAYLOAD_SIZE);
       call Sender.send(sendPackage, destination);
    }
 
@@ -81,11 +81,9 @@ implementation{
 
    event void CommandHandler.setAppClient(){}
 
-   void makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t TTL, uint16_t protocol, uint16_t seq, uint8_t* payload, uint8_t length){
+   void makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t protocol, uint8_t* payload, uint8_t length){
       Package->src = src;
       Package->dest = dest;
-      Package->TTL = TTL;
-      Package->seq = seq;
       Package->protocol = protocol;
       memcpy(Package->payload, payload, length);
    }

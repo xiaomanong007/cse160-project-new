@@ -2286,18 +2286,14 @@ enum __nesc_unnamed4287 {
 
 
 
-
-
 #line 19
 typedef nx_struct pack {
   nx_uint16_t dest;
   nx_uint16_t src;
-  nx_uint16_t seq;
-  nx_uint8_t TTL;
   nx_uint8_t protocol;
   nx_uint8_t payload[PACKET_MAX_PAYLOAD_SIZE];
 } __attribute__((packed)) pack;
-#line 39
+#line 37
 enum __nesc_unnamed4288 {
   AM_PACK = 6
 };
@@ -4273,7 +4269,7 @@ message_t *
 
 TossimActiveMessageC__Receive__default__receive(
 # 48 "/opt/tinyos-main/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0x7ffffabd5e30, 
+am_id_t arg_0x7ffffabd6e30, 
 # 71 "/opt/tinyos-main/tos/interfaces/Receive.nc"
 message_t * msg, 
 void * payload, 
@@ -4494,15 +4490,15 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__f
 #line 83
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa64e950);
+uint8_t arg_0x7ffffa650950);
 # 92 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static bool /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__isRunning(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa64e950);
+uint8_t arg_0x7ffffa650950);
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa64e950, 
+uint8_t arg_0x7ffffa650950, 
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 uint32_t dt);
 # 82 "/opt/tinyos-main/tos/lib/timer/Counter.nc"
@@ -4537,7 +4533,7 @@ error_t error);
 # 110 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__sendDone(
 # 48 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-am_id_t arg_0x7ffffa59cb60, 
+am_id_t arg_0x7ffffa59eb60, 
 # 103 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 message_t * msg, 
 
@@ -4550,7 +4546,7 @@ error_t error);
 # 75 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__send(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa59d940, 
+uint8_t arg_0x7ffffa59f940, 
 # 67 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -4564,7 +4560,7 @@ uint8_t len);
 #line 100
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa59d940, 
+uint8_t arg_0x7ffffa59f940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -4917,7 +4913,7 @@ message_t *
 
 TossimActiveMessageC__Receive__receive(
 # 48 "/opt/tinyos-main/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0x7ffffabd5e30, 
+am_id_t arg_0x7ffffabd6e30, 
 # 71 "/opt/tinyos-main/tos/interfaces/Receive.nc"
 message_t * msg, 
 void * payload, 
@@ -5303,7 +5299,7 @@ static error_t Node__Sender__send(pack msg, uint16_t dest);
 pack Node__sendPackage[1000];
 
 
-static inline void Node__makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t TTL, uint16_t Protocol, uint16_t seq, uint8_t *payload, uint8_t length);
+static inline void Node__makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t Protocol, uint8_t *payload, uint8_t length);
 
 static inline void Node__Boot__booted(void );
 
@@ -5346,7 +5342,7 @@ static inline void Node__CommandHandler__setTestClient(void );
 
 
 
-static inline void Node__makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t TTL, uint16_t protocol, uint16_t seq, uint8_t *payload, uint8_t length);
+static inline void Node__makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t protocol, uint8_t *payload, uint8_t length);
 # 97 "/opt/tinyos-main/tos/interfaces/Pool.nc"
 static 
 #line 94
@@ -5770,7 +5766,7 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__s
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa64e950);
+uint8_t arg_0x7ffffa650950);
 #line 71
 enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4346 {
 #line 71
@@ -5898,7 +5894,7 @@ static inline void /*NodeC.SimpleSendC.AMSenderC.SenderC.AMQueueEntryP*/AMQueueE
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(
 # 48 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-am_id_t arg_0x7ffffa59cb60, 
+am_id_t arg_0x7ffffa59eb60, 
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 am_addr_t addr, 
 #line 71
@@ -5915,7 +5911,7 @@ uint8_t len);
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa59d940, 
+uint8_t arg_0x7ffffa59f940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -6690,13 +6686,13 @@ static inline message_t *TossimActiveMessageC__Receive__default__receive(am_id_t
 }
 
 # 78 "/opt/tinyos-main/tos/interfaces/Receive.nc"
-inline static message_t * TossimActiveMessageC__Receive__receive(am_id_t arg_0x7ffffabd5e30, message_t * msg, void * payload, uint8_t len){
+inline static message_t * TossimActiveMessageC__Receive__receive(am_id_t arg_0x7ffffabd6e30, message_t * msg, void * payload, uint8_t len){
 #line 78
   nx_struct message_t *__nesc_result;
 #line 78
 
 #line 78
-  switch (arg_0x7ffffabd5e30) {
+  switch (arg_0x7ffffabd6e30) {
 #line 78
     case 6:
 #line 78
@@ -6712,7 +6708,7 @@ inline static message_t * TossimActiveMessageC__Receive__receive(am_id_t arg_0x7
 #line 78
     default:
 #line 78
-      __nesc_result = TossimActiveMessageC__Receive__default__receive(arg_0x7ffffabd5e30, msg, payload, len);
+      __nesc_result = TossimActiveMessageC__Receive__default__receive(arg_0x7ffffabd6e30, msg, payload, len);
 #line 78
       break;
 #line 78
@@ -7159,13 +7155,13 @@ inline static /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__Queue__t  /*NodeC
 }
 #line 88
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
-inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(am_id_t arg_0x7ffffa59cb60, am_addr_t addr, message_t * msg, uint8_t len){
+inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(am_id_t arg_0x7ffffa59eb60, am_addr_t addr, message_t * msg, uint8_t len){
 #line 80
   unsigned char __nesc_result;
 #line 80
 
 #line 80
-  __nesc_result = TossimActiveMessageC__AMSend__send(arg_0x7ffffa59cb60, addr, msg, len);
+  __nesc_result = TossimActiveMessageC__AMSend__send(arg_0x7ffffa59eb60, addr, msg, len);
 #line 80
 
 #line 80
@@ -7704,9 +7700,9 @@ static inline void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__send
 }
 
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
-inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa59d940, message_t * msg, error_t error){
+inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa59f940, message_t * msg, error_t error){
 #line 100
-  switch (arg_0x7ffffa59d940) {
+  switch (arg_0x7ffffa59f940) {
 #line 100
     case 0U:
 #line 100
@@ -7716,7 +7712,7 @@ inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint
 #line 100
     default:
 #line 100
-      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa59d940, msg, error);
+      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa59f940, msg, error);
 #line 100
       break;
 #line 100
@@ -8019,13 +8015,11 @@ inline static error_t Node__Sender__send(pack msg, uint16_t dest){
 }
 #line 4
 # 84 "Node.nc"
-static inline void Node__makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t TTL, uint16_t protocol, uint16_t seq, uint8_t *payload, uint8_t length)
+static inline void Node__makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t protocol, uint8_t *payload, uint8_t length)
 #line 84
 {
   __nesc_hton_uint16(Package->src.nxdata, src);
   __nesc_hton_uint16(Package->dest.nxdata, dest);
-  __nesc_hton_uint8(Package->TTL.nxdata, TTL);
-  __nesc_hton_uint16(Package->seq.nxdata, seq);
   __nesc_hton_uint8(Package->protocol.nxdata, protocol);
   memcpy(Package->payload, payload, length);
 }
@@ -8035,7 +8029,7 @@ static inline void Node__CommandHandler__ping(uint16_t destination, uint8_t *pay
 #line 62
 {
   sim_log_debug(113U, GENERAL_CHANNEL, "PING EVENT \n");
-  Node__makePack(&Node__sendPackage[sim_node()], TOS_NODE_ID, destination, 0, 0, 0, payload, PACKET_MAX_PAYLOAD_SIZE);
+  Node__makePack(&Node__sendPackage[sim_node()], TOS_NODE_ID, destination, 0, payload, PACKET_MAX_PAYLOAD_SIZE);
   Node__Sender__send(Node__sendPackage[sim_node()], destination);
 }
 
@@ -9223,9 +9217,9 @@ static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 }
 
 # 83 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa64e950){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa650950){
 #line 83
-  switch (arg_0x7ffffa64e950) {
+  switch (arg_0x7ffffa650950) {
 #line 83
     case 0U:
 #line 83
@@ -9235,7 +9229,7 @@ inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 #line 83
     default:
 #line 83
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa64e950);
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa650950);
 #line 83
       break;
 #line 83
