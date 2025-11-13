@@ -86,6 +86,3 @@ def main():
 if __name__ == '__main__':
     main()
 ```
-# cse160-project-new-version-
-# cse160-project-new-
-# cse160-project-new
