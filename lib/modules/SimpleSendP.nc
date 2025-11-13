@@ -154,4 +154,11 @@ implementation{
          postSendTask();
       }
    }
+
+   command void SimpleSend.makePack(pack *Package, uint8_t src, uint8_t dest, uint8_t protocol, uint8_t *payload, uint8_t length){
+      Package->src = src;
+      Package->dest = dest;
+      Package->protocol = protocol;
+      memcpy(Package->payload, payload, length);
+   }
 }
