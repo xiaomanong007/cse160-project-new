@@ -26,4 +26,8 @@ implementation{
 
    SimpleSendP.Pool -> PoolC;
    SimpleSendP.Queue -> QueueC;
+
+
+   components PacketHandlerC;
+   SimpleSendP.PacketHandler -> PacketHandlerC;
 }
