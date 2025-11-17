@@ -19,6 +19,10 @@ generic module SimpleSendP(){
 
    uses interface Timer<TMilli> as sendTimer;
 
+   uses interface Timer<TMilli> as Clock;
+   uses interface Timer<TMilli> as ReSendTimer;
+   uses interface List<reSendInfo> as ReSendQueue;
+
    uses interface Packet;
    uses interface AMPacket;
    uses interface AMSend;
@@ -33,7 +37,12 @@ implementation{
    bool busy = FALSE;
    message_t pkt;
 
+   uint8_t local_seq = 1;
+   bool acked[MAX_BUFFERED_PKT];
+
    error_t send(uint16_t src, uint16_t dest, pack *message);
+
+   void checkReSend();
 
    // Use this to intiate a send task. We call this method so we can add
    // a delay between sends. If we don't add a delay there may be collisions.
@@ -56,6 +65,29 @@ implementation{
        // back into the queue once you are done.
       if(!call Pool.empty()){
          sendInfo *input;
+
+         // uint32_t currentTime = call Clock.getNow();
+         // printf("current time = %d\n", currentTime);
+
+         if (msg.flag == RELIABLE_REQUEST) {
+            reSendInfo rInfo;
+
+            if (local_seq > MAX_BUFFERED_PKT - 1) {
+               local_seq = 1;
+            }
+
+            msg.flag = local_seq;
+            memcpy(&rInfo.packet, &msg, sizeof(pack));
+            rInfo.seq = rInfo.packet.flag;
+            call ReSendQueue.pushback(rInfo);
+
+            acked[rInfo.seq -1] = FALSE;
+
+            local_seq++;
+
+            call ReSendTimer.startOneShot(2 * RTT + (call Random.rand16() %150));
+         }
+
 
          input = call Pool.get();
          input->packet = msg;
@@ -156,7 +188,23 @@ implementation{
          postSendTask();
       }
    }
-   
+
+   event void Clock.fired() {}
+
+   event void ReSendTimer.fired() {
+      checkReSend();
+   }
+
+   void checkReSend() {
+      reSendInfo rInfo = call ReSendQueue.popfront();
+      if (acked[rInfo.seq - 1] == FALSE) {
+         // printf("RESEND, seq = %d\n", rInfo.seq);
+         call ReSendQueue.pushback(rInfo);
+         call SimpleSend.send(rInfo.packet, rInfo.packet.dest);
+         call ReSendTimer.startOneShot(2 * RTT + (call Random.rand16() %150));
+      }
+   }
+
    event void PacketHandler.getReliablePkt(pack* incomingMsg) {
       pack rPkt;
       uint8_t* ack = "ACK";
@@ -173,8 +221,10 @@ implementation{
       memcpy(Package->payload, payload, length);
    }
 
-   event void PacketHandler.getReliableAckPkt(uint8_t from, uint8_t flag) {
-      printf("NODE %d get reliable ACK from node %d\n", TOS_NODE_ID, from);
+   event void PacketHandler.getReliableAckPkt(uint8_t from, uint8_t seq) {
+      if (acked[seq - 1] == FALSE) {
+         acked[seq - 1] = TRUE;
+      }
    }
 
 

@@ -66,7 +66,7 @@ implementation{
 
    event void CommandHandler.ping(uint16_t destination, uint8_t *payload){
       dbg(GENERAL_CHANNEL, "PING EVENT \n");
-      call Sender.makePack(&sendPackage, TOS_NODE_ID, destination, PROTOCOL_NEIGHBOR_DISCOVERY, 2, payload, PACKET_MAX_PAYLOAD_SIZE);
+      call Sender.makePack(&sendPackage, TOS_NODE_ID, destination, PROTOCOL_NEIGHBOR_DISCOVERY, RELIABLE_REQUEST, payload, PACKET_MAX_PAYLOAD_SIZE);
       call Sender.send(sendPackage, destination);
    }
 
@@ -87,7 +87,7 @@ implementation{
    event void CommandHandler.setAppClient(){}
 
 
-   event void PacketHandler.getReliableAckPkt(uint8_t from, uint8_t flag) {}
+   event void PacketHandler.getReliableAckPkt(uint8_t from, uint8_t seq) {}
    event void PacketHandler.getReliablePkt(pack* _) {}
    event void PacketHandler.gotNDPkt(uint8_t* _){}
    event void PacketHandler.gotFloodPkt(uint8_t* _){}

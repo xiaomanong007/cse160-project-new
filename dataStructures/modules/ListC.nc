@@ -44,7 +44,7 @@ implementation{
 	command t List.popback(){
 		t returnVal;
 
-		returnVal = container[size];
+		returnVal = container[size - 1];
 		// We don't need to actually remove the value, we just need to decrement
 		// the size.
 		if(size > 0)size--;
@@ -74,7 +74,7 @@ implementation{
 
 	// Peek tail
 	command t List.back(){
-		return container[size];
+		return container[size - 1];
 	}
 
 	command bool List.isEmpty(){

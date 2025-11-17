@@ -30,4 +30,13 @@ implementation{
 
    components PacketHandlerC;
    SimpleSendP.PacketHandler -> PacketHandlerC;
+
+
+   components new TimerMilliC() as Clock;
+   components new TimerMilliC() as ReSendTimer;
+   SimpleSendP.Clock -> Clock;
+   SimpleSendP.ReSendTimer -> ReSendTimer;
+
+   components new ListC(reSendInfo, 20) as ReSendQueue;
+   SimpleSendP.ReSendQueue -> ReSendQueue;
 }

@@ -16,6 +16,8 @@ enum{
 	// Flag section
 	BEST_EFFORT = 0,
 	RELIABLE_REQUEST = 128,
+	RTT = 320,
+	MAX_BUFFERED_PKT = 16,
 };
 
 

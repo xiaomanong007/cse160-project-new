@@ -14,9 +14,9 @@ implementation{
     command void PacketHandler.handle(pack* incomingMsg){
         uint8_t* payload = (uint8_t*) incomingMsg->payload;
 
-        if (incomingMsg->flag != 0) {
+        if (incomingMsg->flag != BEST_EFFORT) {
             if (incomingMsg->flag >= 128) {
-                signal PacketHandler.getReliableAckPkt(incomingMsg->src, incomingMsg->flag);
+                signal PacketHandler.getReliableAckPkt(incomingMsg->src, incomingMsg->flag - 128);
             } else {
                 signal PacketHandler.getReliablePkt(incomingMsg);
 
