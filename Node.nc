@@ -87,7 +87,7 @@ implementation{
    event void CommandHandler.setAppClient(){}
 
 
-   event void PacketHandler.getReliableAckPkt(uint8_t from, uint8_t seq) {}
+   event void PacketHandler.getReliableAckPkt(uint8_t _) {}
    event void PacketHandler.getReliablePkt(pack* _) {}
    event void PacketHandler.gotNDPkt(uint8_t* _){}
    event void PacketHandler.gotFloodPkt(uint8_t* _){}

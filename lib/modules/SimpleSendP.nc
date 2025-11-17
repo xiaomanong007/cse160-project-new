@@ -221,7 +221,7 @@ implementation{
       memcpy(Package->payload, payload, length);
    }
 
-   event void PacketHandler.getReliableAckPkt(uint8_t from, uint8_t seq) {
+   event void PacketHandler.getReliableAckPkt(uint8_t seq) {
       if (acked[seq - 1] == FALSE) {
          acked[seq - 1] = TRUE;
       }

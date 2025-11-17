@@ -16,7 +16,7 @@ implementation{
 
         if (incomingMsg->flag != BEST_EFFORT) {
             if (incomingMsg->flag >= 128) {
-                signal PacketHandler.getReliableAckPkt(incomingMsg->src, incomingMsg->flag - 128);
+                signal PacketHandler.getReliableAckPkt(incomingMsg->flag - 128);
             } else {
                 signal PacketHandler.getReliablePkt(incomingMsg);
 
