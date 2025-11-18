@@ -33,4 +33,7 @@ implementation {
 
     components PacketHandlerC;
     Node.PacketHandler -> PacketHandlerC;
+
+    components NeighborDiscoveryC;
+    Node.NeighborDiscovery -> NeighborDiscoveryC;
 }

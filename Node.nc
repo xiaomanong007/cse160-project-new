@@ -24,6 +24,8 @@ module Node{
    uses interface CommandHandler;
 
    uses interface PacketHandler;
+
+   uses interface NeighborDiscovery;
 }
 
 implementation{
@@ -39,6 +41,8 @@ implementation{
    event void AMControl.startDone(error_t err){
       if(err == SUCCESS){
          dbg(GENERAL_CHANNEL, "Radio On\n");
+
+         call NeighborDiscovery.onBoot();
       }else{
          //Retry until successful
          call AMControl.start();
@@ -50,9 +54,8 @@ implementation{
    event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
       dbg(GENERAL_CHANNEL, "Packet Received\n");
       if(len==sizeof(pack)){
-            pack* myMsg=(pack*) payload;
-
-         dbg(GENERAL_CHANNEL, "Package Payload: %s\n", myMsg->payload);
+         pack* myMsg=(pack*) payload;
+         // dbg(GENERAL_CHANNEL, "Package Payload: %s\n", myMsg->payload);
          // logPack(myMsg);
 
          call PacketHandler.handle((pack*) payload);
@@ -65,9 +68,9 @@ implementation{
 
 
    event void CommandHandler.ping(uint16_t destination, uint8_t *payload){
-      dbg(GENERAL_CHANNEL, "PING EVENT \n");
-      call Sender.makePack(&sendPackage, TOS_NODE_ID, destination, PROTOCOL_NEIGHBOR_DISCOVERY, RELIABLE_REQUEST, payload, PACKET_MAX_PAYLOAD_SIZE);
-      call Sender.send(sendPackage, destination);
+      // dbg(GENERAL_CHANNEL, "PING EVENT \n");
+      // call Sender.makePack(&sendPackage, TOS_NODE_ID, destination, PROTOCOL_NEIGHBOR_DISCOVERY, RELIABLE_REQUEST, payload, PACKET_MAX_PAYLOAD_SIZE);
+      // call Sender.send(sendPackage, destination);
    }
 
    event void CommandHandler.printNeighbors(){}
@@ -91,6 +94,5 @@ implementation{
    event void PacketHandler.getReliablePkt(pack* _) {}
    event void PacketHandler.gotNDPkt(uint8_t* _){}
    event void PacketHandler.gotFloodPkt(uint8_t* _){}
-   event void PacketHandler.gotLinkStatePkt(uint8_t* _){}
    event void PacketHandler.gotIpPkt(uint8_t* _){}
 }

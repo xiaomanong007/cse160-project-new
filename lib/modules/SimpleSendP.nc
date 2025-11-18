@@ -206,11 +206,11 @@ implementation{
    }
 
    event void PacketHandler.getReliablePkt(pack* incomingMsg) {
-      pack rPkt;
-      uint8_t* ack = "ACK";
-      memcpy(&rPkt, incomingMsg, 4);
-      call SimpleSend.makePack(&rPkt, rPkt.dest, rPkt.src, rPkt.protocol, rPkt.flag + 128, ack, 3);
-      call SimpleSend.send(rPkt, rPkt.dest);
+      // pack rPkt;
+      // char ack[] = "ACK";
+      // memcpy(&rPkt, incomingMsg, 4);
+      // call SimpleSend.makePack(&rPkt, rPkt.dest, rPkt.src, rPkt.protocol, rPkt.flag + 128, ack, 3);
+      // call SimpleSend.send(rPkt, rPkt.dest);
    }
 
    command void SimpleSend.makePack(pack *Package, uint8_t src, uint8_t dest, uint8_t protocol, uint8_t flag, uint8_t *payload, uint8_t length){
@@ -230,6 +230,5 @@ implementation{
 
    event void PacketHandler.gotNDPkt(uint8_t* _){}
    event void PacketHandler.gotFloodPkt(uint8_t* _){}
-   event void PacketHandler.gotLinkStatePkt(uint8_t* _){}
    event void PacketHandler.gotIpPkt(uint8_t* _){}
 }

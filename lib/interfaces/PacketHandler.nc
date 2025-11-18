@@ -5,6 +5,5 @@ interface PacketHandler{
     event void getReliablePkt(pack* pkt);
     event void gotNDPkt(uint8_t* incomingMsg);
     event void gotFloodPkt(uint8_t* incomingMsg);
-    event void gotLinkStatePkt(uint8_t* incomingMsg);
     event void gotIpPkt(uint8_t* incomingMsg);
 }

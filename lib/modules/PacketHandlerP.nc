@@ -1,4 +1,5 @@
 #include "../../includes/packet.h"
+#include "../../includes/neighborDiscoveryPkt.h"
 #include "../../includes/protocol.h"
 
 module PacketHandlerP{
@@ -26,13 +27,11 @@ implementation{
 
         switch(incomingMsg->protocol){
             case PROTOCOL_NEIGHBOR_DISCOVERY:
+                logNDPkt((neigbhorDiscoveryPkt_t*)payload, GENERAL_CHANNEL);
                 signal PacketHandler.gotNDPkt(payload);
                 break;
             case PROTOCOL_FLOODING:
                 signal PacketHandler.gotFloodPkt(payload);
-                break;
-            case PROTOCOL_LINKSTATE:
-                signal PacketHandler.gotLinkStatePkt(payload);
                 break;
             case PROTOCOL_IP:
                 signal PacketHandler.gotIpPkt(payload);
