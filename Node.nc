@@ -112,7 +112,5 @@ implementation{
    event void PacketHandler.gotIpPkt(uint8_t* _){}
 
    // NeighborDiscovery events
-   event void NeighborDiscovery.neighborDrop() {}
-
-   event void NeighborDiscovery.neighborQualityDegraded() {}
+   event void NeighborDiscovery.neighborChange(uint8_t id, uint8_t tag) {}
 }

@@ -61,6 +61,7 @@ implementation {
     task void updateTable() {
         neighborInfo_t info;
         uint16_t i = 0;
+        uint16_t old_quality;
 
         uint16_t num_neighbors = call NeighborTable.size();
         uint32_t neighbor_list[num_neighbors];
@@ -69,6 +70,7 @@ implementation {
         for(; i < num_neighbors; i++) {
             if (call NeighborTable.contains(neighbor_list[i])) {
                 info = call NeighborTable.get(neighbor_list[i]);
+                old_quality = info.link_quality;
 
                 if (info.last_seq < local_seq - 1) {
                     info.link_quality = ewma(0, info.link_quality);
@@ -76,18 +78,18 @@ implementation {
 
                 call NeighborTable.insert(neighbor_list[i], info);
 
-                if (info.link_quality < good_quality) {
+                if (old_quality > good_quality && info.link_quality < good_quality) {
                     if (info.link_quality > poor_quality) {
-                        signal NeighborDiscovery.neighborQualityDegraded();
                         printf("DEGRADED: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                        signal NeighborDiscovery.neighborChange(neighbor_list[i], LNIK_QUALITY_CHANGE);
                     } else {
                         if (local_seq - info.last_seq < accepted_consecutive_lost + 1) {
-                            signal NeighborDiscovery.neighborQualityDegraded();
-                            printf("CAUSION: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                            printf("CAUSION: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                            signal NeighborDiscovery.neighborChange(neighbor_list[i], LNIK_QUALITY_CHANGE);
                         } else {
+                            printf("DROP: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
                             call NeighborTable.remove(neighbor_list[i]);
-                            signal NeighborDiscovery.neighborDrop();
-                            printf("DROP: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                            signal NeighborDiscovery.neighborChange(neighbor_list[i], NEIGHBOR_DROP);
                         }
                     }
                 }
@@ -155,21 +157,32 @@ implementation {
 
     void updateLink(uint8_t neighbor_id, uint16_t seq) {
         neighborInfo_t info;
+        uint16_t old_quality;
+        uint16_t old_reply_seq;
 
         if (call NeighborTable.contains(neighbor_id)) {
             info = call NeighborTable.get(neighbor_id);
+            old_quality = info.link_quality;
+            old_reply_seq = info.last_seq;
 
             if (info.last_seq >= seq) {
                 return;
             }
-            info.link_quality = ewma(1, info.link_quality);
+            info.link_quality = ewma(1, old_quality);
+            info.last_seq = seq;
+            call NeighborTable.insert(neighbor_id, info);
+
+            if (old_quality < good_quality && info.link_quality > good_quality && old_reply_seq == seq - 1) {
+                printf("IMPROVE: Node %d, id = %d, old quality = %d, new quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_id, old_quality, info.link_quality, info.last_seq);
+                signal NeighborDiscovery.neighborChange(neighbor_id, LNIK_QUALITY_CHANGE);
+            }
         } else {
             info.link_quality = 1000;
+            info.last_seq = seq;
+            call NeighborTable.insert(neighbor_id, info);
         }
 
-        info.last_seq = seq;
 
-        call NeighborTable.insert(neighbor_id, info);
     } 
     
     event void PacketHandler.gotNDPkt(uint8_t* incomingMsg){

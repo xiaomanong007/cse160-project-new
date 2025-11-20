@@ -4143,7 +4143,11 @@ typedef union __nesc_unnamed4335 {
 # 6 "lib/modules/../../includes/neighborDiscoveryPkt.h"
 enum __nesc_unnamed4337 {
   ND_PKT_HEADER_LENGTH = 4, 
-  ND_PKT_MAX_PAYLOAD_SIZE = PACKET_MAX_PAYLOAD_SIZE - ND_PKT_HEADER_LENGTH
+  ND_PKT_MAX_PAYLOAD_SIZE = PACKET_MAX_PAYLOAD_SIZE - ND_PKT_HEADER_LENGTH, 
+
+
+  NEIGHBOR_DROP = 1, 
+  LNIK_QUALITY_CHANGE = 2
 };
 
 
@@ -4151,7 +4155,7 @@ enum __nesc_unnamed4337 {
 
 
 
-#line 11
+#line 15
 typedef struct neigbhorDiscoveryPkt {
   uint8_t src;
   uint8_t protocol;
@@ -4485,8 +4489,7 @@ void * payload,
 
 uint8_t len);
 # 9 "lib/interfaces/NeighborDiscovery.nc"
-static void Node__NeighborDiscovery__neighborDrop(void );
-static void Node__NeighborDiscovery__neighborQualityDegraded(void );
+static void Node__NeighborDiscovery__neighborChange(uint8_t id, uint8_t tag);
 # 6 "lib/interfaces/CommandHandler.nc"
 static void Node__CommandHandler__printLinkState(void );
 #line 4
@@ -4599,15 +4602,15 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__f
 #line 83
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5f3950);
+uint8_t arg_0x7ffffa5f4950);
 # 92 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static bool /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__isRunning(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5f3950);
+uint8_t arg_0x7ffffa5f4950);
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5f3950, 
+uint8_t arg_0x7ffffa5f4950, 
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 uint32_t dt);
 # 82 "/opt/tinyos-main/tos/lib/timer/Counter.nc"
@@ -4642,7 +4645,7 @@ error_t error);
 # 110 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__sendDone(
 # 48 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-am_id_t arg_0x7ffffa541b60, 
+am_id_t arg_0x7ffffa542b60, 
 # 103 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 message_t * msg, 
 
@@ -4655,7 +4658,7 @@ error_t error);
 # 75 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__send(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa542940, 
+uint8_t arg_0x7ffffa543940, 
 # 67 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -4669,7 +4672,7 @@ uint8_t len);
 #line 100
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa542940, 
+uint8_t arg_0x7ffffa543940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -5616,9 +5619,7 @@ static inline void Node__PacketHandler__gotFloodPkt(uint8_t *_);
 static inline void Node__PacketHandler__gotIpPkt(uint8_t *_);
 
 
-static inline void Node__NeighborDiscovery__neighborDrop(void );
-
-static inline void Node__NeighborDiscovery__neighborQualityDegraded(void );
+static inline void Node__NeighborDiscovery__neighborChange(uint8_t id, uint8_t tag);
 # 97 "/opt/tinyos-main/tos/interfaces/Pool.nc"
 static 
 #line 94
@@ -6089,7 +6090,7 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__s
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5f3950);
+uint8_t arg_0x7ffffa5f4950);
 #line 71
 enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4347 {
 #line 71
@@ -6217,7 +6218,7 @@ static inline void /*NodeC.SimpleSendC.AMSenderC.SenderC.AMQueueEntryP*/AMQueueE
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(
 # 48 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-am_id_t arg_0x7ffffa541b60, 
+am_id_t arg_0x7ffffa542b60, 
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 am_addr_t addr, 
 #line 71
@@ -6234,7 +6235,7 @@ uint8_t len);
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa542940, 
+uint8_t arg_0x7ffffa543940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -6512,8 +6513,7 @@ static uint16_t NeighborDiscoveryP__Random__rand16(void );
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void NeighborDiscoveryP__discoverTimer__startOneShot(uint32_t dt);
 # 9 "lib/interfaces/NeighborDiscovery.nc"
-static void NeighborDiscoveryP__NeighborDiscovery__neighborDrop(void );
-static void NeighborDiscoveryP__NeighborDiscovery__neighborQualityDegraded(void );
+static void NeighborDiscoveryP__NeighborDiscovery__neighborChange(uint8_t id, uint8_t tag);
 # 67 "/opt/tinyos-main/tos/interfaces/TaskBasic.nc"
 static error_t NeighborDiscoveryP__updateTable__postTask(void );
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
@@ -6582,7 +6582,7 @@ static inline uint16_t NeighborDiscoveryP__ewma(uint8_t sample, uint16_t old);
 
 
 static inline void NeighborDiscoveryP__updateTable__runTask(void );
-#line 100
+#line 102
 static inline void NeighborDiscoveryP__NeighborDiscovery__onBoot(void );
 
 
@@ -6599,7 +6599,7 @@ static inline void NeighborDiscoveryP__notifyTimer__fired(void );
 
 
 static inline void NeighborDiscoveryP__discover(void );
-#line 135
+#line 137
 static void NeighborDiscoveryP__makeNDPkt(neigbhorDiscoveryPkt_t *Package, uint8_t src, uint8_t protocol, uint16_t seq, uint8_t *payload, uint8_t length);
 
 
@@ -6622,9 +6622,9 @@ static inline uint16_t NeighborDiscoveryP__ewma(uint8_t sample, uint16_t old);
 
 
 static inline void NeighborDiscoveryP__updateLink(uint8_t neighbor_id, uint16_t seq);
-#line 175
+#line 188
 static inline void NeighborDiscoveryP__PacketHandler__gotNDPkt(uint8_t *incomingMsg);
-#line 194
+#line 207
 static inline uint32_t *NeighborDiscoveryP__NeighborDiscovery__neighbors(void );
 
 
@@ -6649,7 +6649,7 @@ static uint16_t NeighborDiscoveryP__NeighborDiscovery__getNeighborQuality(uint8_
 
 
 static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__getLinkCost(uint8_t id);
-#line 248
+#line 261
 static inline void NeighborDiscoveryP__PacketHandler__getReliableAckPkt(uint8_t _);
 static inline void NeighborDiscoveryP__PacketHandler__getReliablePkt(pack *_);
 static inline void NeighborDiscoveryP__PacketHandler__gotFloodPkt(uint8_t *_);
@@ -7364,9 +7364,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
 {
 }
 
-# 251 "lib/modules/NeighborDiscoveryP.nc"
+# 264 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__gotIpPkt(uint8_t *_)
-#line 251
+#line 264
 {
 }
 
@@ -7401,9 +7401,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
 {
 }
 
-# 250 "lib/modules/NeighborDiscoveryP.nc"
+# 263 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__gotFloodPkt(uint8_t *_)
-#line 250
+#line 263
 {
 }
 
@@ -7445,9 +7445,22 @@ inline static void NeighborDiscoveryP__NeighborTable__insert(uint32_t key, Neigh
 #line 11
 }
 #line 11
-# 152 "lib/modules/NeighborDiscoveryP.nc"
+# 115 "Node.nc"
+static inline void Node__NeighborDiscovery__neighborChange(uint8_t id, uint8_t tag)
+#line 115
+{
+}
+
+# 9 "lib/interfaces/NeighborDiscovery.nc"
+inline static void NeighborDiscoveryP__NeighborDiscovery__neighborChange(uint8_t id, uint8_t tag){
+#line 9
+  Node__NeighborDiscovery__neighborChange(id, tag);
+#line 9
+}
+#line 9
+# 154 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint16_t NeighborDiscoveryP__ewma(uint8_t sample, uint16_t old)
-#line 152
+#line 154
 {
   return NeighborDiscoveryP__alpha[sim_node()] * sample + (1000 - NeighborDiscoveryP__alpha[sim_node()]) * old / 1000;
 }
@@ -7482,29 +7495,38 @@ inline static bool NeighborDiscoveryP__NeighborTable__contains(uint32_t key){
 #line 14
 }
 #line 14
-# 156 "lib/modules/NeighborDiscoveryP.nc"
+# 158 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__updateLink(uint8_t neighbor_id, uint16_t seq)
-#line 156
+#line 158
 {
   neighborInfo_t info;
+  uint16_t old_quality;
+  uint16_t old_reply_seq;
 
   if (NeighborDiscoveryP__NeighborTable__contains(neighbor_id)) {
       info = NeighborDiscoveryP__NeighborTable__get(neighbor_id);
+      old_quality = info.link_quality;
+      old_reply_seq = info.last_seq;
 
       if (info.last_seq >= seq) {
           return;
         }
-      info.link_quality = NeighborDiscoveryP__ewma(1, info.link_quality);
+      info.link_quality = NeighborDiscoveryP__ewma(1, old_quality);
+      info.last_seq = seq;
+      NeighborDiscoveryP__NeighborTable__insert(neighbor_id, info);
+
+      if (old_quality < NeighborDiscoveryP__good_quality[sim_node()] && info.link_quality > NeighborDiscoveryP__good_quality[sim_node()] && old_reply_seq == seq - 1) {
+          printf("IMPROVE: Node %d, id = %d, old quality = %d, new quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_id, old_quality, info.link_quality, info.last_seq);
+          NeighborDiscoveryP__NeighborDiscovery__neighborChange(neighbor_id, LNIK_QUALITY_CHANGE);
+        }
     }
   else 
-#line 166
+#line 179
     {
       info.link_quality = 1000;
+      info.last_seq = seq;
+      NeighborDiscoveryP__NeighborTable__insert(neighbor_id, info);
     }
-
-  info.last_seq = seq;
-
-  NeighborDiscoveryP__NeighborTable__insert(neighbor_id, info);
 }
 
 # 4 "lib/interfaces/SimpleSend.nc"
@@ -7529,14 +7551,14 @@ inline static void NeighborDiscoveryP__SimpleSend__makePack(pack *Package, uint8
 #line 5
 }
 #line 5
-# 142 "lib/modules/NeighborDiscoveryP.nc"
+# 144 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__reply(neigbhorDiscoveryPkt_t *incomingMsg, uint8_t from)
-#line 142
+#line 144
 {
   pack send_pkt;
   neigbhorDiscoveryPkt_t nd_pkt;
 
-#line 145
+#line 147
   memcpy(&nd_pkt, incomingMsg, sizeof(neigbhorDiscoveryPkt_t ));
 
   NeighborDiscoveryP__makeNDPkt(&nd_pkt, TOS_NODE_ID, PROTOCOL_PINGREPLY, nd_pkt.seq, nd_pkt.payload, ND_PKT_MAX_PAYLOAD_SIZE);
@@ -7544,13 +7566,13 @@ static inline void NeighborDiscoveryP__reply(neigbhorDiscoveryPkt_t *incomingMsg
   NeighborDiscoveryP__SimpleSend__send(send_pkt, from);
 }
 
-#line 175
+#line 188
 static inline void NeighborDiscoveryP__PacketHandler__gotNDPkt(uint8_t *incomingMsg)
-#line 175
+#line 188
 {
   neigbhorDiscoveryPkt_t nd_pkt;
 
-#line 177
+#line 190
   memcpy(&nd_pkt, (neigbhorDiscoveryPkt_t *)incomingMsg, sizeof(neigbhorDiscoveryPkt_t ));
 
   switch (nd_pkt.protocol) {
@@ -7598,9 +7620,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
 {
 }
 
-# 249 "lib/modules/NeighborDiscoveryP.nc"
+# 262 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__getReliablePkt(pack *_)
-#line 249
+#line 262
 {
 }
 
@@ -7638,9 +7660,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
     }
 }
 
-# 248 "lib/modules/NeighborDiscoveryP.nc"
+# 261 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__getReliableAckPkt(uint8_t _)
-#line 248
+#line 261
 {
 }
 
@@ -8347,9 +8369,9 @@ inline static uint16_t NeighborDiscoveryP__Random__rand16(void ){
 #line 52
 }
 #line 52
-# 100 "lib/modules/NeighborDiscoveryP.nc"
+# 102 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__NeighborDiscovery__onBoot(void )
-#line 100
+#line 102
 {
   NeighborDiscoveryP__discoverTimer__startOneShot(
   NeighborDiscoveryP__START_DELAY_LOWER + NeighborDiscoveryP__Random__rand16() % (NeighborDiscoveryP__START_DELAY_UPPER - NeighborDiscoveryP__START_DELAY_LOWER));
@@ -9013,9 +9035,9 @@ static inline void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__send
 }
 
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
-inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa542940, message_t * msg, error_t error){
+inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa543940, message_t * msg, error_t error){
 #line 100
-  switch (arg_0x7ffffa542940) {
+  switch (arg_0x7ffffa543940) {
 #line 100
     case 0U:
 #line 100
@@ -9031,7 +9053,7 @@ inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint
 #line 100
     default:
 #line 100
-      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa542940, msg, error);
+      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa543940, msg, error);
 #line 100
       break;
 #line 100
@@ -9173,13 +9195,13 @@ inline static void CommandHandlerP__CommandHandler__printLinkState(void ){
 #line 6
 }
 #line 6
-# 217 "lib/modules/NeighborDiscoveryP.nc"
+# 230 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__getLinkCost(uint8_t id)
-#line 217
+#line 230
 {
   uint16_t link_quality = NeighborDiscoveryP__NeighborDiscovery__getNeighborQuality(id);
 
-#line 219
+#line 232
   return NeighborDiscoveryP__x[sim_node()] / link_quality;
 }
 
@@ -9235,9 +9257,9 @@ inline static uint32_t *NeighborDiscoveryP__NeighborTable__getKeys(void ){
 #line 17
 }
 #line 17
-# 194 "lib/modules/NeighborDiscoveryP.nc"
+# 207 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint32_t *NeighborDiscoveryP__NeighborDiscovery__neighbors(void )
-#line 194
+#line 207
 {
   return NeighborDiscoveryP__NeighborTable__getKeys();
 }
@@ -9279,9 +9301,9 @@ inline static uint16_t NeighborDiscoveryP__NeighborTable__size(void ){
 #line 16
 }
 #line 16
-# 198 "lib/modules/NeighborDiscoveryP.nc"
+# 211 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__numNeighbors(void )
-#line 198
+#line 211
 {
   return NeighborDiscoveryP__NeighborTable__size();
 }
@@ -9471,19 +9493,6 @@ static inline void CommandHandlerP__processCommand__runTask(void )
     }
 }
 
-# 115 "Node.nc"
-static inline void Node__NeighborDiscovery__neighborDrop(void )
-#line 115
-{
-}
-
-# 9 "lib/interfaces/NeighborDiscovery.nc"
-inline static void NeighborDiscoveryP__NeighborDiscovery__neighborDrop(void ){
-#line 9
-  Node__NeighborDiscovery__neighborDrop();
-#line 9
-}
-#line 9
 # 76 "dataStructures/modules/HashmapC.nc"
 static inline void /*NeighborDiscoveryC.HashmapC*/HashmapC__0__removeFromKeyList(uint32_t k)
 #line 76
@@ -9582,35 +9591,24 @@ inline static void NeighborDiscoveryP__NeighborTable__remove(uint32_t key){
 #line 12
 }
 #line 12
-# 117 "Node.nc"
-static inline void Node__NeighborDiscovery__neighborQualityDegraded(void )
-#line 117
-{
-}
-
-# 10 "lib/interfaces/NeighborDiscovery.nc"
-inline static void NeighborDiscoveryP__NeighborDiscovery__neighborQualityDegraded(void ){
-#line 10
-  Node__NeighborDiscovery__neighborQualityDegraded();
-#line 10
-}
-#line 10
 # 61 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__updateTable__runTask(void )
 #line 61
 {
   neighborInfo_t info;
   uint16_t i = 0;
+  uint16_t old_quality;
 
   uint16_t num_neighbors = NeighborDiscoveryP__NeighborTable__size();
   uint32_t neighbor_list[num_neighbors];
 
-#line 67
+#line 68
   memcpy(neighbor_list, NeighborDiscoveryP__NeighborTable__getKeys(), sizeof(uint32_t ) * num_neighbors);
 
   for (; i < num_neighbors; i++) {
       if (NeighborDiscoveryP__NeighborTable__contains(neighbor_list[i])) {
           info = NeighborDiscoveryP__NeighborTable__get(neighbor_list[i]);
+          old_quality = info.link_quality;
 
           if (info.last_seq < NeighborDiscoveryP__local_seq[sim_node()] - 1) {
               info.link_quality = NeighborDiscoveryP__ewma(0, info.link_quality);
@@ -9618,24 +9616,24 @@ static inline void NeighborDiscoveryP__updateTable__runTask(void )
 
           NeighborDiscoveryP__NeighborTable__insert(neighbor_list[i], info);
 
-          if (info.link_quality < NeighborDiscoveryP__good_quality[sim_node()]) {
+          if (old_quality > NeighborDiscoveryP__good_quality[sim_node()] && info.link_quality < NeighborDiscoveryP__good_quality[sim_node()]) {
               if (info.link_quality > NeighborDiscoveryP__poor_quality[sim_node()]) {
-                  NeighborDiscoveryP__NeighborDiscovery__neighborQualityDegraded();
                   printf("DEGRADED: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                  NeighborDiscoveryP__NeighborDiscovery__neighborChange(neighbor_list[i], LNIK_QUALITY_CHANGE);
                 }
               else 
-#line 83
+#line 85
                 {
                   if (NeighborDiscoveryP__local_seq[sim_node()] - info.last_seq < NeighborDiscoveryP__accepted_consecutive_lost[sim_node()] + 1) {
-                      NeighborDiscoveryP__NeighborDiscovery__neighborQualityDegraded();
-                      printf("CAUSION: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                      printf("CAUSION: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                      NeighborDiscoveryP__NeighborDiscovery__neighborChange(neighbor_list[i], LNIK_QUALITY_CHANGE);
                     }
                   else 
-#line 87
+#line 89
                     {
+                      printf("DROP: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
                       NeighborDiscoveryP__NeighborTable__remove(neighbor_list[i]);
-                      NeighborDiscoveryP__NeighborDiscovery__neighborDrop();
-                      printf("DROP: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                      NeighborDiscoveryP__NeighborDiscovery__neighborChange(neighbor_list[i], NEIGHBOR_DROP);
                     }
                 }
             }
@@ -10042,13 +10040,13 @@ inline static am_addr_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMPacket__dest
 }
 #line 78
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
-inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(am_id_t arg_0x7ffffa541b60, am_addr_t addr, message_t * msg, uint8_t len){
+inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(am_id_t arg_0x7ffffa542b60, am_addr_t addr, message_t * msg, uint8_t len){
 #line 80
   unsigned char __nesc_result;
 #line 80
 
 #line 80
-  __nesc_result = TossimActiveMessageC__AMSend__send(arg_0x7ffffa541b60, addr, msg, len);
+  __nesc_result = TossimActiveMessageC__AMSend__send(arg_0x7ffffa542b60, addr, msg, len);
 #line 80
 
 #line 80
@@ -11255,9 +11253,9 @@ inline static void NeighborDiscoveryP__notifyTimer__startOneShot(uint32_t dt){
 #line 73
 }
 #line 73
-# 115 "lib/modules/NeighborDiscoveryP.nc"
+# 117 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__discover(void )
-#line 115
+#line 117
 {
   pack send_pkt;
   neigbhorDiscoveryPkt_t nd_pkt;
@@ -11277,9 +11275,9 @@ static inline void NeighborDiscoveryP__discover(void )
   NeighborDiscoveryP__REDISCOVER_LOWER_BOUND + NeighborDiscoveryP__Random__rand16() % (NeighborDiscoveryP__REDISCOVER_UPPER_BOUND - NeighborDiscoveryP__REDISCOVER_LOWER_BOUND));
 }
 
-#line 106
+#line 108
 static inline void NeighborDiscoveryP__discoverTimer__fired(void )
-#line 106
+#line 108
 {
   NeighborDiscoveryP__discover();
 }
@@ -11299,9 +11297,9 @@ inline static error_t NeighborDiscoveryP__updateTable__postTask(void ){
 #line 67
 }
 #line 67
-# 110 "lib/modules/NeighborDiscoveryP.nc"
+# 112 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__notifyTimer__fired(void )
-#line 110
+#line 112
 {
   NeighborDiscoveryP__updateTable__postTask();
 }
@@ -11312,9 +11310,9 @@ static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 }
 
 # 83 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa5f3950){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa5f4950){
 #line 83
-  switch (arg_0x7ffffa5f3950) {
+  switch (arg_0x7ffffa5f4950) {
 #line 83
     case 0U:
 #line 83
@@ -11366,7 +11364,7 @@ inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 #line 83
     default:
 #line 83
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa5f3950);
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa5f4950);
 #line 83
       break;
 #line 83
@@ -13586,9 +13584,9 @@ static void SimSchedulerBasicP__sim_scheduler_submit_event(void )
     }
 }
 
-# 135 "lib/modules/NeighborDiscoveryP.nc"
+# 137 "lib/modules/NeighborDiscoveryP.nc"
 static void NeighborDiscoveryP__makeNDPkt(neigbhorDiscoveryPkt_t *Package, uint8_t src, uint8_t protocol, uint16_t seq, uint8_t *payload, uint8_t length)
-#line 135
+#line 137
 {
   Package->src = src;
   Package->protocol = protocol;
@@ -14397,19 +14395,19 @@ static error_t /*CommandHandlerC.PoolC.PoolP*/PoolP__1__Pool__put(/*CommandHandl
     }
 }
 
-# 206 "lib/modules/NeighborDiscoveryP.nc"
+# 219 "lib/modules/NeighborDiscoveryP.nc"
 static uint16_t NeighborDiscoveryP__NeighborDiscovery__getNeighborQuality(uint8_t id)
-#line 206
+#line 219
 {
   neighborInfo_t info;
 
-#line 208
+#line 221
   if (NeighborDiscoveryP__NeighborTable__contains(id)) {
       info = NeighborDiscoveryP__NeighborTable__get(id);
       return info.link_quality;
     }
   else 
-#line 211
+#line 224
     {
       return 0;
     }

@@ -6,6 +6,5 @@ interface NeighborDiscovery {
     command uint16_t getNeighborQuality(uint8_t id);
     command uint16_t getLinkCost(uint8_t id);
 
-    event void neighborDrop();
-    event void neighborQualityDegraded();
+    event void neighborChange(uint8_t id, uint8_t tag);
 }
