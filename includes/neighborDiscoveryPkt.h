@@ -1,7 +1,7 @@
 #ifndef ND_PKT_H
 #define ND_PKT_H
 
-# include "packet.h"
+#include "packet.h"
 
 enum {
     ND_PKT_HEADER_LENGTH = 4,
@@ -10,6 +10,7 @@ enum {
     // tag
     NEIGHBOR_DROP = 1,
     LNIK_QUALITY_CHANGE = 2,
+    INACTIVE = 3,
 };
 
 typedef struct neigbhorDiscoveryPkt{

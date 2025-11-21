@@ -213,7 +213,7 @@ implementation{
       // call SimpleSend.send(rPkt, rPkt.dest);
    }
 
-   command void SimpleSend.makePack(pack *Package, uint8_t src, uint8_t dest, uint8_t protocol, uint8_t flag, uint8_t *payload, uint8_t length){
+   command void SimpleSend.makePack(pack *Package, uint8_t src, uint16_t dest, uint8_t protocol, uint8_t flag, uint8_t *payload, uint8_t length){
       Package->src = src;
       Package->dest = dest;
       Package->protocol = protocol;
@@ -229,6 +229,6 @@ implementation{
 
 
    event void PacketHandler.gotNDPkt(uint8_t* _){}
-   event void PacketHandler.gotFloodPkt(uint8_t* _){}
+   event void PacketHandler.gotFloodPkt(uint8_t* incomingMsg, uint8_t from){}
    event void PacketHandler.gotIpPkt(uint8_t* _){}
 }

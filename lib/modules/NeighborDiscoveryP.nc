@@ -28,20 +28,20 @@ implementation {
         // NOTIFY_DELAY_UPPER = 2800,
 
         // less aggresive version
-        NOTIFY_DELAY_LOWER = 28000/2,
-        NOTIFY_DELAY_UPPER = 30000/2,
+        NOTIFY_DELAY_LOWER = 25000,
+        NOTIFY_DELAY_UPPER = 26000,
 
-        REDISCOVER_LOWER_BOUND = 28000,
-        REDISCOVER_UPPER_BOUND = 30000,
+        REDISCOVER_LOWER_BOUND = 45000,
+        REDISCOVER_UPPER_BOUND = 46000,
     };
 
     uint16_t local_seq = 1;
-    uint16_t alpha = 125; // a = 0.15, mutiply 1000 to get a deciaml representation 
+    uint16_t alpha = 30; // a = 0.15, mutiply 1000 to get a deciaml representation 
     uint16_t good_quality = 700; // (link quality > good_quality) is good connection
-    uint16_t poor_quality = 600; // (good_quality > link quality > poor_quality) is moderate connection (will be signaled)
+    uint16_t poor_quality = 500; // (good_quality > link quality > poor_quality) is moderate connection (will be signaled)
                     // (link quality < poor_quality) is poor connection (will be dropped and signaled)
 
-    uint16_t accepted_consecutive_lost = 3; // more than accepted_consecutive_lost and bellow poor_quality will result a neighbor drop
+    uint16_t accepted_consecutive_lost = 2; // more than accepted_consecutive_lost and bellow poor_quality will result a neighbor drop
     
     uint16_t x = 10000; // path cost = x / link_quality
 
@@ -80,23 +80,21 @@ implementation {
 
                 if (old_quality > good_quality && info.link_quality < good_quality) {
                     if (info.link_quality > poor_quality) {
-                        printf("DEGRADED: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                        dbg(NEIGHBOR_CHANNEL,"DEGRADED: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
                         signal NeighborDiscovery.neighborChange(neighbor_list[i], LNIK_QUALITY_CHANGE);
                     } else {
                         if (local_seq - info.last_seq < accepted_consecutive_lost + 1) {
-                            printf("CAUSION: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                            dbg(NEIGHBOR_CHANNEL,"CAUSION: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
                             signal NeighborDiscovery.neighborChange(neighbor_list[i], LNIK_QUALITY_CHANGE);
                         } else {
-                            printf("DROP: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
-                            call NeighborTable.remove(neighbor_list[i]);
-                            signal NeighborDiscovery.neighborChange(neighbor_list[i], NEIGHBOR_DROP);
+                            dbg(NEIGHBOR_CHANNEL,"DROP: Node %d, id = %d quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                            // call NeighborTable.remove(neighbor_list[i]);
+                            signal NeighborDiscovery.neighborChange(neighbor_list[i], INACTIVE);
                         }
                     }
                 }
             }
         }
-
-        // printNeighbors();
     }
 
     command void NeighborDiscovery.onBoot() {
@@ -172,8 +170,8 @@ implementation {
             info.last_seq = seq;
             call NeighborTable.insert(neighbor_id, info);
 
-            if (old_quality < good_quality && info.link_quality > good_quality && old_reply_seq == seq - 1) {
-                printf("IMPROVE: Node %d, id = %d, old quality = %d, new quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_id, old_quality, info.link_quality, info.last_seq);
+            if (old_quality < (good_quality+50) && info.link_quality > (good_quality+50) && old_reply_seq == seq - 1) {
+                dbg(NEIGHBOR_CHANNEL,"IMPROVE: Node %d, id = %d, old quality = %d, new quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_id, old_quality, info.link_quality, info.last_seq);
                 signal NeighborDiscovery.neighborChange(neighbor_id, LNIK_QUALITY_CHANGE);
             }
         } else {
@@ -260,6 +258,6 @@ implementation {
     
     event void PacketHandler.getReliableAckPkt(uint8_t _) {}
     event void PacketHandler.getReliablePkt(pack* _) {}
-    event void PacketHandler.gotFloodPkt(uint8_t* _){}
+    event void PacketHandler.gotFloodPkt(uint8_t* incomingMsg, uint8_t from){}
     event void PacketHandler.gotIpPkt(uint8_t* _){}
 }

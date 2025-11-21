@@ -9,6 +9,8 @@
 #include <Timer.h>
 #include "includes/command.h"
 #include "includes/packet.h"
+#include "includes/neighborDiscoveryPkt.h"
+#include "includes/floodingPkt.h"
 #include "includes/CommandMsg.h"
 #include "includes/sendInfo.h"
 #include "includes/channels.h"
@@ -26,6 +28,8 @@ module Node{
    uses interface PacketHandler;
 
    uses interface NeighborDiscovery;
+
+   uses interface Flooding;
 }
 
 implementation{
@@ -70,24 +74,11 @@ implementation{
    event void CommandHandler.ping(uint16_t destination, uint8_t *payload){
       // dbg(GENERAL_CHANNEL, "PING EVENT \n");
       // call Sender.makePack(&sendPackage, TOS_NODE_ID, destination, PROTOCOL_NEIGHBOR_DISCOVERY, RELIABLE_REQUEST, payload, PACKET_MAX_PAYLOAD_SIZE);
-      // call Sender.send(sendPackage, destination);
+      call Flooding.flood(destination, PROTOCOL_LINKSTATE, 50, payload, FLOOD_PKT_MAX_PAYLOAD_SIZE);
    }
 
    event void CommandHandler.printNeighbors(uint16_t src, uint8_t *payload){
-      uint16_t n = call NeighborDiscovery.numNeighbors();
-      uint32_t arr[n];
-      uint16_t i;
-      memcpy(arr, call NeighborDiscovery.neighbors(), n * sizeof(uint32_t));
-
-      dbg(NEIGHBOR_CHANNEL, "NEIGHBOR EVENT \n");
-
-      for (i = 0; i < n; i++) {
-         printf("id = %d, quality = %d, cost = %d\n", arr[i],call NeighborDiscovery.getNeighborQuality(arr[i]), call NeighborDiscovery.getLinkCost(arr[i]));
-      }
-
-      // call NeighborDiscovery.printNeighbors();
-      // call NeighborDiscovery.getLinkCost(3);
-      // call NeighborDiscovery.getLinkCost(8);
+      call NeighborDiscovery.printNeighbors();
    }
 
    event void CommandHandler.printRouteTable(){}
@@ -108,9 +99,14 @@ implementation{
    event void PacketHandler.getReliableAckPkt(uint8_t _) {}
    event void PacketHandler.getReliablePkt(pack* _) {}
    event void PacketHandler.gotNDPkt(uint8_t* _){}
-   event void PacketHandler.gotFloodPkt(uint8_t* _){}
+   event void PacketHandler.gotFloodPkt(uint8_t* incomingMsg, uint8_t from){}
    event void PacketHandler.gotIpPkt(uint8_t* _){}
 
    // NeighborDiscovery events
    event void NeighborDiscovery.neighborChange(uint8_t id, uint8_t tag) {}
+
+   // Flooding events
+   event void Flooding.gotLSA(uint8_t* _) {
+      printf("GET LSA\n");
+   }
 }

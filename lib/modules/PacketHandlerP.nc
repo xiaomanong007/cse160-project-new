@@ -1,5 +1,6 @@
 #include "../../includes/packet.h"
 #include "../../includes/neighborDiscoveryPkt.h"
+#include "../../includes/floodingPkt.h"
 #include "../../includes/protocol.h"
 
 module PacketHandlerP{
@@ -30,7 +31,8 @@ implementation{
                 signal PacketHandler.gotNDPkt(payload);
                 break;
             case PROTOCOL_FLOODING:
-                signal PacketHandler.gotFloodPkt(payload);
+                logFLDPkt((floodingPkt_t *)payload, FLOODING_CHANNEL);
+                signal PacketHandler.gotFloodPkt(payload, incomingMsg->src);
                 break;
             case PROTOCOL_IP:
                 signal PacketHandler.gotIpPkt(payload);
