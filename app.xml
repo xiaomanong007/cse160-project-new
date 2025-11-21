@@ -894,24 +894,6 @@
       </instance>
       <module/>
     </component>
-    <component qname="FloodingC.FloodingTableC" loc="10(FloodingC.FloodingTableC):dataStructures/modules/HashmapC.nc">
-      <documentation loc="1:dataStructures/modules/HashmapC.nc">
-        <short>&#10; ANDES Lab - University of California, Merced&#10; This moudle provides a simple hashmap.</short>
-        <long>&#10; ANDES Lab - University of California, Merced&#10; This moudle provides a simple hashmap.&#10;&#10; @author UCM ANDES Lab&#10; @date   2013/09/03&#10;&#10;</long>
-      </documentation>
-      <instance number="1">
-        <component-ref qname="HashmapC"/>
-        <arguments>
-          <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2fe570"/>
-            <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2fd020"/></typename>
-          </type-tag>
-          <value cst="I:30">
-            <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-          </value>
-        </arguments>
-      </instance>
-      <module/>
-    </component>
     <component qname="Atm128AlarmAsyncC" loc="23:/opt/tinyos-main/tos/chips/atm128/timer/Atm128AlarmAsyncC.nc" abstract="">
       <documentation loc="11:/opt/tinyos-main/tos/chips/atm128/timer/Atm128AlarmAsyncC.nc">
         <short>&#10; Build a 32-bit alarm and counter from the atmega128's 8-bit timer 0&#10; in asynchronous mode.</short>
@@ -7536,7 +7518,7 @@
         <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa341340"/></type-var>
       </field>
     </struct>
-    <enum loc="21:lib/modules/FloodingP.nc" ref="0x7ffffa2f4020" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="20:lib/modules/FloodingP.nc" ref="0x7ffffa2f9ca0" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="FloodingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -7624,7 +7606,7 @@
       </type-array>
     </variable>
     <variable name="outputs" ref="0x7ffffb0eb9a0" loc="67:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
-      <type-array elements="I:226" size="I:3616" alignment="I:8">
+      <type-array elements="I:220" size="I:3520" alignment="I:8">
         <type-tag size="I:16" alignment="I:8"><struct-ref name="sim_log_output" ref="0x7ffffb0efd90"/>
           <typename><typedef-ref name="sim_log_output_t" ref="0x7ffffb0ed650"/></typename>
         </type-tag>
@@ -8586,7 +8568,7 @@
         </type-int>
       </type-array>
     </variable>
-    <variable name="flooding_table" ref="0x7ffffa2f4860" loc="25:lib/modules/FloodingP.nc">
+    <variable name="flooding_table" ref="0x7ffffa2f8580" loc="24:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-array elements="I:30" size="I:1920" alignment="I:4">
         <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2fe570"/>
@@ -8594,13 +8576,13 @@
         </type-tag>
       </type-array>
     </variable>
-    <variable name="local_seq" ref="0x7ffffa2f3130" loc="28:lib/modules/FloodingP.nc">
+    <variable name="local_seq" ref="0x7ffffa2f8e00" loc="27:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="seq_table" ref="0x7ffffa2f4d40" loc="26:lib/modules/FloodingP.nc">
+    <variable name="seq_table" ref="0x7ffffa2f8a60" loc="25:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-array elements="I:30" size="I:60" alignment="I:2">
         <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
@@ -10923,7 +10905,7 @@
     <constant cst="I:2147483648" name="CC2420_INVALID_TIMESTAMP" ref="0x7ffffac68bc0" loc="403:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:226" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
+    <constant cst="I:220" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:0" name="SPI2X" ref="0x7ffffad1b650" loc="970:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
@@ -11730,7 +11712,7 @@
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:30" name="MAX_NODES" ref="0x7ffffa2f4300" loc="22:lib/modules/FloodingP.nc">
+    <constant cst="I:30" name="MAX_NODES" ref="0x7ffffa2f8020" loc="21:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>

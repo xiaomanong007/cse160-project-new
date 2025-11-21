@@ -17,7 +17,4 @@ implementation {
 
     components NeighborDiscoveryC;
     FloodingP.NeighborDiscovery -> NeighborDiscoveryC;
-
-    components new HashmapC(floodingInfo_t, 30) as FloodingTableC;
-    FloodingP.FloodingTable -> FloodingTableC;
 }

@@ -19,8 +19,8 @@ typedef struct floodingPkt{
 
 
 void logFLDPkt(floodingPkt_t* input, char channel[]){
-	dbg(channel, "Src: %d | Dest: %d | Seq: %d | PROTOCAL: %s | TTL: %d | Payload: %s\n",
-	input->src, input->dest, input->seq, input->protocol == PROTOCOL_LINKSTATE ? "LSA" : "Other", input->TTL, input->payload);
+	dbg(channel, "Src: %d | Dest: %d | From: | Seq: %d | PROTOCAL: %s | TTL: %d | Payload: %s\n",
+	input->src, input->dest , input->seq, input->protocol == PROTOCOL_LINKSTATE ? "LSA" : "Other", input->TTL, input->payload);
 }
 
 #endif

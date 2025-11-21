@@ -74,7 +74,7 @@ implementation{
    event void CommandHandler.ping(uint16_t destination, uint8_t *payload){
       // dbg(GENERAL_CHANNEL, "PING EVENT \n");
       // call Sender.makePack(&sendPackage, TOS_NODE_ID, destination, PROTOCOL_NEIGHBOR_DISCOVERY, RELIABLE_REQUEST, payload, PACKET_MAX_PAYLOAD_SIZE);
-      call Flooding.flood(destination, PROTOCOL_LINKSTATE, 50, payload, FLOOD_PKT_MAX_PAYLOAD_SIZE);
+      call Flooding.flood(destination, PROTOCOL_PING, 50, payload, FLOOD_PKT_MAX_PAYLOAD_SIZE);
    }
 
    event void CommandHandler.printNeighbors(uint16_t src, uint8_t *payload){

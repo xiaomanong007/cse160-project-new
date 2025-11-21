@@ -13,7 +13,6 @@ module FloodingP {
         interface SimpleSend;
         interface PacketHandler;
         interface NeighborDiscovery;
-        interface Hashmap<floodingInfo_t> as FloodingTable;
     }
 }
 
@@ -57,13 +56,16 @@ implementation {
         switch(fld_pkt.protocol){
             case PROTOCOL_LINKSTATE:
                 signal Flooding.gotLSA(fld_pkt.payload);
-                forward(&fld_pkt, from);
+                break;
+            case PROTOCOL_PING:
                 break;
             default:
                 dbg(GENERAL_CHANNEL,"Unknown protocol %d from node %d, dropping packet.\n",
                 fld_pkt.protocol, fld_pkt.src);
-                break;
+                return;
         }
+
+        forward(&fld_pkt, from);
     }
 
     void makeFldPkt(floodingPkt_t *Package, uint8_t src, uint8_t dest, uint8_t protocol, uint8_t TTL, uint16_t seq, uint8_t* payload, uint8_t length) {
@@ -93,6 +95,7 @@ implementation {
                     if (flooding_table[flooding_src - 1].neighbors[i] != from) {
                         call SimpleSend.makePack(&pkt, TOS_NODE_ID, flooding_table[flooding_src - 1].neighbors[i], PROTOCOL_FLOODING, BEST_EFFORT, (uint8_t *)fld_pkt, PACKET_MAX_PAYLOAD_SIZE);
                         call SimpleSend.send(pkt, flooding_table[flooding_src - 1].neighbors[i]);
+                        printf("node %d -> node %d\n", TOS_NODE_ID, flooding_table[flooding_src - 1].neighbors[i]);
                     }
                     flooding_table[flooding_src - 1].neighbors[i] = 0;
                 }
@@ -107,7 +110,7 @@ implementation {
         if (seq_table[incomingMsg->src - 1] == 0 || seq_table[incomingMsg->src - 1] < incomingMsg->seq) {
             initEntry(incomingMsg->src, incomingMsg->seq);
         } else {
-            if (seq_table[incomingMsg->src - 1] > incomingMsg->seq || incomingMsg->TTL == 1) {
+            if (seq_table[incomingMsg->src - 1] >= incomingMsg->seq || incomingMsg->TTL == 1) {
                 return;
             }
         }

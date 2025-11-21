@@ -1258,7 +1258,7 @@ typedef struct sim_log_channel {
 } sim_log_channel_t;
 
 enum __nesc_unnamed4272 {
-  SIM_LOG_OUTPUT_COUNT = 226U
+  SIM_LOG_OUTPUT_COUNT = 220U
 };
 
 sim_log_output_t outputs[SIM_LOG_OUTPUT_COUNT];
@@ -4272,7 +4272,6 @@ typedef reSendInfo /*NeighborDiscoveryC.SimpleSendC.ReSendQueue*/ListC__1__t;
 typedef /*NeighborDiscoveryC.SimpleSendC.ReSendQueue*/ListC__1__t /*NeighborDiscoveryC.SimpleSendC.ReSendQueue*/ListC__1__List__t;
 typedef neighborInfo_t /*NeighborDiscoveryC.HashmapC*/HashmapC__0__t;
 typedef /*NeighborDiscoveryC.HashmapC*/HashmapC__0__t /*NeighborDiscoveryC.HashmapC*/HashmapC__0__Hashmap__t;
-typedef floodingInfo_t FloodingP__FloodingTable__t;
 typedef sendInfo /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__Pool__t;
 typedef sendInfo */*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__Queue__t;
 typedef reSendInfo /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__ReSendQueue__t;
@@ -4286,8 +4285,6 @@ typedef sendInfo */*FloodingC.SimpleSendC.QueueC*/QueueC__3__queue_t;
 typedef /*FloodingC.SimpleSendC.QueueC*/QueueC__3__queue_t /*FloodingC.SimpleSendC.QueueC*/QueueC__3__Queue__t;
 typedef reSendInfo /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__t;
 typedef /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__t /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__List__t;
-typedef floodingInfo_t /*FloodingC.FloodingTableC*/HashmapC__1__t;
-typedef /*FloodingC.FloodingTableC*/HashmapC__1__t /*FloodingC.FloodingTableC*/HashmapC__1__Hashmap__t;
 # 62 "/opt/tinyos-main/tos/interfaces/Init.nc"
 static error_t PlatformC__Init__init(void );
 # 67 "/opt/tinyos-main/tos/interfaces/TaskBasic.nc"
@@ -7122,7 +7119,7 @@ static void FloodingP__Flooding__gotLSA(uint8_t *incomingMsg);
 static uint16_t FloodingP__NeighborDiscovery__numNeighbors(void );
 #line 3
 static uint32_t *FloodingP__NeighborDiscovery__neighbors(void );
-# 21 "lib/modules/FloodingP.nc"
+# 20 "lib/modules/FloodingP.nc"
 enum FloodingP____nesc_unnamed4359 {
   FloodingP__MAX_NODES = 30
 };
@@ -7141,9 +7138,9 @@ static void FloodingP__initEntry(uint8_t flooding_src, uint16_t seq);
 static void FloodingP__send(floodingPkt_t *fld_pkt, uint8_t flooding_src, uint8_t from);
 
 static inline void FloodingP__Flooding__flood(uint8_t dest, uint8_t protocol, uint8_t TTL, uint8_t *payload, uint8_t length);
-#line 53
+#line 52
 static inline void FloodingP__PacketHandler__gotFloodPkt(uint8_t *incomingMsg, uint8_t from);
-#line 69
+#line 71
 static inline void FloodingP__makeFldPkt(floodingPkt_t *Package, uint8_t src, uint8_t dest, uint8_t protocol, uint8_t TTL, uint16_t seq, uint8_t *payload, uint8_t length);
 
 
@@ -7162,9 +7159,9 @@ static void FloodingP__initEntry(uint8_t flooding_src, uint16_t seq);
 
 
 static void FloodingP__send(floodingPkt_t *fld_pkt, uint8_t flooding_src, uint8_t from);
-#line 106
+#line 109
 static inline void FloodingP__forward(floodingPkt_t *incomingMsg, uint8_t from);
-#line 121
+#line 124
 static inline void FloodingP__PacketHandler__getReliableAckPkt(uint8_t _);
 static inline void FloodingP__PacketHandler__getReliablePkt(pack *_);
 static inline void FloodingP__PacketHandler__gotNDPkt(uint8_t *_);
@@ -7447,12 +7444,6 @@ uint16_t /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__size[1000];
 static void /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__List__pushback(/*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__t input);
 #line 54
 static inline /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__t /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__List__popfront(void );
-# 23 "dataStructures/modules/HashmapC.nc"
-#line 20
-typedef struct /*FloodingC.FloodingTableC*/HashmapC__1__hashmapEntry {
-  uint32_t key;
-  /*FloodingC.FloodingTableC*/HashmapC__1__t value;
-} /*FloodingC.FloodingTableC*/HashmapC__1__hashmapEntry;
 # 80 "/opt/tinyos-main/tos/lib/tossim/heap.c"
 static inline void init_heap(heap_t *heap)
 #line 80
@@ -7853,9 +7844,9 @@ static inline void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1_
 {
 }
 
-# 124 "lib/modules/FloodingP.nc"
+# 127 "lib/modules/FloodingP.nc"
 static inline void FloodingP__PacketHandler__gotIpPkt(uint8_t *_)
-#line 124
+#line 127
 {
 }
 
@@ -7906,17 +7897,17 @@ static inline void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1_
 {
 }
 
-# 106 "lib/modules/FloodingP.nc"
+# 109 "lib/modules/FloodingP.nc"
 static inline void FloodingP__forward(floodingPkt_t *incomingMsg, uint8_t from)
-#line 106
+#line 109
 {
   if (FloodingP__seq_table[sim_node()][incomingMsg->src - 1] == 0 || FloodingP__seq_table[sim_node()][incomingMsg->src - 1] < incomingMsg->seq) {
       FloodingP__initEntry(incomingMsg->src, incomingMsg->seq);
     }
   else 
-#line 109
+#line 112
     {
-      if (FloodingP__seq_table[sim_node()][incomingMsg->src - 1] > incomingMsg->seq || incomingMsg->TTL == 1) {
+      if (FloodingP__seq_table[sim_node()][incomingMsg->src - 1] >= incomingMsg->seq || incomingMsg->TTL == 1) {
           return;
         }
     }
@@ -7940,25 +7931,28 @@ inline static void FloodingP__Flooding__gotLSA(uint8_t *incomingMsg){
 #line 4
 }
 #line 4
-# 53 "lib/modules/FloodingP.nc"
+# 52 "lib/modules/FloodingP.nc"
 static inline void FloodingP__PacketHandler__gotFloodPkt(uint8_t *incomingMsg, uint8_t from)
-#line 53
+#line 52
 {
   floodingPkt_t fld_pkt;
 
-#line 55
+#line 54
   memcpy(&fld_pkt, (floodingPkt_t *)incomingMsg, sizeof(floodingPkt_t ));
 
   switch (fld_pkt.protocol) {
       case PROTOCOL_LINKSTATE: 
         FloodingP__Flooding__gotLSA(fld_pkt.payload);
-      FloodingP__forward(&fld_pkt, from);
       break;
+      case PROTOCOL_PING: 
+        break;
       default: 
         sim_log_debug(205U, GENERAL_CHANNEL, "Unknown protocol %d from node %d, dropping packet.\n", fld_pkt.protocol, fld_pkt.src);
 
-      break;
+      return;
     }
+
+  FloodingP__forward(&fld_pkt, from);
 }
 
 # 232 "lib/modules/SimpleSendP.nc"
@@ -7988,7 +7982,7 @@ inline static void PacketHandlerP__PacketHandler__gotFloodPkt(uint8_t *incomingM
 static inline void logFLDPkt(floodingPkt_t *input, char channel[])
 #line 21
 {
-  sim_log_debug(48U, channel, "Src: %d | Dest: %d | Seq: %d | PROTOCAL: %s | TTL: %d | Payload: %s\n", input->src, input->dest, input->seq, input->protocol == PROTOCOL_LINKSTATE ? "LSA" : "Other", input->TTL, input->payload);
+  sim_log_debug(48U, channel, "Src: %d | Dest: %d | From: | Seq: %d | PROTOCAL: %s | TTL: %d | Payload: %s\n", input->src, input->dest, input->seq, input->protocol == PROTOCOL_LINKSTATE ? "LSA" : "Other", input->TTL, input->payload);
 }
 
 # 101 "Node.nc"
@@ -8016,9 +8010,9 @@ static inline void Node__NeighborDiscovery__neighborChange(uint8_t id, uint8_t t
 {
 }
 
-# 126 "lib/modules/FloodingP.nc"
+# 129 "lib/modules/FloodingP.nc"
 static inline void FloodingP__NeighborDiscovery__neighborChange(uint8_t id, uint8_t tag)
-#line 126
+#line 129
 {
 }
 
@@ -8168,9 +8162,9 @@ static inline void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1_
 {
 }
 
-# 123 "lib/modules/FloodingP.nc"
+# 126 "lib/modules/FloodingP.nc"
 static inline void FloodingP__PacketHandler__gotNDPkt(uint8_t *_)
-#line 123
+#line 126
 {
 }
 
@@ -8221,9 +8215,9 @@ static inline void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1_
 {
 }
 
-# 122 "lib/modules/FloodingP.nc"
+# 125 "lib/modules/FloodingP.nc"
 static inline void FloodingP__PacketHandler__getReliablePkt(pack *_)
-#line 122
+#line 125
 {
 }
 
@@ -8280,9 +8274,9 @@ static inline void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1_
     }
 }
 
-# 121 "lib/modules/FloodingP.nc"
+# 124 "lib/modules/FloodingP.nc"
 static inline void FloodingP__PacketHandler__getReliableAckPkt(uint8_t _)
-#line 121
+#line 124
 {
 }
 
@@ -10184,9 +10178,9 @@ inline static void CommandHandlerP__CommandHandler__printNeighbors(uint16_t src,
 #line 4
 }
 #line 4
-# 69 "lib/modules/FloodingP.nc"
+# 71 "lib/modules/FloodingP.nc"
 static inline void FloodingP__makeFldPkt(floodingPkt_t *Package, uint8_t src, uint8_t dest, uint8_t protocol, uint8_t TTL, uint16_t seq, uint8_t *payload, uint8_t length)
-#line 69
+#line 71
 {
   Package->src = src;
   Package->dest = dest;
@@ -10196,16 +10190,16 @@ static inline void FloodingP__makeFldPkt(floodingPkt_t *Package, uint8_t src, ui
   memcpy(Package->payload, payload, length);
 }
 
-#line 38
+#line 37
 static inline void FloodingP__Flooding__flood(uint8_t dest, uint8_t protocol, uint8_t TTL, uint8_t *payload, uint8_t length)
-#line 38
+#line 37
 {
   pack pkt;
   floodingPkt_t fld_pkt;
   uint8_t i = 0;
   floodingInfo_t info;
 
-#line 43
+#line 42
   FloodingP__makeFldPkt(&fld_pkt, TOS_NODE_ID, dest, protocol, TTL, FloodingP__local_seq[sim_node()], payload, length);
   FloodingP__initEntry(TOS_NODE_ID, FloodingP__local_seq[sim_node()]);
 
@@ -10229,7 +10223,7 @@ static inline void Node__CommandHandler__ping(uint16_t destination, uint8_t *pay
 {
 
 
-  Node__Flooding__flood(destination, PROTOCOL_LINKSTATE, 50, payload, FLOOD_PKT_MAX_PAYLOAD_SIZE);
+  Node__Flooding__flood(destination, PROTOCOL_PING, 50, payload, FLOOD_PKT_MAX_PAYLOAD_SIZE);
 }
 
 # 3 "lib/interfaces/CommandHandler.nc"
@@ -15140,13 +15134,13 @@ static void /*NeighborDiscoveryC.HashmapC*/HashmapC__0__Hashmap__insert(uint32_t
   i < /*NeighborDiscoveryC.HashmapC*/HashmapC__0__HASH_MAX_SIZE[sim_node()]);
 }
 
-# 78 "lib/modules/FloodingP.nc"
+# 80 "lib/modules/FloodingP.nc"
 static void FloodingP__initEntry(uint8_t flooding_src, uint16_t seq)
-#line 78
+#line 80
 {
   floodingInfo_t info;
 
-#line 80
+#line 82
   FloodingP__seq_table[sim_node()][flooding_src - 1] = seq;
   info.num_neighbors = FloodingP__NeighborDiscovery__numNeighbors();
   memcpy(info.neighbors, FloodingP__NeighborDiscovery__neighbors(), sizeof(uint32_t ) * info.num_neighbors);
@@ -15154,7 +15148,7 @@ static void FloodingP__initEntry(uint8_t flooding_src, uint16_t seq)
 }
 
 static void FloodingP__send(floodingPkt_t *fld_pkt, uint8_t flooding_src, uint8_t from)
-#line 86
+#line 88
 {
   pack pkt;
   uint8_t i = 0;
@@ -15165,12 +15159,13 @@ static void FloodingP__send(floodingPkt_t *fld_pkt, uint8_t flooding_src, uint8_
               if (FloodingP__flooding_table[sim_node()][flooding_src - 1].neighbors[i] != from) {
                   FloodingP__SimpleSend__makePack(&pkt, TOS_NODE_ID, FloodingP__flooding_table[sim_node()][flooding_src - 1].neighbors[i], PROTOCOL_FLOODING, BEST_EFFORT, (uint8_t *)fld_pkt, PACKET_MAX_PAYLOAD_SIZE);
                   FloodingP__SimpleSend__send(pkt, FloodingP__flooding_table[sim_node()][flooding_src - 1].neighbors[i]);
+                  printf("node %d -> node %d\n", TOS_NODE_ID, FloodingP__flooding_table[sim_node()][flooding_src - 1].neighbors[i]);
                 }
               FloodingP__flooding_table[sim_node()][flooding_src - 1].neighbors[i] = 0;
             }
         }
       else 
-#line 99
+#line 102
         {
           return;
         }
@@ -16975,8 +16970,6 @@ static int __nesc_nido_resolve(int __nesc_mote,
     return 0;
   }
 
-  /* Module HashmapC__1 */
-
   return -1;
 }
 /* Invoke static initialisers for mote '__nesc_mote' */
@@ -17172,7 +17165,5 @@ static void __nesc_nido_initialise(int __nesc_mote)
   /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__MAX_SIZE[__nesc_mote] = 20;
   memset((void *)&/*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__container[__nesc_mote], 0, sizeof /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__container[__nesc_mote]);
   /*FloodingC.SimpleSendC.ReSendQueue*/ListC__2__size[__nesc_mote] = 0;
-
-  /* Module HashmapC__1 */
 
 }

@@ -13,8 +13,8 @@ def main():
 
 
     # Add a noise model to all of the motes.
-    s.loadNoise("no_noise.txt");
-    # s.loadNoise("some_noise.txt");
+    # s.loadNoise("no_noise.txt");
+    s.loadNoise("some_noise.txt");
     # s.loadNoise("meyer-heavy.txt");
 
 
@@ -25,7 +25,7 @@ def main():
     s.addChannel(s.COMMAND_CHANNEL);
     s.addChannel(s.GENERAL_CHANNEL);
     s.addChannel(s.NEIGHBOR_CHANNEL);
-    s.addChannel(s.FLOODING_CHANNEL);
+    # s.addChannel(s.FLOODING_CHANNEL);
     # s.addChannel(s.ROUTING_CHANNEL);
     # s.addChannel(s.TRANSPORT_CHANNEL);
 
@@ -34,10 +34,10 @@ def main():
     s.neighborDMP(1);
     s.runTime(1);
     s.ping(1, 7, "Hello, World 1");
-    s.runTime(3);
+    s.runTime(1);
 
-    # s.ping(1, 10, "Hi!");
-    # s.runTime(1);
+    s.ping(10, 1, "Hi!");
+    s.runTime(3);
 
 if __name__ == '__main__':
     main()
