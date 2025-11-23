@@ -34,9 +34,8 @@ implementation {
         REDISCOVER_LOWER_BOUND = 39000,
         REDISCOVER_UPPER_BOUND = 40000,
     };
-
     uint16_t local_seq = 1;
-    uint16_t alpha = 40; // a = 0.15, mutiply 1000 to get a deciaml representation 
+    uint16_t alpha = 100; // a = 0.15, mutiply 1000 to get a deciaml representation 
     uint16_t good_quality = 715; // (link quality > good_quality) is good connection
     uint16_t poor_quality = 400; // (good_quality > link quality > poor_quality) is moderate connection (will be signaled)
                     // (link quality < poor_quality) is poor connection (will be dropped and signaled)
@@ -45,7 +44,7 @@ implementation {
     
     uint16_t x = 10000; // path cost = x / link_quality
 
-    void discover();
+    task void discover();
 
     void makeNDPkt(neigbhorDiscoveryPkt_t *Package, uint8_t src, uint8_t protocol, uint16_t seq, uint8_t* payload, uint8_t length);
 
@@ -75,8 +74,9 @@ implementation {
                 if (info.last_seq < local_seq - 1) {
                     info.link_quality = ewma(0, info.link_quality);
                 }
+                // printf("%d %d %d %d\n", TOS_NODE_ID, neighbor_list[i], local_seq - 1, info.link_quality);
 
-                if (old_quality > good_quality && info.link_quality < good_quality) {
+                if (old_quality > good_quality && info.link_quality < good_quality && !info.degraded) {
                     if (info.link_quality > poor_quality) {
                         dbg(NEIGHBOR_CHANNEL,"DEGRADED: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
                         info.degraded = TRUE;
@@ -111,15 +111,16 @@ implementation {
     }
 
     event void discoverTimer.fired() {
-        discover();
+        post updateTable();
+        post discover();
     }
 
     event void notifyTimer.fired() {
-        post updateTable();
+        // post updateTable();
     }
     
 
-    void discover() {
+    task void discover() {
         pack send_pkt;
         neigbhorDiscoveryPkt_t nd_pkt;
         char content[] = "Hello";

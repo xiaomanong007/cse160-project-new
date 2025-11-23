@@ -30,7 +30,7 @@ def main():
     # s.addChannel(s.TRANSPORT_CHANNEL);
 
     # After sending a ping, simulate a little to prevent collision.
-    s.runTime(400);
+    s.runTime(300);
     # s.neighborDMP(1);
     # s.runTime(1);
     # s.ping(1, 7, "Hello, World 1");

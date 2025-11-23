@@ -22,8 +22,8 @@ implementation {
         // Each cylce should take approximately 60 to complete all sharings, 100 second to construct a table
 
         // Start Timer = 180 - 185 second
-        START_DELAY_LOWER = 295000 * 2,
-        START_DELAY_UPPER = 300000 * 2,
+        START_DELAY_LOWER = 295000 * 3,
+        START_DELAY_UPPER = 300000 * 3,
 
         // Construct Routing Table = 85 - 90 second
         CONSTRUCT_R_TABLE_LOWER = 85000,

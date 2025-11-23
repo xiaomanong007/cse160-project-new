@@ -4875,6 +4875,8 @@ static void NeighborDiscoveryP__PacketHandler__gotIpPkt(uint8_t *incomingMsg);
 static void NeighborDiscoveryP__PacketHandler__gotNDPkt(uint8_t *incomingMsg);
 #line 5
 static void NeighborDiscoveryP__PacketHandler__getReliablePkt(pack *pkt);
+# 75 "/opt/tinyos-main/tos/interfaces/TaskBasic.nc"
+static void NeighborDiscoveryP__discover__runTask(void );
 # 83 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void NeighborDiscoveryP__discoverTimer__fired(void );
 # 4 "lib/interfaces/NeighborDiscovery.nc"
@@ -5161,7 +5163,7 @@ uint8_t arg_0x7ffffadb8020);
 
 enum SimSchedulerBasicP____nesc_unnamed4342 {
 
-  SimSchedulerBasicP__NUM_TASKS = 13U, 
+  SimSchedulerBasicP__NUM_TASKS = 14U, 
   SimSchedulerBasicP__NO_TASK = 255
 };
 
@@ -6708,6 +6710,8 @@ static inline error_t /*CommandHandlerC.QueueC*/QueueC__0__Queue__enqueue(/*Comm
 # 4 "lib/interfaces/SimpleSend.nc"
 static error_t NeighborDiscoveryP__SimpleSend__send(pack msg, uint16_t dest);
 static void NeighborDiscoveryP__SimpleSend__makePack(pack *Package, uint8_t src, uint16_t dest, uint8_t protocol, uint8_t flag, uint8_t *payload, uint8_t length);
+# 67 "/opt/tinyos-main/tos/interfaces/TaskBasic.nc"
+static error_t NeighborDiscoveryP__discover__postTask(void );
 # 52 "/opt/tinyos-main/tos/interfaces/Random.nc"
 static uint16_t NeighborDiscoveryP__Random__rand16(void );
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
@@ -6732,15 +6736,22 @@ static uint32_t *NeighborDiscoveryP__NeighborTable__getKeys(void );
 static bool NeighborDiscoveryP__NeighborTable__contains(uint32_t key);
 
 static uint16_t NeighborDiscoveryP__NeighborTable__size(void );
-# 61 "lib/modules/NeighborDiscoveryP.nc"
+# 47 "lib/modules/NeighborDiscoveryP.nc"
 enum NeighborDiscoveryP____nesc_unnamed4357 {
-#line 61
-  NeighborDiscoveryP__updateTable = 10U
+#line 47
+  NeighborDiscoveryP__discover = 10U
 };
-#line 61
+#line 47
+typedef int NeighborDiscoveryP____nesc_sillytask_discover[NeighborDiscoveryP__discover];
+#line 60
+enum NeighborDiscoveryP____nesc_unnamed4358 {
+#line 60
+  NeighborDiscoveryP__updateTable = 11U
+};
+#line 60
 typedef int NeighborDiscoveryP____nesc_sillytask_updateTable[NeighborDiscoveryP__updateTable];
 #line 22
-enum NeighborDiscoveryP____nesc_unnamed4358 {
+enum NeighborDiscoveryP____nesc_unnamed4359 {
   NeighborDiscoveryP__START_DELAY_LOWER = 500, 
   NeighborDiscoveryP__START_DELAY_UPPER = 1000, 
 
@@ -6755,7 +6766,6 @@ enum NeighborDiscoveryP____nesc_unnamed4358 {
   NeighborDiscoveryP__REDISCOVER_LOWER_BOUND = 39000, 
   NeighborDiscoveryP__REDISCOVER_UPPER_BOUND = 40000
 };
-
 uint16_t NeighborDiscoveryP__local_seq[1000];
 uint16_t NeighborDiscoveryP__alpha[1000];
 uint16_t NeighborDiscoveryP__good_quality[1000];
@@ -6766,7 +6776,7 @@ uint16_t NeighborDiscoveryP__accepted_consecutive_lost[1000];
 
 uint16_t NeighborDiscoveryP__x[1000];
 
-static inline void NeighborDiscoveryP__discover(void );
+
 
 static void NeighborDiscoveryP__makeNDPkt(neigbhorDiscoveryPkt_t *Package, uint8_t src, uint8_t protocol, uint16_t seq, uint8_t *payload, uint8_t length);
 
@@ -6791,13 +6801,14 @@ static inline void NeighborDiscoveryP__discoverTimer__fired(void );
 
 
 
+
 static inline void NeighborDiscoveryP__notifyTimer__fired(void );
 
 
 
 
-static inline void NeighborDiscoveryP__discover(void );
-#line 142
+static inline void NeighborDiscoveryP__discover__runTask(void );
+#line 143
 static void NeighborDiscoveryP__makeNDPkt(neigbhorDiscoveryPkt_t *Package, uint8_t src, uint8_t protocol, uint16_t seq, uint8_t *payload, uint8_t length);
 
 
@@ -6820,9 +6831,9 @@ static inline uint16_t NeighborDiscoveryP__ewma(uint8_t sample, uint16_t old);
 
 
 static inline void NeighborDiscoveryP__updateLink(uint8_t neighbor_id, uint16_t seq);
-#line 198
+#line 199
 static inline void NeighborDiscoveryP__PacketHandler__gotNDPkt(uint8_t *incomingMsg);
-#line 217
+#line 218
 static inline uint32_t *NeighborDiscoveryP__NeighborDiscovery__neighbors(void );
 
 
@@ -6853,7 +6864,7 @@ static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__getLinkCost(uint8_
 
 
 static void NeighborDiscoveryP__printNeighbors(void );
-#line 271
+#line 272
 static inline void NeighborDiscoveryP__PacketHandler__getReliableAckPkt(uint8_t _);
 static inline void NeighborDiscoveryP__PacketHandler__getReliablePkt(pack *_);
 static inline void NeighborDiscoveryP__PacketHandler__gotFloodPkt(uint8_t *incomingMsg, uint8_t from);
@@ -6932,9 +6943,9 @@ static bool /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1__sendTi
 #line 73
 static void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1__sendTimer__startOneShot(uint32_t dt);
 # 108 "lib/modules/SimpleSendP.nc"
-enum /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1____nesc_unnamed4359 {
+enum /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1____nesc_unnamed4360 {
 #line 108
-  SimpleSendP__1__sendBufferTask = 11U
+  SimpleSendP__1__sendBufferTask = 12U
 };
 #line 108
 typedef int /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1____nesc_sillytask_sendBufferTask[/*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1__sendBufferTask];
@@ -7186,7 +7197,7 @@ static uint16_t FloodingP__NeighborDiscovery__numNeighbors(void );
 #line 3
 static uint32_t *FloodingP__NeighborDiscovery__neighbors(void );
 # 20 "lib/modules/FloodingP.nc"
-enum FloodingP____nesc_unnamed4360 {
+enum FloodingP____nesc_unnamed4361 {
   FloodingP__MAX_NODES = 30
 };
 
@@ -7308,9 +7319,9 @@ static bool /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__sendTimer__isRu
 #line 73
 static void /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__sendTimer__startOneShot(uint32_t dt);
 # 108 "lib/modules/SimpleSendP.nc"
-enum /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2____nesc_unnamed4361 {
+enum /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2____nesc_unnamed4362 {
 #line 108
-  SimpleSendP__2__sendBufferTask = 12U
+  SimpleSendP__2__sendBufferTask = 13U
 };
 #line 108
 typedef int /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2____nesc_sillytask_sendBufferTask[/*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__sendBufferTask];
@@ -7524,12 +7535,12 @@ static uint16_t LinkStateRoutingP__NeighborDiscovery__getLinkCost(uint8_t id);
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void LinkStateRoutingP__ShareTimer__startOneShot(uint32_t dt);
 # 21 "lib/modules/LinkStateRoutingP.nc"
-enum LinkStateRoutingP____nesc_unnamed4362 {
+enum LinkStateRoutingP____nesc_unnamed4363 {
 
 
 
-  LinkStateRoutingP__START_DELAY_LOWER = 295000 * 2, 
-  LinkStateRoutingP__START_DELAY_UPPER = 300000 * 2, 
+  LinkStateRoutingP__START_DELAY_LOWER = 295000 * 3, 
+  LinkStateRoutingP__START_DELAY_UPPER = 300000 * 3, 
 
 
   LinkStateRoutingP__CONSTRUCT_R_TABLE_LOWER = 85000, 
@@ -7943,9 +7954,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
 {
 }
 
-# 274 "lib/modules/NeighborDiscoveryP.nc"
+# 275 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__gotIpPkt(uint8_t *_)
-#line 274
+#line 275
 {
 }
 
@@ -8004,9 +8015,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
 {
 }
 
-# 273 "lib/modules/NeighborDiscoveryP.nc"
+# 274 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__gotFloodPkt(uint8_t *incomingMsg, uint8_t from)
-#line 273
+#line 274
 {
 }
 
@@ -8160,9 +8171,9 @@ inline static void NeighborDiscoveryP__NeighborDiscovery__neighborChange(uint8_t
 #line 9
 }
 #line 9
-# 159 "lib/modules/NeighborDiscoveryP.nc"
+# 160 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint16_t NeighborDiscoveryP__ewma(uint8_t sample, uint16_t old)
-#line 159
+#line 160
 {
   return NeighborDiscoveryP__alpha[sim_node()] * sample + (1000 - NeighborDiscoveryP__alpha[sim_node()]) * old / 1000;
 }
@@ -8197,9 +8208,9 @@ inline static bool NeighborDiscoveryP__NeighborTable__contains(uint32_t key){
 #line 14
 }
 #line 14
-# 163 "lib/modules/NeighborDiscoveryP.nc"
+# 164 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__updateLink(uint8_t neighbor_id, uint16_t seq)
-#line 163
+#line 164
 {
   neighborInfo_t info;
   uint16_t old_quality;
@@ -8227,7 +8238,7 @@ static inline void NeighborDiscoveryP__updateLink(uint8_t neighbor_id, uint16_t 
       NeighborDiscoveryP__NeighborTable__insert(neighbor_id, info);
     }
   else 
-#line 188
+#line 189
     {
       info.link_quality = 1000;
       info.last_seq = seq;
@@ -8258,14 +8269,14 @@ inline static void NeighborDiscoveryP__SimpleSend__makePack(pack *Package, uint8
 #line 5
 }
 #line 5
-# 149 "lib/modules/NeighborDiscoveryP.nc"
+# 150 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__reply(neigbhorDiscoveryPkt_t *incomingMsg, uint8_t from)
-#line 149
+#line 150
 {
   pack send_pkt;
   neigbhorDiscoveryPkt_t nd_pkt;
 
-#line 152
+#line 153
   memcpy(&nd_pkt, incomingMsg, sizeof(neigbhorDiscoveryPkt_t ));
 
   NeighborDiscoveryP__makeNDPkt(&nd_pkt, TOS_NODE_ID, PROTOCOL_PINGREPLY, nd_pkt.seq, nd_pkt.payload, ND_PKT_MAX_PAYLOAD_SIZE);
@@ -8273,13 +8284,13 @@ static inline void NeighborDiscoveryP__reply(neigbhorDiscoveryPkt_t *incomingMsg
   NeighborDiscoveryP__SimpleSend__send(send_pkt, from);
 }
 
-#line 198
+#line 199
 static inline void NeighborDiscoveryP__PacketHandler__gotNDPkt(uint8_t *incomingMsg)
-#line 198
+#line 199
 {
   neigbhorDiscoveryPkt_t nd_pkt;
 
-#line 200
+#line 201
   memcpy(&nd_pkt, (neigbhorDiscoveryPkt_t *)incomingMsg, sizeof(neigbhorDiscoveryPkt_t ));
 
   switch (nd_pkt.protocol) {
@@ -8351,9 +8362,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
 {
 }
 
-# 272 "lib/modules/NeighborDiscoveryP.nc"
+# 273 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__getReliablePkt(pack *_)
-#line 272
+#line 273
 {
 }
 
@@ -8415,9 +8426,9 @@ static inline void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__PacketHandle
     }
 }
 
-# 271 "lib/modules/NeighborDiscoveryP.nc"
+# 272 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__PacketHandler__getReliableAckPkt(uint8_t _)
-#line 271
+#line 272
 {
 }
 
@@ -9030,9 +9041,9 @@ inline static uint16_t NeighborDiscoveryP__NeighborTable__size(void ){
 #line 16
 }
 #line 16
-# 221 "lib/modules/NeighborDiscoveryP.nc"
+# 222 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__numNeighbors(void )
-#line 221
+#line 222
 {
   return NeighborDiscoveryP__NeighborTable__size();
 }
@@ -9074,9 +9085,9 @@ inline static uint32_t *NeighborDiscoveryP__NeighborTable__getKeys(void ){
 #line 17
 }
 #line 17
-# 217 "lib/modules/NeighborDiscoveryP.nc"
+# 218 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint32_t *NeighborDiscoveryP__NeighborDiscovery__neighbors(void )
-#line 217
+#line 218
 {
   return NeighborDiscoveryP__NeighborTable__getKeys();
 }
@@ -10321,9 +10332,9 @@ inline static void CommandHandlerP__CommandHandler__printLinkState(void ){
 #line 6
 }
 #line 6
-# 225 "lib/modules/NeighborDiscoveryP.nc"
+# 226 "lib/modules/NeighborDiscoveryP.nc"
 static inline void NeighborDiscoveryP__NeighborDiscovery__printNeighbors(void )
-#line 225
+#line 226
 {
   NeighborDiscoveryP__printNeighbors();
 }
@@ -10533,9 +10544,38 @@ static inline void CommandHandlerP__processCommand__runTask(void )
     }
 }
 
-# 61 "lib/modules/NeighborDiscoveryP.nc"
+# 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
+inline static void NeighborDiscoveryP__notifyTimer__startOneShot(uint32_t dt){
+#line 73
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(7U, dt);
+#line 73
+}
+#line 73
+# 123 "lib/modules/NeighborDiscoveryP.nc"
+static inline void NeighborDiscoveryP__discover__runTask(void )
+#line 123
+{
+  pack send_pkt;
+  neigbhorDiscoveryPkt_t nd_pkt;
+  char content[6] = "Hello";
+
+  NeighborDiscoveryP__makeNDPkt(&nd_pkt, TOS_NODE_ID, PROTOCOL_PING, NeighborDiscoveryP__local_seq[sim_node()], (uint8_t *)content, ND_PKT_MAX_PAYLOAD_SIZE);
+  NeighborDiscoveryP__SimpleSend__makePack(&send_pkt, TOS_NODE_ID, 0xFFFF, PROTOCOL_NEIGHBOR_DISCOVERY, BEST_EFFORT, (uint8_t *)&nd_pkt, PACKET_MAX_PAYLOAD_SIZE);
+  NeighborDiscoveryP__SimpleSend__send(send_pkt, 0xFFFF);
+
+  NeighborDiscoveryP__local_seq[sim_node()]++;
+
+  NeighborDiscoveryP__notifyTimer__startOneShot(
+  NeighborDiscoveryP__NOTIFY_DELAY_LOWER + NeighborDiscoveryP__Random__rand16() % (NeighborDiscoveryP__NOTIFY_DELAY_UPPER - NeighborDiscoveryP__NOTIFY_DELAY_LOWER));
+
+
+  NeighborDiscoveryP__discoverTimer__startOneShot(
+  NeighborDiscoveryP__REDISCOVER_LOWER_BOUND + NeighborDiscoveryP__Random__rand16() % (NeighborDiscoveryP__REDISCOVER_UPPER_BOUND - NeighborDiscoveryP__REDISCOVER_LOWER_BOUND));
+}
+
+#line 60
 static inline void NeighborDiscoveryP__updateTable__runTask(void )
-#line 61
+#line 60
 {
   neighborInfo_t info;
   uint16_t i = 0;
@@ -10544,7 +10584,7 @@ static inline void NeighborDiscoveryP__updateTable__runTask(void )
   uint16_t num_neighbors = NeighborDiscoveryP__NeighborTable__size();
   uint32_t neighbor_list[num_neighbors];
 
-#line 68
+#line 67
   memcpy(neighbor_list, NeighborDiscoveryP__NeighborTable__getKeys(), sizeof(uint32_t ) * num_neighbors);
 
   for (; i < num_neighbors; i++) {
@@ -10556,7 +10596,8 @@ static inline void NeighborDiscoveryP__updateTable__runTask(void )
               info.link_quality = NeighborDiscoveryP__ewma(0, info.link_quality);
             }
 
-          if (old_quality > NeighborDiscoveryP__good_quality[sim_node()] && info.link_quality < NeighborDiscoveryP__good_quality[sim_node()]) {
+
+          if (old_quality > NeighborDiscoveryP__good_quality[sim_node()] && info.link_quality < NeighborDiscoveryP__good_quality[sim_node()] && ! info.degraded) {
               if (info.link_quality > NeighborDiscoveryP__poor_quality[sim_node()]) {
                   sim_log_debug(179U, NEIGHBOR_CHANNEL, "DEGRADED: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
                   info.degraded = TRUE;
@@ -11167,6 +11208,12 @@ inline static void SimSchedulerBasicP__TaskBasic__runTask(uint8_t arg_0x7ffffadb
     case CommandHandlerP__processCommand:
 #line 75
       CommandHandlerP__processCommand__runTask();
+#line 75
+      break;
+#line 75
+    case NeighborDiscoveryP__discover:
+#line 75
+      NeighborDiscoveryP__discover__runTask();
 #line 75
       break;
 #line 75
@@ -12456,43 +12503,21 @@ static inline void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1_
   /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1__checkReSend();
 }
 
-# 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
-inline static void NeighborDiscoveryP__notifyTimer__startOneShot(uint32_t dt){
-#line 73
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(7U, dt);
-#line 73
-}
-#line 73
-# 122 "lib/modules/NeighborDiscoveryP.nc"
-static inline void NeighborDiscoveryP__discover(void )
-#line 122
-{
-  pack send_pkt;
-  neigbhorDiscoveryPkt_t nd_pkt;
-  char content[6] = "Hello";
-
-  NeighborDiscoveryP__makeNDPkt(&nd_pkt, TOS_NODE_ID, PROTOCOL_PING, NeighborDiscoveryP__local_seq[sim_node()], (uint8_t *)content, ND_PKT_MAX_PAYLOAD_SIZE);
-  NeighborDiscoveryP__SimpleSend__makePack(&send_pkt, TOS_NODE_ID, 0xFFFF, PROTOCOL_NEIGHBOR_DISCOVERY, BEST_EFFORT, (uint8_t *)&nd_pkt, PACKET_MAX_PAYLOAD_SIZE);
-  NeighborDiscoveryP__SimpleSend__send(send_pkt, 0xFFFF);
-
-  NeighborDiscoveryP__local_seq[sim_node()]++;
-
-  NeighborDiscoveryP__notifyTimer__startOneShot(
-  NeighborDiscoveryP__NOTIFY_DELAY_LOWER + NeighborDiscoveryP__Random__rand16() % (NeighborDiscoveryP__NOTIFY_DELAY_UPPER - NeighborDiscoveryP__NOTIFY_DELAY_LOWER));
-
-
-  NeighborDiscoveryP__discoverTimer__startOneShot(
-  NeighborDiscoveryP__REDISCOVER_LOWER_BOUND + NeighborDiscoveryP__Random__rand16() % (NeighborDiscoveryP__REDISCOVER_UPPER_BOUND - NeighborDiscoveryP__REDISCOVER_LOWER_BOUND));
-}
-
-#line 113
-static inline void NeighborDiscoveryP__discoverTimer__fired(void )
-#line 113
-{
-  NeighborDiscoveryP__discover();
-}
-
 # 67 "/opt/tinyos-main/tos/interfaces/TaskBasic.nc"
+inline static error_t NeighborDiscoveryP__discover__postTask(void ){
+#line 67
+  unsigned char __nesc_result;
+#line 67
+
+#line 67
+  __nesc_result = SimSchedulerBasicP__TaskBasic__postTask(NeighborDiscoveryP__discover);
+#line 67
+
+#line 67
+  return __nesc_result;
+#line 67
+}
+#line 67
 inline static error_t NeighborDiscoveryP__updateTable__postTask(void ){
 #line 67
   unsigned char __nesc_result;
@@ -12507,11 +12532,17 @@ inline static error_t NeighborDiscoveryP__updateTable__postTask(void ){
 #line 67
 }
 #line 67
-# 117 "lib/modules/NeighborDiscoveryP.nc"
-static inline void NeighborDiscoveryP__notifyTimer__fired(void )
-#line 117
+# 113 "lib/modules/NeighborDiscoveryP.nc"
+static inline void NeighborDiscoveryP__discoverTimer__fired(void )
+#line 113
 {
   NeighborDiscoveryP__updateTable__postTask();
+  NeighborDiscoveryP__discover__postTask();
+}
+
+static inline void NeighborDiscoveryP__notifyTimer__fired(void )
+#line 118
+{
 }
 
 # 67 "/opt/tinyos-main/tos/interfaces/TaskBasic.nc"
@@ -12620,19 +12651,19 @@ static inline void /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__ReSendTi
   /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__checkReSend();
 }
 
-# 229 "lib/modules/NeighborDiscoveryP.nc"
+# 230 "lib/modules/NeighborDiscoveryP.nc"
 static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__getNeighborQuality(uint8_t id)
-#line 229
+#line 230
 {
   neighborInfo_t info;
 
-#line 231
+#line 232
   if (NeighborDiscoveryP__NeighborTable__contains(id)) {
       info = NeighborDiscoveryP__NeighborTable__get(id);
       return info.link_quality;
     }
   else 
-#line 234
+#line 235
     {
       return 0;
     }
@@ -12640,11 +12671,11 @@ static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__getNeighborQuality
 
 
 static inline uint16_t NeighborDiscoveryP__NeighborDiscovery__getLinkCost(uint8_t id)
-#line 240
+#line 241
 {
   uint16_t link_quality = NeighborDiscoveryP__NeighborDiscovery__getNeighborQuality(id);
 
-#line 242
+#line 243
   return NeighborDiscoveryP__x[sim_node()] / link_quality;
 }
 
@@ -15058,9 +15089,9 @@ static void SimSchedulerBasicP__sim_scheduler_submit_event(void )
     }
 }
 
-# 142 "lib/modules/NeighborDiscoveryP.nc"
+# 143 "lib/modules/NeighborDiscoveryP.nc"
 static void NeighborDiscoveryP__makeNDPkt(neigbhorDiscoveryPkt_t *Package, uint8_t src, uint8_t protocol, uint16_t seq, uint8_t *payload, uint8_t length)
-#line 142
+#line 143
 {
   Package->src = src;
   Package->protocol = protocol;
@@ -15992,6 +16023,13 @@ static void CpmModelC__sim_gain_schedule_ack(int source, sim_time_t t, CpmModelC
   sim_queue_insert(ackEvent);
 }
 
+# 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
+static void NeighborDiscoveryP__discoverTimer__startOneShot(uint32_t dt){
+#line 73
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(6U, dt);
+#line 73
+}
+#line 73
 # 103 "/opt/tinyos-main/tos/system/PoolP.nc"
 static error_t /*CommandHandlerC.PoolC.PoolP*/PoolP__1__Pool__put(/*CommandHandlerC.PoolC.PoolP*/PoolP__1__pool_t *newVal)
 #line 103
@@ -16013,9 +16051,9 @@ static error_t /*CommandHandlerC.PoolC.PoolP*/PoolP__1__Pool__put(/*CommandHandl
     }
 }
 
-# 246 "lib/modules/NeighborDiscoveryP.nc"
+# 247 "lib/modules/NeighborDiscoveryP.nc"
 static void NeighborDiscoveryP__printNeighbors(void )
-#line 246
+#line 247
 {
   uint32_t i;
   char buf[200];
@@ -16025,7 +16063,7 @@ static void NeighborDiscoveryP__printNeighbors(void )
   uint16_t n = NeighborDiscoveryP__NeighborTable__size();
   uint32_t arr[n];
 
-#line 254
+#line 255
   memcpy(arr, NeighborDiscoveryP__NeighborTable__getKeys(), n * sizeof(uint32_t ));
 
   pos += snprintf(buf + pos, sizeof buf - pos, "Neighbors of Node %d: [", TOS_NODE_ID);
@@ -16073,13 +16111,6 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__fireTimers(u
   /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__postTask();
 }
 
-# 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
-static void NeighborDiscoveryP__discoverTimer__startOneShot(uint32_t dt){
-#line 73
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(6U, dt);
-#line 73
-}
-#line 73
 # 21 "dataStructures/modules/ListC.nc"
 static void /*NodeC.SimpleSendC.ReSendQueue*/ListC__0__List__pushback(/*NodeC.SimpleSendC.ReSendQueue*/ListC__0__t input)
 #line 21
@@ -17435,7 +17466,7 @@ static void __nesc_nido_initialise(int __nesc_mote)
 
   /* Module NeighborDiscoveryP */
   NeighborDiscoveryP__local_seq[__nesc_mote] = 1;
-  NeighborDiscoveryP__alpha[__nesc_mote] = 25;
+  NeighborDiscoveryP__alpha[__nesc_mote] = 100;
   NeighborDiscoveryP__good_quality[__nesc_mote] = 715;
   NeighborDiscoveryP__poor_quality[__nesc_mote] = 400;
   NeighborDiscoveryP__accepted_consecutive_lost[__nesc_mote] = 2;

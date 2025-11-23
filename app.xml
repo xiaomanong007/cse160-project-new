@@ -1140,11 +1140,11 @@
         <long>&#10; ANDES Lab - University of California, Merced&#10; This moudle provides a simple hashmap.&#10;&#10; @author UCM ANDES Lab&#10; @date   2013/09/03&#10;&#10;</long>
       </documentation>
       <parameters>
-        <typedef name="t" ref="0x7ffffa33d340" loc="10:dataStructures/modules/HashmapC.nc">
+        <typedef name="t" ref="0x7ffffa33d440" loc="10:dataStructures/modules/HashmapC.nc">
           <component-ref qname="HashmapC"/>
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa33d340"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa33d440"/></type-var>
         </typedef>
-        <constant name="n" ref="0x7ffffa33d610" loc="10:dataStructures/modules/HashmapC.nc">
+        <constant name="n" ref="0x7ffffa33d710" loc="10:dataStructures/modules/HashmapC.nc">
           <component-ref qname="HashmapC"/>
           <type-int cname="int" size="I:4" alignment="I:4"></type-int>
         </constant>
@@ -6111,13 +6111,13 @@
     </union>
     <attribute name="atmostonce" loc="97:/opt/tinyos-main/tos/lib/tossim/tos.h" ref="0x7ffffb0f93a0" defined="" size="I:0" alignment="I:1">
     </attribute>
-    <struct name="floodingInfo" loc="9:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2fa570" defined="" size="I:64" alignment="I:4">
-      <field name="num_neighbors" ref="0x7ffffa2fade0" bit-offset="I:0" size="I:1">
+    <struct name="floodingInfo" loc="9:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2faa30" defined="" size="I:64" alignment="I:4">
+      <field name="num_neighbors" ref="0x7ffffa2f7330" bit-offset="I:0" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="neighbors" ref="0x7ffffa2fae90" bit-offset="I:32" size="I:60">
+      <field name="neighbors" ref="0x7ffffa2f73e0" bit-offset="I:32" size="I:60">
         <type-array elements="I:15" size="I:60" alignment="I:4">
           <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
             <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
@@ -6125,13 +6125,13 @@
         </type-array>
       </field>
     </struct>
-    <struct name="tuple" loc="18:lib/modules/../../includes/lsaPkt.h" ref="0x7ffffa2b0ce0" defined="" size="I:4" alignment="I:2">
-      <field name="id" ref="0x7ffffa2ae320" bit-offset="I:0" size="I:1">
+    <struct name="tuple" loc="18:lib/modules/../../includes/lsaPkt.h" ref="0x7ffffa2ac080" defined="" size="I:4" alignment="I:2">
+      <field name="id" ref="0x7ffffa2ac680" bit-offset="I:0" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="cost" ref="0x7ffffa2ae3d0" bit-offset="I:16" size="I:2">
+      <field name="cost" ref="0x7ffffa2ac730" bit-offset="I:16" size="I:2">
         <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
           <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
         </type-int>
@@ -6172,9 +6172,6 @@
         <type-tag size="I:1" alignment="I:1"><struct-ref ref="0x7ffffa7de6a0"/></type-tag>
       </field>
     </union>
-    <enum loc="6:lib/modules/../../includes/lsaPkt.h" ref="0x7ffffa2b4ca0" defined="" size="I:4" alignment="I:4">
-      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-    </enum>
     <attribute name="hwevent"  loc="NONE" ref="0x7ffffb696a90" size="V:" alignment="V:">
     </attribute>
     <enum name="cc2420_ram_addr_enums" loc="225:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h" ref="0x7ffffac883c0" defined="" size="I:4" alignment="I:4">
@@ -6369,6 +6366,9 @@
     <enum name="cc2420_syncword_enums" loc="280:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h" ref="0x7ffffac7eaa0" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
+    <enum loc="6:lib/modules/../../includes/lsaPkt.h" ref="0x7ffffa2af080" defined="" size="I:4" alignment="I:4">
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
     <attribute name="safe"  loc="NONE" ref="0x7ffffb695ce0" size="V:" alignment="V:">
     </attribute>
     <union loc="67:/usr/include/stdlib.h" ref="0x7ffffb476390" defined="" size="I:8" alignment="I:8">
@@ -6498,23 +6498,23 @@
     <enum loc="185:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7dd5a0" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <struct name="linkStateAdPkt" loc="11:lib/modules/../../includes/lsaPkt.h" ref="0x7ffffa2b1af0" defined="" size="I:3" alignment="I:1">
-      <field name="seq" ref="0x7ffffa2b0660" bit-offset="I:0" size="I:1">
+    <struct name="linkStateAdPkt" loc="11:lib/modules/../../includes/lsaPkt.h" ref="0x7ffffa2afe60" defined="" size="I:3" alignment="I:1">
+      <field name="seq" ref="0x7ffffa2ae9c0" bit-offset="I:0" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="num_entries" ref="0x7ffffa2b0710" bit-offset="I:8" size="I:1">
+      <field name="num_entries" ref="0x7ffffa2aea70" bit-offset="I:8" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="tag" ref="0x7ffffa2b07c0" bit-offset="I:16" size="I:1">
+      <field name="tag" ref="0x7ffffa2aeb20" bit-offset="I:16" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="payload" ref="0x7ffffa2b0870" bit-offset="I:24" size="I:0">
+      <field name="payload" ref="0x7ffffa2aebd0" bit-offset="I:24" size="I:0">
         <type-array elements="I:0" size="I:0" alignment="I:1">
           <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
             <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
@@ -6635,6 +6635,9 @@
       </field>
     </struct>
     <enum loc="6:includes/floodingPkt.h" ref="0x7ffffa921650" defined="" size="I:4" alignment="I:4">
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
+    <enum loc="5:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2fa390" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
     <enum loc="6:lib/modules/../../includes/am_types.h" ref="0x7ffffa8bd160" defined="" size="I:4" alignment="I:4">
@@ -7426,9 +7429,6 @@
     <enum name="cc2420_iocfg1_enums" loc="356:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h" ref="0x7ffffac6f020" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="5:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2fde30" defined="" size="I:4" alignment="I:4">
-      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-    </enum>
     <attribute name="atomic_hwevent"  loc="NONE" ref="0x7ffffb696d50" size="V:" alignment="V:">
     </attribute>
     <attribute name="dmemcpy" loc="16:/usr/lib/ncc/deputy_nodeputy.h" ref="0x7ffffb689d00" defined="" size="I:12" alignment="I:4">
@@ -7631,7 +7631,11 @@
       <component-ref qname="CommandHandlerP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="61:lib/modules/NeighborDiscoveryP.nc" ref="0x7ffffa3d3a30" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="60:lib/modules/NeighborDiscoveryP.nc" ref="0x7ffffa351020" defined="" scoped="" size="I:4" alignment="I:4">
+      <component-ref qname="NeighborDiscoveryP"/>
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
+    <enum loc="47:lib/modules/NeighborDiscoveryP.nc" ref="0x7ffffa34f210" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -7639,22 +7643,22 @@
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <struct name="hashmapEntry" loc="20:dataStructures/modules/HashmapC.nc" ref="0x7ffffa338830" defined="" scoped="" size="U:" alignment="U:">
+    <struct name="hashmapEntry" loc="20:dataStructures/modules/HashmapC.nc" ref="0x7ffffa336b10" defined="" scoped="" size="U:" alignment="U:">
       <component-ref qname="HashmapC"/>
-      <field name="key" ref="0x7ffffa338e30" bit-offset="I:0" size="I:4">
+      <field name="key" ref="0x7ffffa335180" bit-offset="I:0" size="I:4">
         <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
           <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
         </type-int>
       </field>
-      <field name="value" ref="0x7ffffa338ee0" bit-offset="U:" size="U:">
-        <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa33d340"/></type-var>
+      <field name="value" ref="0x7ffffa335230" bit-offset="U:" size="U:">
+        <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa33d440"/></type-var>
       </field>
     </struct>
-    <enum loc="20:lib/modules/FloodingP.nc" ref="0x7ffffa2f5ca0" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="20:lib/modules/FloodingP.nc" ref="0x7ffffa2f2340" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="FloodingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="21:lib/modules/LinkStateRoutingP.nc" ref="0x7ffffa29f080" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="21:lib/modules/LinkStateRoutingP.nc" ref="0x7ffffa29d660" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="LinkStateRoutingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -8182,7 +8186,7 @@
     </variable>
     <variable name="m_next" ref="0x7ffffadb64d0" loc="61:/opt/tinyos-main/tos/lib/tossim/SimSchedulerBasicP.nc">
       <component-ref qname="SimSchedulerBasicP"/>
-      <type-array elements="I:13" size="I:13" alignment="I:1">
+      <type-array elements="I:14" size="I:14" alignment="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
@@ -8634,69 +8638,69 @@
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="poor_quality" ref="0x7ffffa3b7750" loc="41:lib/modules/NeighborDiscoveryP.nc">
+    <variable name="poor_quality" ref="0x7ffffa3b7750" loc="40:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="good_quality" ref="0x7ffffa3b7250" loc="40:lib/modules/NeighborDiscoveryP.nc">
+    <variable name="good_quality" ref="0x7ffffa3b7250" loc="39:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="accepted_consecutive_lost" ref="0x7ffffa3b7cf0" loc="44:lib/modules/NeighborDiscoveryP.nc">
+    <variable name="accepted_consecutive_lost" ref="0x7ffffa3b7cf0" loc="43:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="local_seq" ref="0x7ffffa3b8830" loc="38:lib/modules/NeighborDiscoveryP.nc">
+    <variable name="local_seq" ref="0x7ffffa3b8830" loc="37:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="x" ref="0x7ffffa3b61e0" loc="46:lib/modules/NeighborDiscoveryP.nc">
+    <variable name="x" ref="0x7ffffa3b61e0" loc="45:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="alpha" ref="0x7ffffa3b8cf0" loc="39:lib/modules/NeighborDiscoveryP.nc">
+    <variable name="alpha" ref="0x7ffffa3b8cf0" loc="38:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="numofVals" ref="0x7ffffa337d80" loc="27:dataStructures/modules/HashmapC.nc">
+    <variable name="numofVals" ref="0x7ffffa3330d0" loc="27:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="HASH_MAX_SIZE" ref="0x7ffffa339e40" loc="15:dataStructures/modules/HashmapC.nc">
+    <variable name="HASH_MAX_SIZE" ref="0x7ffffa336160" loc="15:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="map" ref="0x7ffffa337540" loc="25:dataStructures/modules/HashmapC.nc">
+    <variable name="map" ref="0x7ffffa335840" loc="25:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
       <type-array elements="U:" size="U:" alignment="U:">
-        <type-tag size="U:" alignment="U:"><struct-ref name="hashmapEntry" scoped="" ref="0x7ffffa338830"/>
-          <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa337090"/></typename>
+        <type-tag size="U:" alignment="U:"><struct-ref name="hashmapEntry" scoped="" ref="0x7ffffa336b10"/>
+          <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa335390"/></typename>
         </type-tag>
       </type-array>
     </variable>
-    <variable name="EMPTY_KEY" ref="0x7ffffa3383a0" loc="18:dataStructures/modules/HashmapC.nc">
+    <variable name="EMPTY_KEY" ref="0x7ffffa336680" loc="18:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="keys" ref="0x7ffffa3379e0" loc="26:dataStructures/modules/HashmapC.nc">
+    <variable name="keys" ref="0x7ffffa335ce0" loc="26:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
       <type-array elements="U:" size="U:" alignment="I:4">
         <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
@@ -8704,21 +8708,21 @@
         </type-int>
       </type-array>
     </variable>
-    <variable name="flooding_table" ref="0x7ffffa2f4580" loc="24:lib/modules/FloodingP.nc">
+    <variable name="flooding_table" ref="0x7ffffa2f2b80" loc="24:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-array elements="I:30" size="I:1920" alignment="I:4">
-        <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2fa570"/>
-          <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2f9020"/></typename>
+        <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2faa30"/>
+          <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2f7540"/></typename>
         </type-tag>
       </type-array>
     </variable>
-    <variable name="local_seq" ref="0x7ffffa2f4e00" loc="27:lib/modules/FloodingP.nc">
+    <variable name="local_seq" ref="0x7ffffa2f1430" loc="27:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="seq_table" ref="0x7ffffa2f4a60" loc="25:lib/modules/FloodingP.nc">
+    <variable name="seq_table" ref="0x7ffffa2f1090" loc="25:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-array elements="I:30" size="I:60" alignment="I:2">
         <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
@@ -9190,7 +9194,7 @@
     <constant cst="I:7" name="RXC0" ref="0x7ffffad12980" loc="1030:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:3" name="LSA_PKT_HEADER_LENGTH" ref="0x7ffffa2b1070" loc="7:lib/modules/../../includes/lsaPkt.h">
+    <constant cst="I:3" name="LSA_PKT_HEADER_LENGTH" ref="0x7ffffa2af3e0" loc="7:lib/modules/../../includes/lsaPkt.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:8" name="ATM128_ACSR" ref="0x7ffffad70710" loc="54:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
@@ -11245,7 +11249,7 @@
     <constant cst="I:0" name="ATM128_ADC_VREF_OFF" ref="0x7ffffacd1c40" loc="44:/opt/tinyos-main/tos/chips/atm128/adc/Atm128Adc.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:15" name="MAX_NUM_NEIGHBOR" ref="0x7ffffa2fa200" loc="6:lib/modules/../../includes/floodingInfo.h">
+    <constant cst="I:15" name="MAX_NUM_NEIGHBOR" ref="0x7ffffa2fa6c0" loc="6:lib/modules/../../includes/floodingInfo.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:4" name="FE" ref="0x7ffffad14020" loc="1013:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
@@ -11341,7 +11345,7 @@
     <constant cst="I:7" name="PD7" ref="0x7ffffacf8660" loc="1191:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:15" name="LSA_PKT_MAX_PAYLOAD_SIZE" ref="0x7ffffa2b1770" loc="8:lib/modules/../../includes/lsaPkt.h">
+    <constant cst="I:15" name="LSA_PKT_MAX_PAYLOAD_SIZE" ref="0x7ffffa2afae0" loc="8:lib/modules/../../includes/lsaPkt.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:2" name="CC2420_RXCTRL0_MED_LNA_CURRENT" ref="0x7ffffac7a970" loc="300:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
@@ -11765,7 +11769,7 @@
       <component-ref qname="SimSchedulerBasicP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:13" name="NUM_TASKS" ref="0x7ffffadb7420" loc="55:/opt/tinyos-main/tos/lib/tossim/SimSchedulerBasicP.nc">
+    <constant cst="I:14" name="NUM_TASKS" ref="0x7ffffadb7420" loc="55:/opt/tinyos-main/tos/lib/tossim/SimSchedulerBasicP.nc">
       <component-ref qname="SimSchedulerBasicP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -11837,6 +11841,10 @@
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
+    <constant cst="I:10" name="discover" ref="0x7ffffa34f020" loc="47:lib/modules/NeighborDiscoveryP.nc">
+      <component-ref qname="NeighborDiscoveryP"/>
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </constant>
     <constant cst="I:21000" name="NOTIFY_DELAY_UPPER" ref="0x7ffffa3b9c90" loc="32:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
@@ -11845,7 +11853,7 @@
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:10" name="updateTable" ref="0x7ffffa3d3840" loc="61:lib/modules/NeighborDiscoveryP.nc">
+    <constant cst="I:11" name="updateTable" ref="0x7ffffa3d3d90" loc="60:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -11857,23 +11865,23 @@
       <component-ref qname="NeighborDiscoveryP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:30" name="MAX_NODES" ref="0x7ffffa2f4020" loc="21:lib/modules/FloodingP.nc">
+    <constant cst="I:30" name="MAX_NODES" ref="0x7ffffa2f2620" loc="21:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:90000" name="CONSTRUCT_R_TABLE_UPPER" ref="0x7ffffa29e3f0" loc="30:lib/modules/LinkStateRoutingP.nc">
+    <constant cst="I:90000" name="CONSTRUCT_R_TABLE_UPPER" ref="0x7ffffa29c900" loc="30:lib/modules/LinkStateRoutingP.nc">
       <component-ref qname="LinkStateRoutingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:590000" name="START_DELAY_LOWER" ref="0x7ffffa29f5a0" loc="25:lib/modules/LinkStateRoutingP.nc">
+    <constant cst="I:885000" name="START_DELAY_LOWER" ref="0x7ffffa29db80" loc="25:lib/modules/LinkStateRoutingP.nc">
       <component-ref qname="LinkStateRoutingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:85000" name="CONSTRUCT_R_TABLE_LOWER" ref="0x7ffffa29e020" loc="29:lib/modules/LinkStateRoutingP.nc">
+    <constant cst="I:85000" name="CONSTRUCT_R_TABLE_LOWER" ref="0x7ffffa29c530" loc="29:lib/modules/LinkStateRoutingP.nc">
       <component-ref qname="LinkStateRoutingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:600000" name="START_DELAY_UPPER" ref="0x7ffffa29fae0" loc="26:lib/modules/LinkStateRoutingP.nc">
+    <constant cst="I:900000" name="START_DELAY_UPPER" ref="0x7ffffa29c140" loc="26:lib/modules/LinkStateRoutingP.nc">
       <component-ref qname="LinkStateRoutingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -12602,9 +12610,9 @@
         <typename><typedef-ref name="time_t" ref="0x7ffffb44d4a0"/></typename>
       </type-int>
     </typedef>
-    <typedef name="tuple_t" ref="0x7ffffa2ae530" loc="21:lib/modules/../../includes/lsaPkt.h">
-      <type-tag size="I:4" alignment="I:2"><struct-ref name="tuple" ref="0x7ffffa2b0ce0"/>
-        <typename><typedef-ref name="tuple_t" ref="0x7ffffa2ae530"/></typename>
+    <typedef name="tuple_t" ref="0x7ffffa2ac890" loc="21:lib/modules/../../includes/lsaPkt.h">
+      <type-tag size="I:4" alignment="I:2"><struct-ref name="tuple" ref="0x7ffffa2ac080"/>
+        <typename><typedef-ref name="tuple_t" ref="0x7ffffa2ac890"/></typename>
       </type-tag>
     </typedef>
     <typedef name="nxle_int8_t" ref="0x7ffffb4eacd0" loc="441:/usr/lib/ncc/nesc_nx.h">
@@ -12766,9 +12774,9 @@
         <typename><typedef-ref name="_G_fpos_t" ref="0x7ffffb1c52f0"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="floodingInfo_t" ref="0x7ffffa2f9020" loc="12:lib/modules/../../includes/floodingInfo.h">
-      <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2fa570"/>
-        <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2f9020"/></typename>
+    <typedef name="floodingInfo_t" ref="0x7ffffa2f7540" loc="12:lib/modules/../../includes/floodingInfo.h">
+      <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2faa30"/>
+        <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2f7540"/></typename>
       </type-tag>
     </typedef>
     <typedef name="u_int8_t" ref="0x7ffffb44b1b0" loc="200:/usr/include/x86_64-linux-gnu/sys/types.h">
@@ -13320,9 +13328,9 @@
         <typename><typedef-ref name="ulong" ref="0x7ffffb44c450"/></typename>
       </type-int>
     </typedef>
-    <typedef name="linkStateAdPkt_t" ref="0x7ffffa2b09d0" loc="16:lib/modules/../../includes/lsaPkt.h">
-      <type-tag size="I:3" alignment="I:1"><struct-ref name="linkStateAdPkt" ref="0x7ffffa2b1af0"/>
-        <typename><typedef-ref name="linkStateAdPkt_t" ref="0x7ffffa2b09d0"/></typename>
+    <typedef name="linkStateAdPkt_t" ref="0x7ffffa2aed30" loc="16:lib/modules/../../includes/lsaPkt.h">
+      <type-tag size="I:3" alignment="I:1"><struct-ref name="linkStateAdPkt" ref="0x7ffffa2afe60"/>
+        <typename><typedef-ref name="linkStateAdPkt_t" ref="0x7ffffa2aed30"/></typename>
       </type-tag>
     </typedef>
     <typedef name="int_fast64_t" ref="0x7ffffb67a850" loc="94:/usr/include/stdint.h">
@@ -13554,16 +13562,22 @@
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </type-array>
     </typedef>
-    <typedef name="__nesc_sillytask_updateTable" ref="0x7ffffa3d3de0" loc="61:lib/modules/NeighborDiscoveryP.nc">
+    <typedef name="__nesc_sillytask_updateTable" ref="0x7ffffa3513d0" loc="60:lib/modules/NeighborDiscoveryP.nc">
+      <component-ref qname="NeighborDiscoveryP"/>
+      <type-array elements="I:11" size="I:44" alignment="I:4">
+        <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+      </type-array>
+    </typedef>
+    <typedef name="__nesc_sillytask_discover" ref="0x7ffffa34f5c0" loc="47:lib/modules/NeighborDiscoveryP.nc">
       <component-ref qname="NeighborDiscoveryP"/>
       <type-array elements="I:10" size="I:40" alignment="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </type-array>
     </typedef>
-    <typedef name="hashmapEntry" ref="0x7ffffa337090" loc="23:dataStructures/modules/HashmapC.nc">
+    <typedef name="hashmapEntry" ref="0x7ffffa335390" loc="23:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
-      <type-tag size="U:" alignment="U:"><struct-ref name="hashmapEntry" scoped="" ref="0x7ffffa338830"/>
-        <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa337090"/></typename>
+      <type-tag size="U:" alignment="U:"><struct-ref name="hashmapEntry" scoped="" ref="0x7ffffa336b10"/>
+        <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa335390"/></typename>
       </type-tag>
     </typedef>
   </typedefs>
