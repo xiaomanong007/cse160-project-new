@@ -34,10 +34,14 @@ implementation {
     uint8_t local_seq = 1;
     bool init = FALSE;
     bool hasTabel = FALSE;
+    uint16_t k = 0;
 
     task void DijstraTask();
 
     void printRoutingTable();
+
+    void determineRunDijstra(); //  if there is a change in the Graph, first chech if a DijstraTimer is running; 
+                                //  if not, wait 4s to runing Dijstra; otherwise, stop the current one and wait 4s to runing Dijstra
     
     void makeLSAPack(linkStateAdPkt_t *Package, uint8_t seq, uint8_t num_entries, uint8_t tag, uint8_t* payload, uint8_t length);
 
@@ -87,7 +91,6 @@ implementation {
     }
     
     event void DijstraTimer.fired() {
-        // call Graph.printGraph();
         post DijstraTask();
     }
 
@@ -97,6 +100,18 @@ implementation {
     command uint16_t LinkStateRouting.pathCost(uint8_t dest) {}
 
     command void LinkStateRouting.printRoutingTable() {}
+
+    void determineRunDijstra() {
+        if (hasTabel) {
+            if (call DijstraTimer.isRunning()) {
+                call DijstraTimer.stop();
+            }
+            call DijstraTimer.startOneShot(
+                4000 + (call Random.rand16() % (5000 - 4000))
+            );
+        }
+
+    }
     
 
     event void Flooding.gotLSA(uint8_t* incomingMsg, uint8_t from) {
@@ -111,12 +126,15 @@ implementation {
                 for (; i < lsa_pkt.num_entries; i++) {
                     call Graph.insert(from, entry[i].id, entry[i].cost);
                 }
+                determineRunDijstra();
                 break;
             case LNIK_QUALITY_CHANGE:
                 call Graph.insert(from, entry[i].id, entry[i].cost);
+                determineRunDijstra();
                 break;
             case INACTIVE:
                 call Graph.removeEdge(from, entry[i].id);
+                determineRunDijstra();
                 break;
             default:
                 return;
@@ -238,7 +256,9 @@ implementation {
             }
         }
 
-        printRoutingTable();
+        k++;
+        printf("Node %d: run dj = %d\n", TOS_NODE_ID, k);
+        // printRoutingTable();
         hasTabel = TRUE;
     }
 
