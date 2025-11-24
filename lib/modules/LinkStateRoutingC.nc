@@ -26,4 +26,7 @@ implementation {
 
     components new GraphC(25);
     LinkStateRoutingP.Graph -> GraphC;
+
+    components new HashmapC(routingInfo_t, 30) as RoutingTable;
+    LinkStateRoutingP.RoutingTable -> RoutingTable;
 }

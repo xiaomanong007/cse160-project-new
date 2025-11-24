@@ -40,7 +40,8 @@ implementation {
                     // (link quality < poor_quality) is poor connection (will be dropped and signaled)
 
     uint16_t accepted_consecutive_lost = 2; // more than accepted_consecutive_lost and bellow poor_quality will result a neighbor drop
-    
+    uint16_t drop_value = 9; // with more than "drop_value" packets lost will cause a drop in neighbor in the table
+
     uint16_t x = 10000; // path cost = x / link_quality
 
     task void discover();
@@ -69,6 +70,13 @@ implementation {
             if (call NeighborTable.contains(neighbor_list[i])) {
                 info = call NeighborTable.get(neighbor_list[i]);
                 old_quality = info.link_quality;
+
+                if (local_seq - info.last_seq >= drop_value - 1) {
+                    dbg(NEIGHBOR_CHANNEL,"DROP: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
+                    
+                    call NeighborTable.remove(neighbor_list[i]);
+                    continue;
+                }
 
                 if (info.last_seq < local_seq - 1) {
                     info.link_quality = ewma(0, info.link_quality);

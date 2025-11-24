@@ -39,6 +39,8 @@ implementation{
         return adjacency_matrix[i][j];
     }
 
+    command uint16_t Graph.numNeighbors(uint16_t i) {}
+    command uint16_t* Graph.neighbors(uint16_t i) {}
 
     command bool Graph.contains(uint16_t i) {
         return node_arr[i];

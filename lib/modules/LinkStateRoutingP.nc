@@ -1,4 +1,5 @@
 #include "../../includes/lsaPkt.h"
+#include "../../includes/routingInfo.h"
 #include "../../includes/protocol.h"
 
 #define INFINITE 65535
@@ -15,6 +16,7 @@ module LinkStateRoutingP {
         interface Timer<TMilli> as ShareTimer;
         interface Timer<TMilli> as DijstraTimer;
         interface Graph;
+        interface Hashmap<routingInfo_t> as RoutingTable;
     }
 }
 
@@ -30,7 +32,7 @@ implementation {
     uint8_t local_seq = 1;
     bool init = FALSE;
 
-    void updateGraph(tuple_t* info, uint8_t src, uint8_t num_entries, uint8_t tag);
+    task void DijstraTask();
     
     void makeLSAPack(linkStateAdPkt_t *Package, uint8_t seq, uint8_t num_entries, uint8_t tag, uint8_t* payload, uint8_t length);
 
@@ -80,7 +82,8 @@ implementation {
     }
     
     event void DijstraTimer.fired() {
-        call Graph.printGraph();
+        // call Graph.printGraph();
+        post DijstraTask();
     }
 
 
@@ -115,6 +118,10 @@ implementation {
         }
     }
 
+    task void DijstraTask() {
+        printf("Run Dijstra\n");
+    }
+
     event void NeighborDiscovery.neighborChange(uint8_t id, uint8_t tag) {
         if (init) {
             linkStateAdPkt_t lsa_pkt;
@@ -125,8 +132,6 @@ implementation {
             call Flooding.flood(GLOBAL_SHARE, PROTOCOL_LINKSTATE, 30, (uint8_t *)&lsa_pkt, sizeof(linkStateAdPkt_t));
         }
     }
-
-    void updateGraph(tuple_t* info, uint8_t src, uint8_t num_entries, uint8_t tag) {}
 
     void makeLSAPack(linkStateAdPkt_t *Package, uint8_t seq, uint8_t num_entries, uint8_t tag, uint8_t* payload, uint8_t length) {
         Package->seq = seq;
