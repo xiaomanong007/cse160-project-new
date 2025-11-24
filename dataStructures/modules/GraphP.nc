@@ -39,8 +39,31 @@ implementation{
         return adjacency_matrix[i][j];
     }
 
-    command uint16_t Graph.numNeighbors(uint16_t i) {}
-    command uint16_t* Graph.neighbors(uint16_t i) {}
+    command uint16_t Graph.numNeighbors(uint16_t i) {
+        uint16_t c = 0;
+        uint16_t k = 1;
+        for (; k < n+1; k++) {
+            if (adjacency_matrix[i][k] != 0) {
+                c++;
+            }
+        }
+        return c;
+    }
+
+    command void Graph.neighbors(uint16_t i, uint16_t* input) {
+        uint16_t c = call Graph.numNeighbors(i);
+        uint16_t arr[c];
+        uint16_t counter = 0;
+        uint16_t k = 1;
+        for (; k < n+1; k++) {
+            if (adjacency_matrix[i][k] != 0) {
+                arr[counter] = k;
+                counter++;
+            }
+        }
+
+        memcpy(input, &arr, c * sizeof(uint16_t));
+    }
 
     command bool Graph.contains(uint16_t i) {
         return node_arr[i];

@@ -8,8 +8,8 @@ enum{
 };
 
 typedef struct routingInfo{
-    uint8_t num;
-    tuple_t next_hops[MAX_NEXT_HOP_NUM];
+    uint8_t next_hop;
+    uint16_t cost;
 }routingInfo_t;
 
 #endif

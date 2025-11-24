@@ -9,6 +9,8 @@ def main():
 
     # Load the the layout of the network.
     # s.loadTopo("circle.topo");
+    # s.loadTopo("house.topo");
+    # s.loadTopo("pizza.topo");
     s.loadTopo("tuna-melt.topo");
 
 
@@ -26,7 +28,7 @@ def main():
     s.addChannel(s.GENERAL_CHANNEL);
     # s.addChannel(s.NEIGHBOR_CHANNEL);
     # s.addChannel(s.FLOODING_CHANNEL);
-    # s.addChannel(s.ROUTING_CHANNEL);
+    s.addChannel(s.ROUTING_CHANNEL);
     # s.addChannel(s.TRANSPORT_CHANNEL);
 
     # After sending a ping, simulate a little to prevent collision.

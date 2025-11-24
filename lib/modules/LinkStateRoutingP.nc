@@ -3,6 +3,8 @@
 #include "../../includes/protocol.h"
 
 #define INFINITE 65535
+#define MAX_LOG_LEN 512
+
 
 module LinkStateRoutingP {
     provides {
@@ -31,8 +33,11 @@ implementation {
 
     uint8_t local_seq = 1;
     bool init = FALSE;
+    bool hasTabel = FALSE;
 
     task void DijstraTask();
+
+    void printRoutingTable();
     
     void makeLSAPack(linkStateAdPkt_t *Package, uint8_t seq, uint8_t num_entries, uint8_t tag, uint8_t* payload, uint8_t length);
 
@@ -118,8 +123,123 @@ implementation {
         }
     }
 
+    void printRoutingTable() {
+        char logBuffer[MAX_LOG_LEN];
+        uint16_t offset = 0;
+        uint16_t dest;
+        routingInfo_t routeInfo;
+        uint8_t i;
+
+        offset += snprintf(logBuffer + offset, MAX_LOG_LEN - offset, "\n---NODE %d ROUTING TABLE---\n", TOS_NODE_ID);
+        offset += snprintf(logBuffer + offset, MAX_LOG_LEN - offset, "dest\thop\tcost\n");
+
+        for (i = 0; i < call RoutingTable.size(); i++) {
+            dest = *(call RoutingTable.getKeys() + i);
+            routeInfo = call RoutingTable.get(dest);
+
+            offset += snprintf(logBuffer + offset, MAX_LOG_LEN - offset, "%d\t%d\t%d\n", dest, routeInfo.next_hop, routeInfo.cost);
+
+            if (offset >= MAX_LOG_LEN - 32)
+                break;
+        }
+
+        offset += snprintf(logBuffer + offset, MAX_LOG_LEN - offset, "\n");
+
+        dbg(ROUTING_CHANNEL, "%s", logBuffer);
+    }
+
     task void DijstraTask() {
-        printf("Run Dijstra\n");
+        routingInfo_t routeInfo;
+        uint16_t i, j, n;
+        tuple_t temp;
+        uint16_t lowest_distance = INFINITE;
+        uint16_t lowest = TOS_NODE_ID - 1;
+        uint16_t num_nodes = call Graph.num_nodes();
+        uint16_t temp_arr[num_nodes];
+        uint16_t counter = num_nodes;
+        uint16_t distance[num_nodes];
+        uint16_t updatedBy[num_nodes];
+        bool discoverd[num_nodes];
+
+
+        distance[TOS_NODE_ID - 1] = 0;
+        discoverd[TOS_NODE_ID - 1] = TRUE;
+        updatedBy[TOS_NODE_ID - 1] = lowest + 1;
+        routeInfo.next_hop = TOS_NODE_ID;
+        routeInfo.cost = 0;
+        call RoutingTable.insert(TOS_NODE_ID, routeInfo);
+
+
+        for (i = 0; i < num_nodes; i++) {
+            if (i != TOS_NODE_ID - 1) {
+                distance[i] = INFINITE;
+                discoverd[i] = FALSE;
+            }
+        }
+
+        while (counter > 0) {
+            n = call Graph.numNeighbors(lowest + 1);
+            call Graph.neighbors(lowest + 1, (uint16_t*)&temp_arr);
+            for (i = 0; i < n; i++) {
+                temp.id = temp_arr[i];
+                temp.cost = call Graph.cost(lowest + 1, temp.id);
+                if (!discoverd[temp.id - 1]) {
+                    if (distance[temp.id - 1] > (distance[lowest] + temp.cost)) {
+                        distance[temp.id - 1] = distance[lowest] + temp.cost;
+                        if (lowest == TOS_NODE_ID - 1) {
+                            updatedBy[temp.id - 1] = temp.id;
+                        } else {
+                            updatedBy[temp.id - 1] = updatedBy[lowest];
+                        }
+                        
+                    } else {
+                        if (distance[temp.id - 1] == (distance[lowest] + temp.cost)) {
+                            if (updatedBy[temp.id - 1] > lowest) {
+                                if (lowest == TOS_NODE_ID - 1) {
+                                    updatedBy[temp.id - 1] = temp.id;
+                                } else {
+                                    updatedBy[temp.id - 1] = updatedBy[lowest];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            for (j = 0; j < num_nodes; j++) {
+                if (!discoverd[j] && distance[j] != INFINITE) {
+                    if (distance[j] < lowest_distance) {
+                        lowest_distance = distance[j];
+                        lowest = j;
+                    } else {
+                        if (distance[j] == lowest_distance) {
+                            if (j < lowest) {
+                                lowest = j;
+                            }
+                        }
+                    }
+                }
+            }
+
+            discoverd[lowest] = TRUE;
+            routeInfo.next_hop = updatedBy[lowest];
+            routeInfo.cost = distance[lowest];
+            call RoutingTable.insert(lowest+1, routeInfo);
+            lowest_distance = INFINITE;
+            counter--;
+        }
+
+        for (i = 0; i < num_nodes; i++) {
+            if (!discoverd[i]) {
+                routeInfo.next_hop = 0;
+                routeInfo.cost = INFINITE;
+                call RoutingTable.insert(i+1, routeInfo);
+            }
+        }
+
+        printRoutingTable();
+        hasTabel = TRUE;
     }
 
     event void NeighborDiscovery.neighborChange(uint8_t id, uint8_t tag) {
