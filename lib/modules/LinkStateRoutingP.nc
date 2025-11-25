@@ -116,7 +116,6 @@ implementation {
         tuple_t entry[MAX_ENTRIES];
         memcpy(&lsa_pkt, incomingMsg, sizeof(linkStateAdPkt_t));
         memcpy(&entry, lsa_pkt.payload, MAX_ENTRIES * sizeof(tuple_t));
-
         switch(lsa_pkt.tag) {
             case INIT:
                 for (; i < lsa_pkt.num_entries; i++) {
@@ -129,6 +128,10 @@ implementation {
                 determineRunDijstra();
                 break;
             case INACTIVE:
+                call Graph.removeEdge(from, entry[i].id);
+                determineRunDijstra();
+                break;
+            case NEIGHBOR_DROP:                
                 call Graph.removeEdge(from, entry[i].id);
                 determineRunDijstra();
                 break;
@@ -251,7 +254,6 @@ implementation {
                 call RoutingTable.insert(i+1, routeInfo);
             }
         }
-        // printRoutingTable();
         hasTabel = TRUE;
     }
 
@@ -260,7 +262,7 @@ implementation {
     }
 
     command uint16_t LinkStateRouting.pathCost(uint8_t dest) {
-        return (call RoutingTable.get(dest)).next_hop;
+        return (call RoutingTable.get(dest)).cost;
     }
 
     command void LinkStateRouting.printRoutingTable() {
@@ -273,7 +275,15 @@ implementation {
             linkStateAdPkt_t lsa_pkt;
             tuple_t info;
             info.id = id;
-            info.cost = call NeighborDiscovery.getLinkCost(id);
+            
+            if (tag == INACTIVE || tag == NEIGHBOR_DROP) {
+                info.cost = 0;
+                call Graph.removeEdge(TOS_NODE_ID, id);
+            } else {
+                info.cost = call NeighborDiscovery.getLinkCost(id);
+                call Graph.insert(TOS_NODE_ID, id, info.cost);
+            }
+
             makeLSAPack(&lsa_pkt, local_seq, 1, tag, (uint8_t*)&info, sizeof(tuple_t));
             call Flooding.flood(GLOBAL_SHARE, PROTOCOL_LINKSTATE, 30, (uint8_t *)&lsa_pkt, sizeof(linkStateAdPkt_t));
         }
@@ -289,4 +299,5 @@ implementation {
     event void PacketHandler.gotNDPkt(uint8_t* _){}
     event void PacketHandler.gotFloodPkt(uint8_t* incomingMsg, uint8_t from){}
     event void PacketHandler.gotIpPkt(uint8_t* _){}
+
 }

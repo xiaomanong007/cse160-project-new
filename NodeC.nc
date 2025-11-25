@@ -42,4 +42,7 @@ implementation {
 
     components LinkStateRoutingC;
     Node.LinkStateRouting -> LinkStateRoutingC;
+
+    components IPC;
+    Node.IP -> IPC;
 }

@@ -73,8 +73,8 @@ implementation {
 
                 if (local_seq - info.last_seq >= drop_value - 1) {
                     dbg(NEIGHBOR_CHANNEL,"DROP: Node %d, id = %d, quality = %d, last seq = %d\n", TOS_NODE_ID, neighbor_list[i], info.link_quality, info.last_seq);
-                    
                     call NeighborTable.remove(neighbor_list[i]);
+                    signal NeighborDiscovery.neighborChange(neighbor_list[i], NEIGHBOR_DROP);
                     continue;
                 }
 

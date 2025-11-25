@@ -31,8 +31,8 @@ implementation{
     }
 
     command void Graph.removeEdge(uint16_t i, uint16_t j) {
-        adjacency_matrix[i][j] = 0;
-        adjacency_matrix[j][i] = 0;
+        adjacency_matrix[i][j] = 65535;
+        adjacency_matrix[j][i] = 65535;
     }
 
     command uint16_t Graph.cost(uint16_t i, uint16_t j) {
@@ -43,7 +43,7 @@ implementation{
         uint16_t c = 0;
         uint16_t k = 1;
         for (; k < n+1; k++) {
-            if (adjacency_matrix[i][k] != 0) {
+            if (adjacency_matrix[i][k] != 0 && adjacency_matrix[i][k] != 65535) {
                 c++;
             }
         }
@@ -56,7 +56,7 @@ implementation{
         uint16_t counter = 0;
         uint16_t k = 1;
         for (; k < n+1; k++) {
-            if (adjacency_matrix[i][k] != 0) {
+            if (adjacency_matrix[i][k] != 0 && adjacency_matrix[i][k] != 65535) {
                 arr[counter] = k;
                 counter++;
             }
@@ -93,7 +93,7 @@ implementation{
             hasNeighbor = FALSE;
 
             for (j = 0; j < n+1; j++) {
-                if (adjacency_matrix[i][j] != 0) {
+                if (adjacency_matrix[i][j] != 0 && adjacency_matrix[i][j] != 65535) {
                     printf("(%d, cost=%d) ", j, adjacency_matrix[i][j]);
                     hasNeighbor = TRUE;
                 }
