@@ -15,10 +15,15 @@ implementation {
     components LinkStateRoutingC;
     IPP.LinkStateRouting -> LinkStateRoutingC;
 
-    components new ListC(uint8_t, 11) as PendingQueueC;
+    components new ListC(uint8_t, 11) as PendingSeqQueueC;
+    IPP.PendingSeqQueue -> PendingSeqQueueC;
+
+    components new ListC(ipPkt_t, 20) as PendingQueueC;
     IPP.PendingQueue -> PendingQueueC;
 
     components new ListC(uint8_t, 11) as TimeoutQueueC;
     IPP.TimeoutQueue -> TimeoutQueueC;
 
+    components new TimerMilliC() as PendingTimer;
+    IPP.PendingTimer -> PendingTimer;
 }
