@@ -34,6 +34,8 @@ module Node{
    uses interface LinkStateRouting;
 
    uses interface IP;
+
+   uses interface Transport;
 }
 
 implementation{
@@ -118,7 +120,5 @@ implementation{
    event void Flooding.gotLSA(uint8_t* incomingMsg, uint8_t from) {}
 
    // IP events
-   event void IP.gotTCP(uint8_t* incomingMsg) {
-      printf("get TCP\n");
-   }
+   event void IP.gotTCP(uint8_t* incomingMsg) { }
 }
