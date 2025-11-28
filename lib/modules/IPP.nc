@@ -116,7 +116,7 @@ implementation {
         if (incomingMsg->flag == 0) {
             switch(incomingMsg->protocol) {
                 case PROTOCOL_TCP:
-                    signal IP.gotTCP(incomingMsg->payload);
+                    signal IP.gotTCP(incomingMsg->payload, incomingMsg->src);
                     break;
                 default:
                     return;
@@ -142,6 +142,7 @@ implementation {
             temp = call PendingSeqQueue.popfront();
             has_pending[temp] = TRUE;
             dropped[temp] = FALSE;
+            pending_arr[temp].src = ip_pkt.src;
             pending_arr[temp].protocol = ip_pkt.protocol;
             pending_arr[temp].current_length = fragment_size;
             if (ip_pkt.flag < 192) {
@@ -160,7 +161,7 @@ implementation {
             printf("post = %d, current lenght = %d, payload = %s\n", ip_pkt.offset * 4, pending_arr[seq - 1].current_length, pending_arr[seq - 1].payload);
             if (pending_arr[seq - 1].current_length >=  pending_arr[seq - 1].expected_length) {
                 has_pending[seq - 1] = FALSE;
-                signal IP.gotTCP(pending_arr[seq - 1].payload);
+                signal IP.gotTCP(pending_arr[seq - 1].payload, pending_arr[seq - 1].src);
             }
         }
     }

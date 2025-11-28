@@ -55,6 +55,7 @@ implementation{
          call NeighborDiscovery.onBoot();
          call LinkStateRouting.onBoot();
          call IP.onBoot();
+         call Transport.onBoot();
       }else{
          //Retry until successful
          call AMControl.start();
@@ -100,9 +101,13 @@ implementation{
 
    event void CommandHandler.printDistanceVector(){}
 
-   event void CommandHandler.setTestServer(){}
+   event void CommandHandler.setTestServer(uint8_t port) {
+      call Transport.initServer(port);
+   }
 
-   event void CommandHandler.setTestClient(){}
+   event void CommandHandler.setTestClient(uint8_t dest, uint8_t srcPort, uint8_t destPort, uint16_t transfer) {
+      call Transport.initClientAndConnect(dest, srcPort, destPort, transfer);
+   }
 
    event void CommandHandler.setAppServer(){}
 
@@ -120,5 +125,5 @@ implementation{
    event void Flooding.gotLSA(uint8_t* incomingMsg, uint8_t from) {}
 
    // IP events
-   event void IP.gotTCP(uint8_t* incomingMsg) { }
+   event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from) { }
 }

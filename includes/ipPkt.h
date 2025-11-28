@@ -22,6 +22,7 @@ typedef struct ipPkt{
 }ipPkt_t;
 
 typedef struct pendingPayload{
+    uint8_t src;
     uint8_t protocol;
     uint16_t current_length;
     uint16_t expected_length;
