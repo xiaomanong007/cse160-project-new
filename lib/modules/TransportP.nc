@@ -31,6 +31,8 @@ implementation {
 
     void makeTCPPkt(tcpPkt_t* Package, socket_addr_t src, socket_addr_t dest, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t* payload, uint16_t length);
 
+    void makeReSend(tcpPkt_t* Package, socket_t fd, uint8_t dest, uint8_t length, uint8_t type);
+
     void receiveSYN(tcpPkt_t* payload, uint8_t from);
 
     void receiveSYNACK(tcpPkt_t* payload, uint8_t from);
@@ -123,9 +125,7 @@ implementation {
 
     command socket_t Transport.accept(socket_t fd) {}
 
-    command uint16_t Transport.write(socket_t fd, uint8_t *buff, uint16_t bufflen) {
-        
-    }
+    command uint16_t Transport.write(socket_t fd, uint8_t *buff, uint16_t bufflen) {}
 
     command error_t Transport.receive(pack* package) {}
 
@@ -143,6 +143,8 @@ implementation {
             socketArray[fd].effectiveWindow = SOCKET_BUFFER_SIZE;
             socketArray[fd].lastSent = random_seq;
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, ATTEMPT_CONNECT, SYN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+            makeReSend(&tcp_pkt, fd, addr->addr, TCP_HEADER_LENDTH, OTHER);
+            call ReSendTimer.startOneShot(socketArray[fd].RTT + 200);
             call IP.send(addr->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
             return SUCCESS;
         }
@@ -180,7 +182,11 @@ implementation {
             memcpy(&socketArray[fd].src, &socketArray[global_fd].src, sizeof(socket_addr_t));
             socketArray[fd].dest = temp;
             socketArray[fd].nextExpected = payload->seq + 1;
-            makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, 5, payload->seq + 1, SYN, SOCKET_BUFFER_SIZE, (uint8_t*)&empty_payload, 1);
+            socketArray[fd].RTT = call IP.estimateRTT(from);
+            socketArray[fd].effectiveWindow = SOCKET_BUFFER_SIZE;
+            makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, 5, socketArray[fd].nextExpected, SYN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+            makeReSend(&tcp_pkt, fd, from, TCP_HEADER_LENDTH, OTHER);
+            call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
             call IP.send(from, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
         } else {
             temp = socketArray[global_fd].src;
@@ -207,12 +213,34 @@ implementation {
 
         socketArray[fd].state = ESTABLISHED;
         socketArray[fd].lastAck = payload->ack_num;
+        reSend[fd] = FALSE;
 
         makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, payload->ack_num, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
         call IP.send(from, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
     }
 
-    void receiveACK(tcpPkt_t* payload, uint8_t from) {}
+    void receiveACK(tcpPkt_t* payload, uint8_t from) {
+        socket_t fd = call SocketTable.get(from);
+
+        switch(socketArray[fd].state) {
+            case SYN_RCVD:
+                socketArray[fd].state = ESTABLISHED;
+                socketArray[fd].nextExpected = payload->seq + 1;
+                reSend[fd] = FALSE;
+                dbg(TRANSPORT_CHANNEL, "Node %d establish connection with Node %d\n", TOS_NODE_ID, from);
+                return;
+            case FIN_WAIT_1:
+                socketArray[fd].state = FIN_WAIT_2;
+                printf("NODE %d FIN_WAIT_2\n", TOS_NODE_ID);
+                return;
+            case LAST_ACK:
+                socketArray[fd].state = CLOSED;
+                printf("NODE %d CLOSED\n", TOS_NODE_ID);
+                return;
+            default:
+                return;
+        }
+    }
 
     void receiveDATA(tcpPkt_t* payload, uint8_t from) {}
 
@@ -228,7 +256,33 @@ implementation {
         memcpy(Package->payload, payload, length);
     }
 
-    event void ReSendTimer.fired() {}
+    void makeReSend(tcpPkt_t* Package, socket_t fd, uint8_t dest, uint8_t length, uint8_t type) {
+        reSendTCP_t resend_info;
+        memcpy(&resend_info.pkt, Package, length);
+        resend_info.fd = fd;
+        resend_info.dest = dest;
+        resend_info.length = length;
+        resend_info.type = type;
+        reSend[fd] = TRUE;
+        call ReSendQueue.pushback(resend_info);
+    }
+
+
+    event void ReSendTimer.fired() {
+        reSendTCP_t resend_info = call ReSendQueue.popfront();
+        if (resend_info.type == OTHER) {
+            if (reSend[resend_info.fd] == TRUE) {
+                printf("RESEND\n");
+                call ReSendQueue.pushback(resend_info);
+                call IP.send(resend_info.dest, PROTOCOL_TCP, 50, (uint8_t*)&resend_info.pkt, resend_info.length);
+                call ReSendTimer.startOneShot(2 * socketArray[resend_info.fd].RTT);
+            }
+        } else if (resend_info.type == DATA) {
+            return;
+        } else {
+            return;
+        }
+    }
 
     event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from) {
         tcpPkt_t tcp_pkt;

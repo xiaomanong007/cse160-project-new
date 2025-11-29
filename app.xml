@@ -8984,7 +8984,7 @@
       </type-array>
     </variable>
     <variable name="outputs" ref="0x7ffffb0eb9a0" loc="67:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
-      <type-array elements="I:263" size="I:4208" alignment="I:8">
+      <type-array elements="I:264" size="I:4224" alignment="I:8">
         <type-tag size="I:16" alignment="I:8"><struct-ref name="sim_log_output" ref="0x7ffffb0efd90"/>
           <typename><typedef-ref name="sim_log_output_t" ref="0x7ffffb0ed650"/></typename>
         </type-tag>
@@ -12466,7 +12466,7 @@
     <constant cst="I:2147483648" name="CC2420_INVALID_TIMESTAMP" ref="0x7ffffac68bc0" loc="403:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:263" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
+    <constant cst="I:264" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:0" name="SPI2X" ref="0x7ffffad1b020" loc="970:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
