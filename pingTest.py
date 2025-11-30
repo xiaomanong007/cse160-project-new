@@ -29,7 +29,7 @@ def main():
     # s.addChannel(s.NEIGHBOR_CHANNEL);
     # s.addChannel(s.FLOODING_CHANNEL);
     # s.addChannel(s.ROUTING_CHANNEL);
-    # s.addChannel(s.TRANSPORT_CHANNEL);
+    s.addChannel(s.TRANSPORT_CHANNEL);
 
     # After sending a ping, simulate a little to prevent collision.
     s.runTime(300);

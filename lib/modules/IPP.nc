@@ -155,7 +155,7 @@ implementation {
             }
             memcpy(pending_arr[seq - 1].payload + ip_pkt.offset * 4, ip_pkt.payload, fragment_size);
             call TimeoutQueue.pushback(seq - 1);
-            call PendingTimer.startOneShot(PENDING_DROP_TIME);
+            call PendingTimer.startOneShot(call IP.estimateRTT(ip_pkt.src));
         } else {
             pending_arr[seq - 1].current_length = pending_arr[seq - 1].current_length + fragment_size;
             if (ip_pkt.flag < 192) {
