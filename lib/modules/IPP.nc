@@ -139,7 +139,6 @@ implementation {
         uint8_t seq = (ip_pkt.flag > 192) ? (ip_pkt.flag - 192) : (ip_pkt.flag - 128);
         uint8_t num_words = MAX_IP_PAYLOAD_SIZE / 4;
         uint16_t fragment_size = num_words * 4;
-        uint8_t temp;
 
         if (dropped[seq - 1]) {
             return;
