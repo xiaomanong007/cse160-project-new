@@ -29,4 +29,9 @@ typedef struct pendingPayload{
     uint8_t payload[MAX_PENDING_SIZE];
 }pendingPayload_t;
 
+typedef struct pair{
+    uint8_t src;
+    uint8_t seq;
+}pair_t;
+
 #endif

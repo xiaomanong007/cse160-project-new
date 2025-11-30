@@ -21,7 +21,7 @@ implementation {
     components new ListC(ipPkt_t, 20) as PendingQueueC;
     IPP.PendingQueue -> PendingQueueC;
 
-    components new ListC(uint8_t, 11) as TimeoutQueueC;
+    components new ListC(pair_t, 11) as TimeoutQueueC;
     IPP.TimeoutQueue -> TimeoutQueueC;
 
     components new TimerMilliC() as PendingTimer;

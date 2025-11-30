@@ -13,7 +13,7 @@ module IPP {
         interface LinkStateRouting;
         interface List<uint8_t> as PendingSeqQueue;
         interface List<ipPkt_t> as PendingQueue;
-        interface List<uint8_t> as TimeoutQueue;
+        interface List<pair_t> as TimeoutQueue;
         interface Timer<TMilli> as PendingTimer;
 
     }
@@ -21,19 +21,21 @@ module IPP {
 
 implementation {
     enum {
-        MAX_NUM_PENDING = 10,
+        MAX_NUM_PENDING = 20,
 
         PENDING_DROP_TIME = 30000,
 
         ESTIMATE_RTT = 320,
+
+        MAX_NODES = 25,
     };
 
-    uint8_t local_seq = 1;
+    uint8_t local_seq = 0;
 
     pendingPayload_t pending_arr[MAX_NUM_PENDING];
     
-    bool has_pending[MAX_NUM_PENDING];
-    bool dropped[MAX_NUM_PENDING];
+    bool has_pending[MAX_NODES][MAX_NUM_PENDING];
+    bool dropped[MAX_NODES][MAX_NUM_PENDING];
 
     void makeIPPkt(ipPkt_t* Package, uint8_t dest, uint8_t protocol, uint8_t TTL, uint8_t flag, uint8_t offset, uint8_t* payload, uint16_t length);
 
@@ -58,43 +60,40 @@ implementation {
     command void IP.send(uint8_t dest, uint8_t protocol, uint8_t TTL, uint8_t* payload, uint16_t length) {
         pack pkt;
         ipPkt_t ip_pkt;
+        uint8_t temp_seq = local_seq++;
         uint8_t offset, flag;
         uint8_t i = 0;
         uint8_t next_hop = call LinkStateRouting.nextHop(dest);
         uint8_t num_words = MAX_IP_PAYLOAD_SIZE / 4;
         uint16_t fragment_size = num_words * 4;
         uint8_t k = length / fragment_size;
-        uint8_t r = length - (fragment_size * k);
+        uint8_t r = length % fragment_size;
+
+        if (local_seq > MAX_NUM_PENDING - 1) {
+            local_seq = 1;
+        }
 
         for (; i < k; i++) {
             if (i == k - 1 && r == 0) {
                 offset = num_words * i;
-                flag = (k == 1) ? 0 : (128 + local_seq);
+                flag = (k == 1) ? 0 : (128 + temp_seq);
                 makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, payload + i * fragment_size, fragment_size);
                 call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
                 call SimpleSend.send(pkt, next_hop);
                 return;
             }
-
             offset = num_words * i;
-            flag = 192 + local_seq;
+            flag = 192 + temp_seq;
             makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, payload + i * fragment_size, fragment_size);
             call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
             call SimpleSend.send(pkt, next_hop);
         }
 
         offset = num_words * k;
-        flag = (k == 0) ? 0 : (128 + local_seq);
-        makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, payload + k * fragment_size, fragment_size);
+        flag = (k == 0) ? 0 : (128 + temp_seq);
+        makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, payload + k * fragment_size, r);
         call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
         call SimpleSend.send(pkt, next_hop);
-
-        local_seq++;
-
-        if (local_seq > 9) {
-            local_seq = 1;
-        }
-
         return;
     }
 
@@ -139,14 +138,17 @@ implementation {
         uint8_t seq = (ip_pkt.flag > 192) ? (ip_pkt.flag - 192) : (ip_pkt.flag - 128);
         uint8_t num_words = MAX_IP_PAYLOAD_SIZE / 4;
         uint16_t fragment_size = num_words * 4;
+        uint16_t timeout = call IP.estimateRTT(ip_pkt.src);
+        pair_t temp;
 
-        if (dropped[seq - 1]) {
+        if (dropped[ip_pkt.src][seq - 1]) {
             return;
         }
-        if (!has_pending[seq - 1]) {
+
+        if (!has_pending[ip_pkt.src][seq - 1]) {
             // temp = call PendingSeqQueue.popfront();
-            has_pending[seq - 1] = TRUE;
-            dropped[seq - 1] = FALSE;
+            has_pending[ip_pkt.src][seq - 1] = TRUE;
+            dropped[ip_pkt.src][seq - 1] = FALSE;
             pending_arr[seq - 1].src = ip_pkt.src;
             pending_arr[seq - 1].protocol = ip_pkt.protocol;
             pending_arr[seq - 1].current_length = fragment_size;
@@ -154,8 +156,10 @@ implementation {
                 pending_arr[seq - 1].expected_length = ip_pkt.offset * 4;
             }
             memcpy(pending_arr[seq - 1].payload + ip_pkt.offset * 4, ip_pkt.payload, fragment_size);
-            call TimeoutQueue.pushback(seq - 1);
-            call PendingTimer.startOneShot(call IP.estimateRTT(ip_pkt.src));
+            temp.src = ip_pkt.src;
+            temp.seq = seq - 1;
+            call TimeoutQueue.pushback(temp);
+            call PendingTimer.startOneShot(timeout / 2);
         } else {
             pending_arr[seq - 1].current_length = pending_arr[seq - 1].current_length + fragment_size;
             if (ip_pkt.flag < 192) {
@@ -163,18 +167,17 @@ implementation {
             }
             memcpy(pending_arr[seq - 1].payload + ip_pkt.offset * 4, ip_pkt.payload, fragment_size);
             if (pending_arr[seq - 1].current_length >=  pending_arr[seq - 1].expected_length) {
-                has_pending[seq - 1] = FALSE;
+                has_pending[ip_pkt.src][seq - 1] = FALSE;
                 signal IP.gotTCP(pending_arr[seq - 1].payload, pending_arr[seq - 1].src);
             }
         }
     }
 
     event void PendingTimer.fired() {
-        uint8_t seq = call TimeoutQueue.popfront();
-        if (has_pending[seq]) {
-            has_pending[seq] = FALSE;
-            dropped[seq] = TRUE;
-            call PendingSeqQueue.pushback(seq);
+        pair_t temp = call TimeoutQueue.popfront();
+        if (has_pending[temp.src][temp.seq]) {
+            has_pending[temp.src][temp.seq] = FALSE;
+            dropped[temp.src][temp.seq] = TRUE;
         }
     }
 
@@ -188,7 +191,6 @@ implementation {
         memcpy(Package->payload, payload, length);
     }
 
-    event void PacketHandler.gotFloodPkt(uint8_t* incomingMsg, uint8_t from){}
-    event void PacketHandler.gotNDPkt(uint8_t* _) { }
-
+    event void PacketHandler.gotFloodPkt(uint8_t* incomingMsg, uint8_t from) {}
+    event void PacketHandler.gotNDPkt(uint8_t* incomingMsg) { }
 }

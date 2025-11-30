@@ -38,4 +38,11 @@ implementation {
 
     components new ListC(receiveTCP_t, 15) as ReceiveQueue;
     TransportP.ReceiveQueue -> ReceiveQueue;
+
+
+    components new TimerMilliC() as InitSendTimer;
+    TransportP.InitSendTimer -> InitSendTimer;
+
+    components new ListC(socket_t, 10) as InitSendQueue;
+    TransportP.InitSendQueue -> InitSendQueue;
 }
