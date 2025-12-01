@@ -36,6 +36,7 @@ typedef struct reSendTCP{
 
 typedef struct receiveTCP{
     uint8_t from;
+    uint8_t len;
     tcpPkt_t pkt;
 }receiveTCP_t;
 

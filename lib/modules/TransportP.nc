@@ -318,8 +318,8 @@ implementation {
         socket_t fd = call SocketTable.get(r_pkt.from);
         tcpPkt_t* tcp_pkt = &r_pkt.pkt;
         tcpPkt_t reply_pkt;
-        uint8_t data[MAX_PAYLOAD - TCP_HEADER_LENDTH];
-        uint8_t size;
+        uint8_t size = r_pkt.len - TCP_HEADER_LENDTH;
+        uint8_t data[size];
         char empty_payload[1] = " ";
 
         if (socketArray[fd].state != ESTABLISHED)
@@ -333,16 +333,6 @@ implementation {
 
         if (tcp_pkt->ack_num == socketArray[fd].ISN + 1) {
             socketArray[fd].ISN = socketArray[fd].ISN + 1;
-            if (tcp_pkt->seq >= socketArray[fd].pending_seq) {
-                size = tcp_pkt->seq - socketArray[fd].pending_seq;
-            } else {
-                size = SOCKET_BUFFER_SIZE + tcp_pkt->seq - socketArray[fd].pending_seq;
-            }
-
-            if (size > MAX_PAYLOAD - TCP_HEADER_LENDTH) {
-                size = MAX_PAYLOAD - TCP_HEADER_LENDTH;
-            }
-
             socketArray[fd].pending_seq = tcp_pkt->seq;
             socketArray[fd].nextExpected = (tcp_pkt->seq + 1) % SOCKET_BUFFER_SIZE;
 
@@ -486,9 +476,7 @@ implementation {
                     socketArray[fd].lastAck = ack;
                     socketArray[fd].pending_seq = seq;
                     distnace = (ack + SOCKET_BUFFER_SIZE - socketArray[fd].lastSent) % SOCKET_BUFFER_SIZE;
-                    if (socketArray[fd].remain == SOCKET_BUFFER_SIZE && distnace == 0) {
-                        socketArray[fd].remain == SOCKET_BUFFER_SIZE;
-                    } else {
+                    if (!(socketArray[fd].remain == SOCKET_BUFFER_SIZE && distnace == 0)) {
                         socketArray[fd].remain = (distnace < socketArray[fd].remain) ? distnace : socketArray[fd].remain;
                     }
                 }
@@ -612,12 +600,13 @@ implementation {
         sendData(fd);
     }
 
-    event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from) {
+    event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from, uint8_t len) {
         tcpPkt_t tcp_pkt;
         receiveTCP_t temp;
         memcpy(&tcp_pkt, incomingMsg, sizeof(tcpPkt_t));
         memcpy(&temp.pkt, &tcp_pkt, sizeof(tcpPkt_t));
         temp.from = from;
+        temp.len = len;
         switch(tcp_pkt.flag) {
             case SYN:
                 if (tcp_pkt.ack_num == ATTEMPT_CONNECT) {

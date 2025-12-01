@@ -22,7 +22,7 @@ module IPP {
 
 implementation {
     enum {
-        MAX_NUM_PENDING = 20,
+        MAX_NUM_PENDING = 10,
 
         PENDING_DROP_TIME = 30000,
 
@@ -69,45 +69,6 @@ implementation {
         makePending(&pend, dest, protocol, TTL, payload, length);
         call SendingQueue.pushback(pend);
         call SendingTimer.startOneShot(50);
-        // pack pkt;
-        // ipPkt_t ip_pkt;
-        // uint8_t temp_seq = local_seq++;
-        // uint8_t offset, flag;
-        // uint8_t pending_payload[length];
-        // uint8_t i = 0;
-        // uint8_t next_hop = call LinkStateRouting.nextHop(dest);
-        // uint8_t num_words = MAX_IP_PAYLOAD_SIZE / 4;
-        // uint16_t fragment_size = num_words * 4;
-        // uint8_t k = length / fragment_size;
-        // uint8_t r = length % fragment_size;
-
-        // memcpy(&pending_payload, payload, length);
-
-        // if (local_seq > MAX_NUM_PENDING - 1) {
-        //     local_seq = 1;
-        // }
-
-        // for (; i < k; i++) {
-        //     if (i == k - 1 && r == 0) {
-        //         offset = num_words * i;
-        //         flag = (k == 1) ? 0 : (128 + temp_seq);
-        //         makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, pending_payload + i * fragment_size, fragment_size);
-        //         call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
-        //         call SimpleSend.send(pkt, next_hop);
-        //         return;
-        //     }
-        //     offset = num_words * i;
-        //     flag = 192 + temp_seq;
-        //     makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, pending_payload + i * fragment_size, fragment_size);
-        //     call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
-        //     call SimpleSend.send(pkt, next_hop);
-        // }
-        
-        // offset = num_words * k;
-        // flag = (k == 0) ? 0 : (128 + temp_seq);
-        // makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, pending_payload + k * fragment_size, r);
-        // call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
-        // call SimpleSend.send(pkt, next_hop);
         return;
     }
 
@@ -136,7 +97,7 @@ implementation {
         if (incomingMsg->flag == 0) {
             switch(incomingMsg->protocol) {
                 case PROTOCOL_TCP:
-                    signal IP.gotTCP(incomingMsg->payload, incomingMsg->src);
+                    signal IP.gotTCP(incomingMsg->payload, incomingMsg->src, incomingMsg->len);
                     break;
                 default:
                     return;
@@ -150,39 +111,33 @@ implementation {
     task void pendingTask() {
         ipPkt_t ip_pkt = call PendingQueue.popfront();
         uint8_t seq = (ip_pkt.flag > 192) ? (ip_pkt.flag - 192) : (ip_pkt.flag - 128);
-        uint8_t num_words = MAX_IP_PAYLOAD_SIZE / 4;
-        uint16_t fragment_size = num_words * 4;
         uint16_t timeout = call IP.estimateRTT(ip_pkt.src);
         pair_t temp;
 
-        if (dropped[ip_pkt.src][seq - 1]) {
-            return;
-        }
-
         if (!has_pending[ip_pkt.src][seq - 1]) {
-            // temp = call PendingSeqQueue.popfront();
             has_pending[ip_pkt.src][seq - 1] = TRUE;
             dropped[ip_pkt.src][seq - 1] = FALSE;
             pending_arr[seq - 1].src = ip_pkt.src;
             pending_arr[seq - 1].protocol = ip_pkt.protocol;
-            pending_arr[seq - 1].current_length = fragment_size;
+            pending_arr[seq - 1].current_length = ip_pkt.len;
             if (ip_pkt.flag < 192) {
-                pending_arr[seq - 1].expected_length = ip_pkt.offset * 4;
+                pending_arr[seq - 1].expected_length = ip_pkt.offset * 4 + ip_pkt.len;
             }
-            memcpy(pending_arr[seq - 1].payload + ip_pkt.offset * 4, ip_pkt.payload, fragment_size);
+            memcpy(pending_arr[seq - 1].payload + ip_pkt.offset * 4, ip_pkt.payload, ip_pkt.len);
             temp.src = ip_pkt.src;
             temp.seq = seq - 1;
             call TimeoutQueue.pushback(temp);
-            call PendingTimer.startOneShot(timeout);
+            call PendingTimer.startOneShot((timeout / 2));
         } else {
-            pending_arr[seq - 1].current_length = pending_arr[seq - 1].current_length + fragment_size;
+            pending_arr[seq - 1].current_length = pending_arr[seq - 1].current_length + ip_pkt.len;
             if (ip_pkt.flag < 192) {
-                pending_arr[seq - 1].expected_length = ip_pkt.offset * 4;
+                pending_arr[seq - 1].expected_length = ip_pkt.offset * 4 + ip_pkt.len;
             }
-            memcpy(pending_arr[seq - 1].payload + ip_pkt.offset * 4, ip_pkt.payload, fragment_size);
+            memcpy(pending_arr[seq - 1].payload + ip_pkt.offset * 4, ip_pkt.payload, ip_pkt.len);
             if (pending_arr[seq - 1].current_length >=  pending_arr[seq - 1].expected_length) {
                 has_pending[ip_pkt.src][seq - 1] = FALSE;
-                signal IP.gotTCP(pending_arr[seq - 1].payload, pending_arr[seq - 1].src);
+                signal IP.gotTCP(pending_arr[seq - 1].payload, pending_arr[seq - 1].src, pending_arr[seq - 1].expected_length);
+
             }
         }
     }
@@ -200,7 +155,7 @@ implementation {
         uint8_t r = pend.length % fragment_size;
 
         local_seq = (pend.length <= fragment_size) ? local_seq : local_seq + 1;
-        if (local_seq > MAX_NUM_PENDING - 1) {
+        if (local_seq > MAX_NUM_PENDING) {
             local_seq = 1;
         }
 
@@ -247,6 +202,7 @@ implementation {
         Package->TTL = TTL;
         Package->flag = flag;
         Package->offset = offset;
+        Package->len = length;
         for (i = 0; i < MAX_IP_PAYLOAD_SIZE; i++) {
             Package->payload[i] = 0;
         }
