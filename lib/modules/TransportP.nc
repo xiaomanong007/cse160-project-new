@@ -413,8 +413,7 @@ implementation {
 
         if (socketArray[fd].type == TYPICAL) {
             k = (socketArray[fd].lastWritten - socketArray[fd].lastSent) / dataSize;
-            r = (socketArray[fd].lastWritten - socketArray[fd].lastSent) - k * dataSize;
-
+            r = (socketArray[fd].lastWritten - socketArray[fd].lastSent) % dataSize;
             for (i = 0; i < k; i++) {
                 memcpy(&temp, socketArray[fd].sendBuff + (socketArray[fd].lastSent), dataSize);
                 socketArray[fd].lastSent = (socketArray[fd].lastSent + dataSize) % SOCKET_BUFFER_SIZE;                
@@ -424,7 +423,6 @@ implementation {
                     call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
                     return;
                 }
-
             }
             memcpy(&temp, socketArray[fd].sendBuff + (socketArray[fd].lastSent), r);
             socketArray[fd].lastSent = (socketArray[fd].lastSent + r) % SOCKET_BUFFER_SIZE;
@@ -432,7 +430,7 @@ implementation {
             call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH + r);
         } else {
             k = (socketArray[fd].lastWritten + SOCKET_BUFFER_SIZE - socketArray[fd].lastSent) / dataSize;
-            r = (socketArray[fd].lastWritten + SOCKET_BUFFER_SIZE - socketArray[fd].lastSent) - k * dataSize;
+            r = (socketArray[fd].lastWritten + SOCKET_BUFFER_SIZE - socketArray[fd].lastSent) % dataSize;
             left = SOCKET_BUFFER_SIZE - socketArray[fd].lastSent;
             for (i = 0; i < k; i++) {
                 if (left >= dataSize) {
@@ -471,25 +469,33 @@ implementation {
     }
 
     void update(socket_t fd, uint8_t ack_num, uint8_t seq) {
-        printf("ack_num = %d\n", ack_num);
+        uint8_t ack = (ack_num -1 ) % SOCKET_BUFFER_SIZE;
+        uint8_t distnace;
         if (socketArray[fd].type != WRAP) {
-            if (ack_num - 1 > socketArray[fd].lastAck && ack_num - 1 <= socketArray[fd].lastSent) {
-                socketArray[fd].lastAck = ack_num - 1;
+            if (ack > socketArray[fd].lastAck && ack <= socketArray[fd].lastSent) {
+                socketArray[fd].lastAck = ack;
                 socketArray[fd].pending_seq = seq;
-                socketArray[fd].remain = (socketArray[fd].lastSent - (ack_num - 1) < socketArray[fd].remain) ? socketArray[fd].lastSent - (ack_num - 1) : socketArray[fd].remain;
+                distnace = (socketArray[fd].lastSent - (ack)) % SOCKET_BUFFER_SIZE;
+                socketArray[fd].remain = (distnace < socketArray[fd].remain) ? distnace : socketArray[fd].remain;
             }
         } else {
             if (socketArray[fd].lastAck >= socketArray[fd].lastSent) {
-                if (ack_num - 1 > socketArray[fd].lastAck || ack_num - 1 <= socketArray[fd].lastSent) {
-                    socketArray[fd].lastAck = ack_num - 1;
+                if (ack > socketArray[fd].lastAck || ack <= socketArray[fd].lastSent) {
+                    socketArray[fd].lastAck = ack;
                     socketArray[fd].pending_seq = seq;
-                    socketArray[fd].remain = (socketArray[fd].lastSent + SOCKET_BUFFER_SIZE - (ack_num - 1) < socketArray[fd].remain) ? socketArray[fd].lastSent  + SOCKET_BUFFER_SIZE - (ack_num - 1) : socketArray[fd].remain;
+                    distnace = (ack + SOCKET_BUFFER_SIZE - socketArray[fd].lastSent) % SOCKET_BUFFER_SIZE;
+                    if (socketArray[fd].remain == SOCKET_BUFFER_SIZE && distnace == 0) {
+                        socketArray[fd].remain == SOCKET_BUFFER_SIZE;
+                    } else {
+                        socketArray[fd].remain = (distnace < socketArray[fd].remain) ? distnace : socketArray[fd].remain;
+                    }
                 }
             } else {
-                if (ack_num - 1 > socketArray[fd].lastAck && ack_num - 1 <= socketArray[fd].lastSent) {
-                    socketArray[fd].lastAck = ack_num - 1;
+                if (ack > socketArray[fd].lastAck && ack <= socketArray[fd].lastSent) {
+                    socketArray[fd].lastAck = ack;
                     socketArray[fd].pending_seq = seq;
-                    socketArray[fd].remain = (socketArray[fd].lastSent - (ack_num - 1) < socketArray[fd].remain) ? socketArray[fd].lastSent - (ack_num - 1) : socketArray[fd].remain;
+                    distnace = (socketArray[fd].lastSent - (ack)) % SOCKET_BUFFER_SIZE;
+                    socketArray[fd].remain = (distnace < socketArray[fd].remain) ? distnace : socketArray[fd].remain;
                 }
             }
         }
