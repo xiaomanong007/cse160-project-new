@@ -30,7 +30,7 @@ module TransportP {
 
 implementation {
     enum {
-        MAX_PAYLOAD = 16,
+        MAX_PAYLOAD = 32,
     };
 
     socket_t global_fd;
@@ -191,7 +191,7 @@ implementation {
             socketArray[fd].type = TYPICAL;
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, ATTEMPT_CONNECT, SYN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
             makeReSend(&tcp_pkt, fd, addr->addr, TCP_HEADER_LENDTH, OTHER);
-            call ReSendTimer.startOneShot(4 * socketArray[fd].RTT);
+            call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
             call IP.send(addr->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
             return SUCCESS;
         }
@@ -271,10 +271,10 @@ implementation {
 
         if (call InitSendTimer.isRunning()) {
             call InitSendTimer.stop();
-            call InitSendTimer.startOneShot(4 * socketArray[fd].RTT);
+            call InitSendTimer.startOneShot(2 * socketArray[fd].RTT);
         } else {
             call InitSendQueue.pushback(fd);
-            call InitSendTimer.startOneShot(4 * socketArray[fd].RTT);
+            call InitSendTimer.startOneShot(2 * socketArray[fd].RTT);
         }
     }
 
@@ -310,6 +310,8 @@ implementation {
         }
     }
 
+
+    // need modification
     task void receiveDATA() {
         receiveTCP_t r_pkt = call ReceiveQueue.popfront();
         uint8_t i;
@@ -343,8 +345,8 @@ implementation {
 
             socketArray[fd].pending_seq = tcp_pkt->seq;
             socketArray[fd].nextExpected = (tcp_pkt->seq + 1) % SOCKET_BUFFER_SIZE;
-            memcpy(data, tcp_pkt->payload, size);
 
+            memcpy(data, tcp_pkt->payload, size);
             printf("DATA from (%d): ", r_pkt.from);
             for (i = 0; i < size; i++) {
                 printf("%d, ", data[i]);
@@ -420,7 +422,7 @@ implementation {
                 makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, socketArray[fd].pending_seq + (i + 1), DATA, socketArray[fd].effectiveWindow, (uint8_t*)&temp, dataSize);
                 call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
                 if (i == k - 1 && r == 0) {
-                    call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
+                    call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
                     return;
                 }
             }
@@ -455,7 +457,7 @@ implementation {
                     call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
                 }
                 if (i == k - 1 && r == 0) {
-                    call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
+                    call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
                     return;
                 }
             }
@@ -465,7 +467,7 @@ implementation {
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, socketArray[fd].pending_seq + (k + 1), DATA, socketArray[fd].effectiveWindow, (uint8_t*)&temp, r);
             call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH + r);
         }
-        call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
+        call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
     }
 
     void update(socket_t fd, uint8_t ack_num, uint8_t seq) {
@@ -534,7 +536,7 @@ implementation {
                 call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
                 
                 if (i == k - 1 && r == 0) {
-                    call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
+                    call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
                     return;
                 }
             }
@@ -572,7 +574,7 @@ implementation {
                 }
 
                 if (i == k - 1 && r == 0) {
-                    call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
+                    call ReSendDataTimer.startOneShot(2* socketArray[fd].RTT);
                     return;
                 }
             }
@@ -581,7 +583,7 @@ implementation {
             call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH + r);
         }
 
-        call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
+        call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
     }
 
     event void ReSendTimer.fired() {

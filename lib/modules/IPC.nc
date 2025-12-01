@@ -26,4 +26,10 @@ implementation {
 
     components new TimerMilliC() as PendingTimer;
     IPP.PendingTimer -> PendingTimer;
+
+    components new ListC(pending_t, 11) as SendingQueue;
+    IPP.SendingQueue -> SendingQueue;
+
+    components new TimerMilliC() as SendingTimer;
+    IPP.SendingTimer -> SendingTimer;
 }
