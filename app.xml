@@ -9036,7 +9036,7 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="53:lib/modules/TransportP.nc" ref="0x7ffff9fc3e20" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="53:lib/modules/TransportP.nc" ref="0x7ffff9fbee20" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -13509,7 +13509,7 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:17" name="receiveDATA" ref="0x7ffff9fc3c30" loc="53:lib/modules/TransportP.nc">
+    <constant cst="I:17" name="receiveDATA" ref="0x7ffff9fbec30" loc="53:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -15284,7 +15284,7 @@
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </type-array>
     </typedef>
-    <typedef name="__nesc_sillytask_receiveDATA" ref="0x7ffff9fc1250" loc="53:lib/modules/TransportP.nc">
+    <typedef name="__nesc_sillytask_receiveDATA" ref="0x7ffff9fbd250" loc="53:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:17" size="I:68" alignment="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
