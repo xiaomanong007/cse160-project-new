@@ -62,12 +62,15 @@ implementation {
         ipPkt_t ip_pkt;
         uint8_t temp_seq = local_seq++;
         uint8_t offset, flag;
+        uint8_t pending_payload[length];
         uint8_t i = 0;
         uint8_t next_hop = call LinkStateRouting.nextHop(dest);
         uint8_t num_words = MAX_IP_PAYLOAD_SIZE / 4;
         uint16_t fragment_size = num_words * 4;
         uint8_t k = length / fragment_size;
         uint8_t r = length % fragment_size;
+
+        memcpy(&pending_payload, payload, length);
 
         if (local_seq > MAX_NUM_PENDING - 1) {
             local_seq = 1;
@@ -77,21 +80,21 @@ implementation {
             if (i == k - 1 && r == 0) {
                 offset = num_words * i;
                 flag = (k == 1) ? 0 : (128 + temp_seq);
-                makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, payload + i * fragment_size, fragment_size);
+                makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, pending_payload + i * fragment_size, fragment_size);
                 call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
                 call SimpleSend.send(pkt, next_hop);
                 return;
             }
             offset = num_words * i;
             flag = 192 + temp_seq;
-            makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, payload + i * fragment_size, fragment_size);
+            makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, pending_payload + i * fragment_size, fragment_size);
             call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
             call SimpleSend.send(pkt, next_hop);
         }
-
+        
         offset = num_words * k;
         flag = (k == 0) ? 0 : (128 + temp_seq);
-        makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, payload + k * fragment_size, r);
+        makeIPPkt(&ip_pkt, dest, protocol, TTL, flag, offset, pending_payload + k * fragment_size, r);
         call SimpleSend.makePack(&pkt, TOS_NODE_ID, next_hop, PROTOCOL_IP, (uint8_t*)&ip_pkt, sizeof(ipPkt_t));
         call SimpleSend.send(pkt, next_hop);
         return;

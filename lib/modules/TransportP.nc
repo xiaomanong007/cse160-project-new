@@ -30,7 +30,7 @@ module TransportP {
 
 implementation {
     enum {
-        MAX_PAYLOAD = 32,
+        MAX_PAYLOAD = 16,
     };
 
     socket_t global_fd;
@@ -167,6 +167,7 @@ implementation {
         }
 
         socketArray[fd].remain = writtenBytes;
+        printClientBuffer(fd);
         return writtenBytes;
     }
 
@@ -191,7 +192,7 @@ implementation {
             socketArray[fd].type = TYPICAL;
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, ATTEMPT_CONNECT, SYN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
             makeReSend(&tcp_pkt, fd, addr->addr, TCP_HEADER_LENDTH, OTHER);
-            call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
+            call ReSendTimer.startOneShot(4 * socketArray[fd].RTT);
             call IP.send(addr->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
             return SUCCESS;
         }
@@ -239,7 +240,7 @@ implementation {
             socketArray[fd].effectiveWindow = SOCKET_BUFFER_SIZE;
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, socketArray[fd].nextExpected, SYN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
             makeReSend(&tcp_pkt, fd, from, TCP_HEADER_LENDTH, OTHER);
-            call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
+            call ReSendTimer.startOneShot(4 * socketArray[fd].RTT);
             call IP.send(from, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
         } else {
             temp = socketArray[global_fd].src;
@@ -320,8 +321,11 @@ implementation {
         uint8_t size;
         char empty_payload[1] = " ";
 
+        if (socketArray[fd].pending_seq == 0 || tcp_pkt->seq == socketArray[fd].pending_seq) {
+            return;
+        }
+
         if (tcp_pkt->ack_num == socketArray[fd].ISN + 1) {
-            printf("pending seq = %d, get seq = %d, size = %d\n", socketArray[fd].pending_seq, tcp_pkt->seq, size);
             socketArray[fd].ISN = socketArray[fd].ISN + 1;
             if (tcp_pkt->seq >= socketArray[fd].pending_seq) {
                 size = tcp_pkt->seq - socketArray[fd].pending_seq;
@@ -335,7 +339,7 @@ implementation {
             }
             memcpy(data, tcp_pkt->payload, size);
 
-            printf("DATA: ");
+            printf("DATA from (%d): ", r_pkt.from);
             for (i = 0; i < size; i++) {
                 printf("%d, ", data[i]);
             }
@@ -401,7 +405,6 @@ implementation {
         resend.type = 1;
         call ReSendDataQueue.pushback(resend);
 
-
         if (socketArray[fd].type == TYPICAL) {
             k = (socketArray[fd].lastWritten - socketArray[fd].lastSent) / dataSize;
             r = (socketArray[fd].lastWritten - socketArray[fd].lastSent) - k * dataSize;
@@ -447,7 +450,6 @@ implementation {
                     makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, socketArray[fd].pending_seq + (i + 1), DATA, socketArray[fd].effectiveWindow, (uint8_t*)&temp, dataSize);
                     call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
                 }
-
                 if (i == k - 1 && r == 0) {
                     call ReSendDataTimer.startOneShot(4 * socketArray[fd].RTT);
                     return;
@@ -456,7 +458,6 @@ implementation {
 
             memcpy(&temp, socketArray[fd].sendBuff + (socketArray[fd].lastSent), r);
             socketArray[fd].lastSent = socketArray[fd].lastSent + r;
-            
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, socketArray[fd].pending_seq + (k + 1), DATA, socketArray[fd].effectiveWindow, (uint8_t*)&temp, r);
             call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH + r);
         }
@@ -464,17 +465,27 @@ implementation {
     }
 
     void update(socket_t fd, uint8_t ack_num, uint8_t seq) {
-        if (socketArray[fd].pending_seq == seq) {
-            return;
-        } else {
-            socketArray[fd].remain = socketArray[fd].remain - (MAX_PAYLOAD - TCP_HEADER_LENDTH);
-            if (socketArray[fd].remain > 128) {
-                socketArray[fd].remain = 0;
+        if (socketArray[fd].type != WRAP) {
+            if (ack_num - 1 > socketArray[fd].lastAck && ack_num - 1 <= socketArray[fd].lastSent) {
+                socketArray[fd].lastAck = ack_num - 1;
+                socketArray[fd].pending_seq = seq;
+                socketArray[fd].remain = (socketArray[fd].lastSent - (ack_num - 1) < socketArray[fd].remain) ? socketArray[fd].lastSent - (ack_num - 1) : socketArray[fd].remain;
             }
-            socketArray[fd].lastAck = ack_num - 1;
-            socketArray[fd].pending_seq = seq;
+        } else {
+            if (socketArray[fd].lastAck >= socketArray[fd].lastSent) {
+                if (ack_num - 1 > socketArray[fd].lastAck || ack_num - 1 <= socketArray[fd].lastSent) {
+                    socketArray[fd].lastAck = ack_num - 1;
+                    socketArray[fd].pending_seq = seq;
+                    socketArray[fd].remain = (socketArray[fd].lastSent + SOCKET_BUFFER_SIZE - (ack_num - 1) < socketArray[fd].remain) ? socketArray[fd].lastSent  + SOCKET_BUFFER_SIZE - (ack_num - 1) : socketArray[fd].remain;
+                }
+            } else {
+                if (ack_num - 1 > socketArray[fd].lastAck && ack_num - 1 <= socketArray[fd].lastSent) {
+                    socketArray[fd].lastAck = ack_num - 1;
+                    socketArray[fd].pending_seq = seq;
+                    socketArray[fd].remain = (socketArray[fd].lastSent - (ack_num - 1) < socketArray[fd].remain) ? socketArray[fd].lastSent - (ack_num - 1) : socketArray[fd].remain;
+                }
+            }
         }
-        printf("ack = %d, seq = %d\n", ack_num, seq);
     }
 
     void reSendData(socket_t fd) {
@@ -542,7 +553,6 @@ implementation {
                     } else {
                         memcpy(temp, socketArray[fd].sendBuff + ((lastAck + i * dataSize) %128), dataSize);
                     }
-                    
 
                     makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, (lastAck + (i + 1) * dataSize) %128, pending_seq + (i + 1), DATA, socketArray[fd].effectiveWindow, (uint8_t*)&temp, dataSize);
                     call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
@@ -567,7 +577,7 @@ implementation {
             if (reSend[resend_info.fd] == TRUE) {
                 call ReSendQueue.pushback(resend_info);
                 call IP.send(resend_info.dest, PROTOCOL_TCP, 50, (uint8_t*)&resend_info.pkt, resend_info.length);
-                call ReSendTimer.startOneShot(2 * socketArray[resend_info.fd].RTT);
+                call ReSendTimer.startOneShot(4 * socketArray[resend_info.fd].RTT);
             }
         } else if (resend_info.type == 1) {
             reSendData(resend_info.fd);
@@ -591,6 +601,8 @@ implementation {
         tcpPkt_t tcp_pkt;
         receiveTCP_t temp;
         memcpy(&tcp_pkt, incomingMsg, sizeof(tcpPkt_t));
+        memcpy(&temp.pkt, &tcp_pkt, sizeof(tcpPkt_t));
+        temp.from = from;
         switch(tcp_pkt.flag) {
             case SYN:
                 if (tcp_pkt.ack_num == ATTEMPT_CONNECT) {
@@ -610,8 +622,6 @@ implementation {
                 receiveFIN(&tcp_pkt, from);
                 break;
             case DATA:
-                temp.pkt = tcp_pkt;
-                temp.from = from;
                 call ReceiveQueue.pushback(temp);
                 post receiveDATA();
                 break;
