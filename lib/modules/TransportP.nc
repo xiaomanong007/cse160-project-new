@@ -15,7 +15,6 @@ module TransportP {
         interface IP;
         interface Hashmap<socket_t> as SocketTable;
         interface List<uint8_t> as FDQueue;
-        interface List<uint8_t> as CloseQueue;
         interface List<uint8_t> as AcceptSockets;
         interface List<reSendTCP_t> as ReSendQueue;
         interface List<reSendTCP_t> as ReSendDataQueue;
@@ -24,6 +23,8 @@ module TransportP {
         interface List<receiveTCP_t> as ReceiveQueue;
         interface Timer<TMilli> as InitSendTimer;
         interface List<socket_t> as InitSendQueue;
+        interface Timer<TMilli> as CloseTimer;
+        interface List<socket_t> as CloseQueue;
     }
 }
 
@@ -62,6 +63,8 @@ implementation {
     void reSendData(socket_t fd);
 
     void update(socket_t fd, uint8_t ack_num, uint8_t seq);
+
+    task void closeTask();
 
     command void Transport.onBoot() {
         uint8_t i = 10;
@@ -299,6 +302,8 @@ implementation {
 
     void receiveACK(tcpPkt_t* payload, uint8_t from) {
         socket_t fd = call SocketTable.get(from);
+        socket_addr_t* self_addr = &socketArray[fd].src;
+        socket_addr_t* dest_addr = &socketArray[fd].dest;
 
         switch(socketArray[fd].state) {
             case SYN_RCVD:
@@ -314,18 +319,8 @@ implementation {
                 dbg(TRANSPORT_CHANNEL, "Node %d establish connection with Node %d\n", TOS_NODE_ID, from);
                 return;
             case FIN_WAIT_1:
-                if (payload->ack_num == socketArray[fd].lastSent + 1) {
-                    socketArray[fd].state = FIN_WAIT_2;
-                    reSend[fd] = FALSE;
-                    dbg(TRANSPORT_CHANNEL, "NODE %d FIN_WAIT_2\n", TOS_NODE_ID);
-                }
-                return;
-            case FIN_WAIT_2:
-
                 return;
             case LAST_ACK:
-                socketArray[fd].state = CLOSED;
-                printf("NODE %d CLOSED\n", TOS_NODE_ID);
                 return;
             case ESTABLISHED:
                 update(fd, payload->ack_num, payload->seq);
@@ -384,28 +379,14 @@ implementation {
 
         switch(socketArray[fd].state) {
             case ESTABLISHED:
-                if (payload->ack_num != socketArray[fd].ISN + 1) {
-                    dbg(TRANSPORT_CHANNEL, "Error: recive FIN with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
-                    return;
-                }
-                socketArray[fd].state = CLOSE_WAIT;
-                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
-                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
                 return;
-            case CLOSE_WAIT:
-                if (payload->ack_num != socketArray[fd].ISN + 1) {
-                    dbg(TRANSPORT_CHANNEL, "Error: recive FIN with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
-                    return;
-                }
-                socketArray[fd].state = CLOSE_WAIT;
-                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
-                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
+            case LAST_ACK:
                 return;
             case FIN_WAIT_2:
-
+                return;
+            case TIME_WAIT:
                 return;
             default:
-
                 return;
         }
     }
@@ -560,7 +541,13 @@ implementation {
         socket_addr_t dest = socketArray[fd].dest;
         reSendTCP_t resend;
 
-        if (socketArray[fd].remain == 0) {
+        if (socketArray[fd].remain == 0 && socketArray[fd].state == ESTABLISHED) {
+            if (call ReSendDataTimer.isRunning()) {
+                call ReSendDataTimer.stop();
+                if (call ReSendDataQueue.size() > 0) {
+                    call ReSendDataQueue.popfront();
+                }
+            }
             call Transport.close(fd);
             return;
         }
@@ -630,19 +617,22 @@ implementation {
         call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
     }
 
+    task void closeTask() {
+        socket_t fd = call CloseQueue.popfront();
+        socket_addr_t* self_addr = &socketArray[fd].src;
+        socket_addr_t* dest_addr = &socketArray[fd].dest;
+        socketArray[fd].state = CLOSED;
+        dbg(TRANSPORT_CHANNEL, "Client (node %d : port %d) close connection with Server (node %d : port %d)\n", self_addr->addr, self_addr->port, dest_addr->addr, dest_addr->port);
+    }
+
     event void ReSendTimer.fired() {
         reSendTCP_t resend_info = call ReSendQueue.popfront();
         if (resend_info.type == OTHER) {
             if (reSend[resend_info.fd] == TRUE) {
-                call ReSendQueue.pushback(resend_info);
                 call IP.send(resend_info.dest, PROTOCOL_TCP, 50, (uint8_t*)&resend_info.pkt, resend_info.length);
-                call ReSendTimer.startOneShot(4 * socketArray[resend_info.fd].RTT);
+                call ReSendQueue.pushback(resend_info);
+                call ReSendTimer.startOneShot(2 * socketArray[resend_info.fd].RTT);
             }
-        } else if (resend_info.type == 1) {
-            reSendData(resend_info.fd);
-            return;
-        } else {
-            return;
         }
     }
 
@@ -655,6 +645,11 @@ implementation {
         socket_t fd = call InitSendQueue.popfront();
         sendData(fd);
     }
+
+    event void CloseTimer.fired() {
+        post closeTask();
+    }
+
 
     event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from, uint8_t len) {
         tcpPkt_t tcp_pkt;

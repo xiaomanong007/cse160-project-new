@@ -21,9 +21,6 @@ implementation {
     components new ListC(uint8_t, 12) as AcceptSockets;
     TransportP.AcceptSockets -> AcceptSockets;
 
-    components new ListC(uint8_t, 12) as CloseQueue;
-    TransportP.CloseQueue -> CloseQueue;
-
     components new ListC(reSendTCP_t, 10) as ReSendQueue;
     TransportP.ReSendQueue -> ReSendQueue;
 
@@ -39,10 +36,15 @@ implementation {
     components new ListC(receiveTCP_t, 15) as ReceiveQueue;
     TransportP.ReceiveQueue -> ReceiveQueue;
 
-
     components new TimerMilliC() as InitSendTimer;
     TransportP.InitSendTimer -> InitSendTimer;
 
     components new ListC(socket_t, 10) as InitSendQueue;
     TransportP.InitSendQueue -> InitSendQueue;
+
+    components new TimerMilliC() as CloseTimer;
+    TransportP.CloseTimer -> CloseTimer;
+
+    components new ListC(socket_t, 10) as CloseQueue;
+    TransportP.CloseQueue -> CloseQueue;
 }

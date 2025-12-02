@@ -108,7 +108,7 @@
         <short>&#10; The virtualized millisecond timer abstraction.</short>
         <long>&#10; The virtualized millisecond timer abstraction. Instantiating this &#10; component gives an independent millisecond granularity timer.&#10;&#10; @author Philip Levis&#10; @date   January 16 2006&#10; @see    TEP 102: Timers&#10;</long>
       </documentation>
-      <instance number="9">
+      <instance number="10">
         <component-ref qname="TimerMilliC"/>
       </instance>
       <configuration/>
@@ -204,7 +204,7 @@
           <type-tag size="I:4" alignment="I:4"><struct-ref ref="0x7ffffad89b40"/>
             <typename><typedef-ref name="TMilli" ref="0x7ffffad88020"/></typename>
           </type-tag>
-          <value cst="I:13">
+          <value cst="I:14">
             <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4"></type-int>
           </value>
         </arguments>
@@ -490,7 +490,7 @@
         <short>&#10; The virtualized millisecond timer abstraction.</short>
         <long>&#10; The virtualized millisecond timer abstraction. Instantiating this &#10; component gives an independent millisecond granularity timer.&#10;&#10; @author Philip Levis&#10; @date   January 16 2006&#10; @see    TEP 102: Timers&#10;</long>
       </documentation>
-      <instance number="10">
+      <instance number="11">
         <component-ref qname="TimerMilliC"/>
       </instance>
       <configuration/>
@@ -670,7 +670,7 @@
         <short>&#10; The virtualized millisecond timer abstraction.</short>
         <long>&#10; The virtualized millisecond timer abstraction. Instantiating this &#10; component gives an independent millisecond granularity timer.&#10;&#10; @author Philip Levis&#10; @date   January 16 2006&#10; @see    TEP 102: Timers&#10;</long>
       </documentation>
-      <instance number="11">
+      <instance number="12">
         <component-ref qname="TimerMilliC"/>
       </instance>
       <configuration/>
@@ -878,7 +878,7 @@
         <short>&#10; The virtualized millisecond timer abstraction.</short>
         <long>&#10; The virtualized millisecond timer abstraction. Instantiating this &#10; component gives an independent millisecond granularity timer.&#10;&#10; @author Philip Levis&#10; @date   January 16 2006&#10; @see    TEP 102: Timers&#10;</long>
       </documentation>
-      <instance number="12">
+      <instance number="13">
         <component-ref qname="TimerMilliC"/>
       </instance>
       <configuration/>
@@ -1140,30 +1140,12 @@
       </instance>
       <module/>
     </component>
-    <component qname="TransportC.CloseQueue" loc="11(TransportC.CloseQueue):dataStructures/modules/ListC.nc">
-      <documentation loc="1:dataStructures/modules/ListC.nc">
-        <short>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.</short>
-        <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10;&#10;</long>
-      </documentation>
-      <instance number="6">
-        <component-ref qname="ListC"/>
-        <arguments>
-          <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-            <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-          </type-int>
-          <value cst="I:12">
-            <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-          </value>
-        </arguments>
-      </instance>
-      <module/>
-    </component>
     <component qname="TransportC.ReSendQueue" loc="11(TransportC.ReSendQueue):dataStructures/modules/ListC.nc">
       <documentation loc="1:dataStructures/modules/ListC.nc">
         <short>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.</short>
         <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10;&#10;</long>
       </documentation>
-      <instance number="7">
+      <instance number="6">
         <component-ref qname="ListC"/>
         <arguments>
           <type-tag size="I:36" alignment="I:1"><struct-ref name="reSendTCP" ref="0x7ffffa121080"/>
@@ -1191,7 +1173,7 @@
         <short>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.</short>
         <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10;&#10;</long>
       </documentation>
-      <instance number="8">
+      <instance number="7">
         <component-ref qname="ListC"/>
         <arguments>
           <type-tag size="I:36" alignment="I:1"><struct-ref name="reSendTCP" ref="0x7ffffa121080"/>
@@ -1219,7 +1201,7 @@
         <short>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.</short>
         <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10;&#10;</long>
       </documentation>
-      <instance number="9">
+      <instance number="8">
         <component-ref qname="ListC"/>
         <arguments>
           <type-tag size="I:34" alignment="I:1"><struct-ref name="receiveTCP" ref="0x7ffffa11f3d0"/>
@@ -1243,6 +1225,34 @@
       <configuration/>
     </component>
     <component qname="TransportC.InitSendQueue" loc="11(TransportC.InitSendQueue):dataStructures/modules/ListC.nc">
+      <documentation loc="1:dataStructures/modules/ListC.nc">
+        <short>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.</short>
+        <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10;&#10;</long>
+      </documentation>
+      <instance number="9">
+        <component-ref qname="ListC"/>
+        <arguments>
+          <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+            <typename><typedef-ref name="socket_t" ref="0x7ffffa8e76a0"/></typename>
+          </type-int>
+          <value cst="I:10">
+            <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+          </value>
+        </arguments>
+      </instance>
+      <module/>
+    </component>
+    <component qname="TransportC.CloseTimer" loc="44(TransportC.CloseTimer):/opt/tinyos-main/tos/system/TimerMilliC.nc">
+      <documentation loc="33:/opt/tinyos-main/tos/system/TimerMilliC.nc">
+        <short>&#10; The virtualized millisecond timer abstraction.</short>
+        <long>&#10; The virtualized millisecond timer abstraction. Instantiating this &#10; component gives an independent millisecond granularity timer.&#10;&#10; @author Philip Levis&#10; @date   January 16 2006&#10; @see    TEP 102: Timers&#10;</long>
+      </documentation>
+      <instance number="9">
+        <component-ref qname="TimerMilliC"/>
+      </instance>
+      <configuration/>
+    </component>
+    <component qname="TransportC.CloseQueue" loc="11(TransportC.CloseQueue):dataStructures/modules/ListC.nc">
       <documentation loc="1:dataStructures/modules/ListC.nc">
         <short>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.</short>
         <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10;&#10;</long>
@@ -9115,11 +9125,15 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="52:lib/modules/TransportP.nc" ref="0x7ffff9f71e20" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="67:lib/modules/TransportP.nc" ref="0x7ffff9f735b0" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="31:lib/modules/TransportP.nc" ref="0x7ffffa0e18f0" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="53:lib/modules/TransportP.nc" ref="0x7ffff9f726c0" defined="" scoped="" size="I:4" alignment="I:4">
+      <component-ref qname="TransportP"/>
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
+    <enum loc="32:lib/modules/TransportP.nc" ref="0x7ffffa0db020" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -9207,7 +9221,7 @@
       </type-array>
     </variable>
     <variable name="outputs" ref="0x7ffffb0eb9a0" loc="67:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
-      <type-array elements="I:268" size="I:4288" alignment="I:8">
+      <type-array elements="I:266" size="I:4256" alignment="I:8">
         <type-tag size="I:16" alignment="I:8"><struct-ref name="sim_log_output" ref="0x7ffffb0efd90"/>
           <typename><typedef-ref name="sim_log_output_t" ref="0x7ffffb0ed650"/></typename>
         </type-tag>
@@ -9647,7 +9661,7 @@
     </variable>
     <variable name="m_next" ref="0x7ffffadb64d0" loc="61:/opt/tinyos-main/tos/lib/tossim/SimSchedulerBasicP.nc">
       <component-ref qname="SimSchedulerBasicP"/>
-      <type-array elements="I:19" size="I:19" alignment="I:1">
+      <type-array elements="I:20" size="I:20" alignment="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
@@ -10273,7 +10287,7 @@
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="inSend" ref="0x7ffffa0df510" loc="39:lib/modules/TransportP.nc">
+    <variable name="inSend" ref="0x7ffffa0dac10" loc="40:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:10" size="I:10" alignment="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
@@ -10281,7 +10295,7 @@
         </type-int>
       </type-array>
     </variable>
-    <variable name="reSend" ref="0x7ffffa0df020" loc="38:lib/modules/TransportP.nc">
+    <variable name="reSend" ref="0x7ffffa0da720" loc="39:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:10" size="I:10" alignment="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
@@ -10289,7 +10303,7 @@
         </type-int>
       </type-array>
     </variable>
-    <variable name="socketInUse" ref="0x7ffffa0e0ac0" loc="37:lib/modules/TransportP.nc">
+    <variable name="socketInUse" ref="0x7ffffa0da230" loc="38:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:10" size="I:10" alignment="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
@@ -10297,7 +10311,7 @@
         </type-int>
       </type-array>
     </variable>
-    <variable name="socketArray" ref="0x7ffffa0e05a0" loc="36:lib/modules/TransportP.nc">
+    <variable name="socketArray" ref="0x7ffffa0dbc50" loc="37:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:10" size="I:2840" alignment="I:4">
         <type-tag size="I:284" alignment="I:4"><struct-ref name="socket_store_t" ref="0x7ffffa8e7a20"/>
@@ -10305,13 +10319,13 @@
         </type-tag>
       </type-array>
     </variable>
-    <variable name="global_fd" ref="0x7ffffa0e0020" loc="35:lib/modules/TransportP.nc">
+    <variable name="global_fd" ref="0x7ffffa0db6d0" loc="36:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
         <typename><typedef-ref name="socket_t" ref="0x7ffffa8e76a0"/></typename>
       </type-int>
     </variable>
-    <variable name="socket_num" ref="0x7ffffa0df8b0" loc="40:lib/modules/TransportP.nc">
+    <variable name="socket_num" ref="0x7ffffa0d9020" loc="41:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
         <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
@@ -12707,7 +12721,7 @@
     <constant cst="I:2147483648" name="CC2420_INVALID_TIMESTAMP" ref="0x7ffffac68bc0" loc="403:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:268" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
+    <constant cst="I:266" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:0" name="SPI2X" ref="0x7ffffad1b020" loc="970:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
@@ -13440,7 +13454,7 @@
       <component-ref qname="SimSchedulerBasicP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:19" name="NUM_TASKS" ref="0x7ffffadb7420" loc="55:/opt/tinyos-main/tos/lib/tossim/SimSchedulerBasicP.nc">
+    <constant cst="I:20" name="NUM_TASKS" ref="0x7ffffadb7420" loc="55:/opt/tinyos-main/tos/lib/tossim/SimSchedulerBasicP.nc">
       <component-ref qname="SimSchedulerBasicP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -13592,11 +13606,15 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:18" name="receiveDATA" ref="0x7ffff9f71c30" loc="52:lib/modules/TransportP.nc">
+    <constant cst="I:18" name="receiveDATA" ref="0x7ffff9f724d0" loc="53:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:16" name="MAX_PAYLOAD" ref="0x7ffffa0e1be0" loc="32:lib/modules/TransportP.nc">
+    <constant cst="I:16" name="MAX_PAYLOAD" ref="0x7ffffa0db310" loc="33:lib/modules/TransportP.nc">
+      <component-ref qname="TransportP"/>
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </constant>
+    <constant cst="I:19" name="closeTask" ref="0x7ffff9f733c0" loc="67:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -15378,7 +15396,13 @@
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </type-array>
     </typedef>
-    <typedef name="__nesc_sillytask_receiveDATA" ref="0x7ffff9f70250" loc="52:lib/modules/TransportP.nc">
+    <typedef name="__nesc_sillytask_closeTask" ref="0x7ffff9f73960" loc="67:lib/modules/TransportP.nc">
+      <component-ref qname="TransportP"/>
+      <type-array elements="I:19" size="I:76" alignment="I:4">
+        <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+      </type-array>
+    </typedef>
+    <typedef name="__nesc_sillytask_receiveDATA" ref="0x7ffff9f72a70" loc="53:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:18" size="I:72" alignment="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
