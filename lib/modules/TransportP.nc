@@ -30,7 +30,7 @@ module TransportP {
 
 implementation {
     enum {
-        MAX_PAYLOAD = 16,
+        MAX_PAYLOAD = 20,
     };
 
     socket_t global_fd;
@@ -214,10 +214,12 @@ implementation {
         if (socketArray[fd].state == ESTABLISHED || socketArray[fd].state == FIN_WAIT_1) {
             dbg(TRANSPORT_CHANNEL, "Node %d (port %d) : all data are transmitted and received, start to close the connection with node %d (port %d)\n", self_addr->addr, self_addr->port, temp->addr, temp->port);
             socketArray[fd].state = FIN_WAIT_1;
+            dbg(TRANSPORT_CHANNEL, "Node %d FIN_WAIT_1\n", TOS_NODE_ID);
             socketArray[fd].lastSent = socketArray[fd].lastSent + 1;
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, socketArray[fd].pending_seq + 1, FIN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
             makeReSend(&tcp_pkt, fd, temp->addr, TCP_HEADER_LENDTH, OTHER);
             call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
+            socketArray[fd].RTT = call IP.estimateRTT(temp->addr);
             call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
             return SUCCESS;
         }
@@ -256,13 +258,15 @@ implementation {
             memcpy(&socketArray[fd].src, &socketArray[global_fd].src, sizeof(socket_addr_t));
             socketArray[fd].dest = temp;
             socketArray[fd].nextExpected = payload->seq + 1;
-            socketArray[fd].ISN = random_seq;
+            socketArray[fd].ISN = (call SocketTable.contains(from)) ? socketArray[fd].ISN : random_seq;
             socketArray[fd].RTT = call IP.estimateRTT(from);
             socketArray[fd].effectiveWindow = SOCKET_BUFFER_SIZE;
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, socketArray[fd].nextExpected, SYN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
-            makeReSend(&tcp_pkt, fd, from, TCP_HEADER_LENDTH, OTHER);
             call IP.send(from, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
-            call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
+            if (!reSend[fd]) {
+                makeReSend(&tcp_pkt, fd, from, TCP_HEADER_LENDTH, OTHER);
+                call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
+            }
         } else {
             temp = socketArray[global_fd].src;
             dbg(TRANSPORT_CHANNEL, "Server (node %d, port %d) is not in LISTEN state\n", TOS_NODE_ID, temp.port);
@@ -291,12 +295,10 @@ implementation {
         call IP.send(from, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
         signal Transport.connectDone(fd);
 
-        if (call InitSendTimer.isRunning()) {
-            call InitSendTimer.stop();
-            call InitSendTimer.startOneShot(2 * socketArray[fd].RTT);
-        } else {
+        if (!call InitSendTimer.isRunning() && !inSend[fd]) {
             call InitSendQueue.pushback(fd);
-            call InitSendTimer.startOneShot(2 * socketArray[fd].RTT);
+            socketArray[fd].RTT = call IP.estimateRTT(from);
+            call InitSendTimer.startOneShot(4 * socketArray[fd].RTT);
         }
     }
 
@@ -308,6 +310,7 @@ implementation {
         switch(socketArray[fd].state) {
             case SYN_RCVD:
                 if (payload->ack_num != socketArray[fd].ISN + 1) {
+                    dbg(TRANSPORT_CHANNEL, "Error: wrong ack num (expect = %d, get = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
                     return;
                 }
                 socketArray[fd].ISN = socketArray[fd].ISN + 1;
@@ -319,8 +322,20 @@ implementation {
                 dbg(TRANSPORT_CHANNEL, "Node %d establish connection with Node %d\n", TOS_NODE_ID, from);
                 return;
             case FIN_WAIT_1:
+                if (payload->ack_num == socketArray[fd].lastSent + 1) {
+                    reSend[fd] = FALSE;
+                    socketArray[fd].state = FIN_WAIT_2;
+                    dbg(TRANSPORT_CHANNEL, "Node %d FIN_WAIT_2, reSend = %s\n", TOS_NODE_ID, (reSend[fd]) ? "TRUE" : "FALSE");
+                }
                 return;
             case LAST_ACK:
+                if (payload->ack_num != socketArray[fd].ISN + 1) {
+                    dbg(TRANSPORT_CHANNEL, "Error: recive ACK with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
+                    return;
+                }
+                reSend[fd] = FALSE;
+                socketArray[fd].state = CLOSED;
+                dbg(TRANSPORT_CHANNEL, "Server (node %d port %d) close connection with Client (node %d port %d)\n", self_addr->addr, self_addr->port, dest_addr->addr, dest_addr->port);
                 return;
             case ESTABLISHED:
                 update(fd, payload->ack_num, payload->seq);
@@ -370,7 +385,6 @@ implementation {
     }
 
     
-    // not finish
     void receiveFIN(tcpPkt_t* payload, uint8_t from) {
         tcpPkt_t tcp_pkt;
         socket_t fd = call SocketTable.get(from);
@@ -379,12 +393,63 @@ implementation {
 
         switch(socketArray[fd].state) {
             case ESTABLISHED:
+                if (payload->ack_num != socketArray[fd].ISN + 1) {
+                    dbg(TRANSPORT_CHANNEL, "Error: recive FIN with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
+                    return;
+                }
+                socketArray[fd].state = CLOSE_WAIT;
+                dbg(TRANSPORT_CHANNEL, "node %d CLOSE_WAIT\n", TOS_NODE_ID);
+                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
+                socketArray[fd].state = LAST_ACK;
+                dbg(TRANSPORT_CHANNEL, "NODE %d LAST_ACK\n", TOS_NODE_ID);
+                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, FIN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
+                makeReSend(&tcp_pkt, fd, temp->addr, TCP_HEADER_LENDTH, OTHER);
+                socketArray[fd].RTT = call IP.estimateRTT(temp->addr);
+                call ReSendTimer.startOneShot(2 * socketArray[fd].RTT);
+                return;
+            case CLOSE_WAIT:
+                if (payload->ack_num != socketArray[fd].ISN + 1) {
+                    dbg(TRANSPORT_CHANNEL, "Error: recive FIN with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
+                    return;
+                }
+                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
                 return;
             case LAST_ACK:
+                if (payload->ack_num != socketArray[fd].ISN + 1) {
+                    dbg(TRANSPORT_CHANNEL, "Error: recive FIN with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
+                    return;
+                }
+                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
                 return;
             case FIN_WAIT_2:
+                if (payload->ack_num != socketArray[fd].lastSent + 1) {
+                    dbg(TRANSPORT_CHANNEL, "Error: recive FIN with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
+                    return;
+                }
+                socketArray[fd].state = TIME_WAIT;
+                dbg(TRANSPORT_CHANNEL, "node %d TIME_WAIT\n", TOS_NODE_ID);
+                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
+                call CloseQueue.pushback(fd);
+                socketArray[fd].RTT = call IP.estimateRTT(temp->addr);
+                call CloseTimer.startOneShot(30 * socketArray[fd].RTT);
                 return;
             case TIME_WAIT:
+                if (payload->ack_num != socketArray[fd].lastSent + 1) {
+                    dbg(TRANSPORT_CHANNEL, "Error: recive FIN with wrong ack_num (expect ack = %d, ack received = %d)\n", socketArray[fd].ISN + 1, payload->ack_num);
+                    return;
+                }
+                makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, payload->seq + 1, ACK, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
+                call IP.send(temp->addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
+                if (call CloseTimer.isRunning()) {
+                    call CloseTimer.stop();
+                    socketArray[fd].RTT = call IP.estimateRTT(temp->addr);
+                    call CloseTimer.startOneShot(30 * socketArray[fd].RTT);
+                }
                 return;
             default:
                 return;
@@ -436,9 +501,12 @@ implementation {
         socket_addr_t dest = socketArray[fd].dest;
         reSendTCP_t resend;
 
+        inSend[fd] = TRUE;
         resend.fd = fd;
         resend.type = 1;
         call ReSendDataQueue.pushback(resend);
+
+        socketArray[fd].RTT = call IP.estimateRTT(dest.addr);
 
         if (socketArray[fd].type == TYPICAL) {
             k = (socketArray[fd].lastWritten - socketArray[fd].lastSent) / dataSize;
@@ -542,19 +610,14 @@ implementation {
         reSendTCP_t resend;
 
         if (socketArray[fd].remain == 0 && socketArray[fd].state == ESTABLISHED) {
-            if (call ReSendDataTimer.isRunning()) {
-                call ReSendDataTimer.stop();
-                if (call ReSendDataQueue.size() > 0) {
-                    call ReSendDataQueue.popfront();
-                }
-            }
             call Transport.close(fd);
             return;
         }
-
         resend.fd = fd;
         resend.type = 1;
         call ReSendDataQueue.pushback(resend);
+
+        socketArray[fd].RTT = call IP.estimateRTT(dest.addr);
 
 
         if (socketArray[fd].type == TYPICAL) {
@@ -622,6 +685,8 @@ implementation {
         socket_addr_t* self_addr = &socketArray[fd].src;
         socket_addr_t* dest_addr = &socketArray[fd].dest;
         socketArray[fd].state = CLOSED;
+        socketInUse[fd] = FALSE;
+        call FDQueue.pushback(fd);
         dbg(TRANSPORT_CHANNEL, "Client (node %d : port %d) close connection with Server (node %d : port %d)\n", self_addr->addr, self_addr->port, dest_addr->addr, dest_addr->port);
     }
 
@@ -631,6 +696,7 @@ implementation {
             if (reSend[resend_info.fd] == TRUE) {
                 call IP.send(resend_info.dest, PROTOCOL_TCP, 50, (uint8_t*)&resend_info.pkt, resend_info.length);
                 call ReSendQueue.pushback(resend_info);
+                socketArray[resend_info.fd].RTT = call IP.estimateRTT(resend_info.dest);
                 call ReSendTimer.startOneShot(2 * socketArray[resend_info.fd].RTT);
             }
         }
@@ -654,10 +720,13 @@ implementation {
     event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from, uint8_t len) {
         tcpPkt_t tcp_pkt;
         receiveTCP_t temp;
+        socket_t fd;
         memcpy(&tcp_pkt, incomingMsg, sizeof(tcpPkt_t));
         memcpy(&temp.pkt, &tcp_pkt, sizeof(tcpPkt_t));
+
         temp.from = from;
         temp.len = len;
+
         switch(tcp_pkt.flag) {
             case SYN:
                 if (tcp_pkt.ack_num == ATTEMPT_CONNECT) {

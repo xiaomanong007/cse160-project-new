@@ -29,7 +29,7 @@ def main():
     # s.addChannel(s.NEIGHBOR_CHANNEL);
     # s.addChannel(s.FLOODING_CHANNEL);
     # s.addChannel(s.ROUTING_CHANNEL);
-    s.addChannel(s.TRANSPORT_CHANNEL);
+    # s.addChannel(s.TRANSPORT_CHANNEL);
 
     # After sending a ping, simulate a little to prevent collision.
     s.runTime(300);
@@ -52,8 +52,8 @@ def main():
     s.cmdTestClient(5, 1, 60, 80, 200);
     s.runTime(400);
 
-    # s.cmdTestClient(7, 1, 40, 80, 50);
-    # s.runTime(100);
+    s.cmdTestClient(7, 1, 40, 80, 50);
+    s.runTime(200);
     s.runTime(300);
 
 if __name__ == '__main__':

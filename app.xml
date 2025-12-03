@@ -999,7 +999,7 @@
           <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
             <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
           </type-int>
-          <value cst="I:11">
+          <value cst="I:20">
             <type-int cname="int" size="I:4" alignment="I:4"></type-int>
           </value>
         </arguments>
@@ -1035,7 +1035,7 @@
           <type-tag size="I:2" alignment="I:1"><struct-ref name="pair" ref="0x7ffffa20bad0"/>
             <typename><typedef-ref name="pair_t" ref="0x7ffffa20a2f0"/></typename>
           </type-tag>
-          <value cst="I:11">
+          <value cst="I:20">
             <type-int cname="int" size="I:4" alignment="I:4"></type-int>
           </value>
         </arguments>
@@ -1063,7 +1063,7 @@
           <type-tag size="I:166" alignment="I:2"><struct-ref name="pending" ref="0x7ffffa20d600"/>
             <typename><typedef-ref name="pending_t" ref="0x7ffffa20b7d0"/></typename>
           </type-tag>
-          <value cst="I:11">
+          <value cst="I:20">
             <type-int cname="int" size="I:4" alignment="I:4"></type-int>
           </value>
         </arguments>
@@ -9125,11 +9125,11 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="67:lib/modules/TransportP.nc" ref="0x7ffff9f735b0" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="53:lib/modules/TransportP.nc" ref="0x7ffff9f2e6c0" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="53:lib/modules/TransportP.nc" ref="0x7ffff9f726c0" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="67:lib/modules/TransportP.nc" ref="0x7ffff9f2f5b0" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -9221,7 +9221,7 @@
       </type-array>
     </variable>
     <variable name="outputs" ref="0x7ffffb0eb9a0" loc="67:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
-      <type-array elements="I:266" size="I:4256" alignment="I:8">
+      <type-array elements="I:279" size="I:4464" alignment="I:8">
         <type-tag size="I:16" alignment="I:8"><struct-ref name="sim_log_output" ref="0x7ffffb0efd90"/>
           <typename><typedef-ref name="sim_log_output_t" ref="0x7ffffb0ed650"/></typename>
         </type-tag>
@@ -12721,7 +12721,7 @@
     <constant cst="I:2147483648" name="CC2420_INVALID_TIMESTAMP" ref="0x7ffffac68bc0" loc="403:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:266" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
+    <constant cst="I:279" name="SIM_LOG_OUTPUT_COUNT" ref="0x7ffffb0eb3d0" loc="64:/opt/tinyos-main/tos/lib/tossim/sim_log.c">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:0" name="SPI2X" ref="0x7ffffad1b020" loc="970:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
@@ -13594,7 +13594,7 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:320" name="ESTIMATE_RTT" ref="0x7ffffa1e10b0" loc="29:lib/modules/IPP.nc">
+    <constant cst="I:650" name="ESTIMATE_RTT" ref="0x7ffffa1e10b0" loc="29:lib/modules/IPP.nc">
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -13606,15 +13606,15 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:18" name="receiveDATA" ref="0x7ffff9f724d0" loc="53:lib/modules/TransportP.nc">
+    <constant cst="I:18" name="receiveDATA" ref="0x7ffff9f2e4d0" loc="53:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:16" name="MAX_PAYLOAD" ref="0x7ffffa0db310" loc="33:lib/modules/TransportP.nc">
+    <constant cst="I:20" name="MAX_PAYLOAD" ref="0x7ffffa0db310" loc="33:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:19" name="closeTask" ref="0x7ffff9f733c0" loc="67:lib/modules/TransportP.nc">
+    <constant cst="I:19" name="closeTask" ref="0x7ffff9f2f3c0" loc="67:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -15396,13 +15396,13 @@
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </type-array>
     </typedef>
-    <typedef name="__nesc_sillytask_closeTask" ref="0x7ffff9f73960" loc="67:lib/modules/TransportP.nc">
+    <typedef name="__nesc_sillytask_closeTask" ref="0x7ffff9f2f960" loc="67:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:19" size="I:76" alignment="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </type-array>
     </typedef>
-    <typedef name="__nesc_sillytask_receiveDATA" ref="0x7ffff9f72a70" loc="53:lib/modules/TransportP.nc">
+    <typedef name="__nesc_sillytask_receiveDATA" ref="0x7ffff9f2ea70" loc="53:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-array elements="I:18" size="I:72" alignment="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>

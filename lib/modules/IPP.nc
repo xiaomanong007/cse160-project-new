@@ -26,7 +26,7 @@ implementation {
 
         PENDING_DROP_TIME = 30000,
 
-        ESTIMATE_RTT = 320,
+        ESTIMATE_RTT = 650,
 
         MAX_NODES = 25,
     };
