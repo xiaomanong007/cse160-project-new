@@ -102,8 +102,6 @@ implementation {
         socket_t fd = call Transport.socket();
         socket_addr_t src_addr;
         socket_addr_t dest_addr;
-        uint8_t buff[transfer];
-        uint8_t i;
 
         if (fd == NULL_SOCKET) {
             dbg(TRANSPORT_CHANNEL, "No available socket\n");
@@ -112,17 +110,12 @@ implementation {
 
         src_addr.addr = TOS_NODE_ID;
         src_addr.port = srcPort;
-
-        for (i = 1; i <= transfer; i++) {
-            buff[i - 1] = i;
-        }
         
         if (call Transport.bind(fd, &src_addr) == SUCCESS) {
             dest_addr.addr = dest;
             dest_addr.port = destPort;
             if (call Transport.connect(fd, &dest_addr) == SUCCESS) {
                 call SocketTable.insert(dest, fd);
-                call Transport.write(fd, (uint8_t *)&buff, transfer);
                 return SUCCESS;
             } else {
                 return FAIL;
@@ -171,7 +164,10 @@ implementation {
             socketArray[fd].lastWritten = writtenBytes - left;
         }
 
-        socketArray[fd].remain = writtenBytes;
+        if (socketArray[fd].remain == 0) {
+            socketArray[fd].remain = writtenBytes;
+            sendData(fd);
+        }
         return writtenBytes;
     }
 
@@ -314,11 +310,11 @@ implementation {
         call IP.send(from, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH);
         signal Transport.connectDone(fd);
 
-        if (!call InitSendTimer.isRunning() && !inSend[fd]) {
-            call InitSendQueue.pushback(fd);
-            socketArray[fd].RTT = call IP.estimateRTT(from);
-            call InitSendTimer.startOneShot(4 * socketArray[fd].RTT);
-        }
+        // if (!call InitSendTimer.isRunning() && !inSend[fd]) {
+        //     call InitSendQueue.pushback(fd);
+        //     socketArray[fd].RTT = call IP.estimateRTT(from);
+        //     call InitSendTimer.startOneShot(4 * socketArray[fd].RTT);
+        // }
     }
 
     void receiveACK(tcpPkt_t* payload, uint8_t from) {
@@ -392,14 +388,14 @@ implementation {
             socketArray[fd].pending_seq = tcp_pkt->seq;
             socketArray[fd].nextExpected = (tcp_pkt->seq + 1) % SOCKET_BUFFER_SIZE;
 
-            printf("Data: ");
             for (i = 0; i < size; i++) {
                 socketArray[fd].rcvdBuff[socketArray[fd].lastRcvd] = *(tcp_pkt->payload + i);
-                printf("%d, ", socketArray[fd].rcvdBuff[socketArray[fd].lastRcvd]);
                 socketArray[fd].lastRcvd = (socketArray[fd].lastRcvd + 1) % 128;
             }
-            printf("\n");
-            signal Transport.hasData(fd);
+
+            if (*(tcp_pkt->payload + (size - 2)) == '\r' && *(tcp_pkt->payload + (size - 1)) == '\n') {
+                signal Transport.hasData(fd);
+            }
         }
         ad_window = (socketArray[fd].lastRcvd - socketArray[fd].lastRead);
         ad_window = ad_window % 128;

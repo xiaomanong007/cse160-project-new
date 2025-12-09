@@ -96,9 +96,28 @@ implementation {
 
     event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from, uint8_t len) { }
 
-    event void Transport.connectDone(socket_t fd) { }
+    event void Transport.connectDone(socket_t fd) {
+        uint8_t idx = 0;
+        uint8_t size = HELLO_LEN + username_len + END_LEN;
+        uint8_t data[size];
 
-    event void Transport.hasData(socket_t fd) { }
+        memcpy(data + idx, "hello ", HELLO_LEN);
+        idx += HELLO_LEN;
+
+        memcpy(data + idx, name, username_len);
+        idx += username_len;
+
+        memcpy(data + idx, "\r\n", END_LEN);
+        idx += END_LEN;
+
+        call Transport.write(fd, &data, idx);
+    }
+
+    event void Transport.hasData(socket_t fd) {
+        uint8_t content[20];
+        call Transport.read(fd, &content, 20);
+        printf("%s\n", content);
+    }
 
     event void Transport.getGreet(tcpPkt_t* incomingMsg, uint8_t from, uint8_t len) {
         tcpPkt_t tcp_pkt;
@@ -110,6 +129,7 @@ implementation {
         while(i < size) {
             if (tcp_pkt.payload[HELLO_LEN + i] == ' ') {
                 i++;
+                username_len = i;
                 break;
             }
             name[i] = tcp_pkt.payload[HELLO_LEN + i];
@@ -120,6 +140,7 @@ implementation {
             port = port * 10 + (tcp_pkt.payload[HELLO_LEN + i] - '0');
             i++;
         }
+
         call Transport.initClientAndConnect(from, tcp_pkt.destPort, tcp_pkt.srcPort, 10);
     }
 }
