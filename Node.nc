@@ -36,6 +36,8 @@ module Node{
    uses interface IP;
 
    uses interface Transport;
+
+   uses interface App;
 }
 
 implementation{
@@ -113,6 +115,24 @@ implementation{
 
    event void CommandHandler.setAppClient(){}
 
+   event void CommandHandler.greet(uint8_t dest, uint8_t port, uint8_t length, uint8_t* username) {
+      printf("server = %d, dest = %d, port = %d, len = %d, name = %s\n", TOS_NODE_ID, dest, port, length, username);
+   }
+
+   event void CommandHandler.broadcastMessage(uint8_t legnth, uint8_t* payload) {
+      printf("client = %d, len = %d, msg = %s\n", TOS_NODE_ID, legnth, payload);
+   }
+
+   event void CommandHandler.unicastMessage(uint8_t len_username ,uint8_t* username, uint8_t legnth, uint8_t* payload) {
+      uint8_t name[len_username];
+      memcpy(&name, username, len_username + 1);
+      printf("client = %d, len_user = %d, username = %s, len = %d, msg = %s\n", TOS_NODE_ID, len_username, name, legnth, payload);
+   }
+
+   event void CommandHandler.printAllUsers() {
+      printf("client = %d, print all users\n", TOS_NODE_ID);
+   }
+
    // PacketHandler events
    event void PacketHandler.gotNDPkt(uint8_t* _){}
    event void PacketHandler.gotFloodPkt(uint8_t* incomingMsg, uint8_t from){}
@@ -130,16 +150,5 @@ implementation{
    // Transport events
    event void Transport.connectDone(socket_t fd) { }
 
-   event void Transport.hasData(socket_t fd) {
-      uint16_t i;
-      uint8_t size = 128;
-      uint8_t data[size];
-      uint16_t len = call Transport.read(fd, &data, size);
-
-      printf("DATA: ");
-      for (i = 0; i < len; i++) {
-            printf("%d, ", data[i]);
-      }
-      printf("\n");
-   }
+   event void Transport.hasData(socket_t fd) { }
 }

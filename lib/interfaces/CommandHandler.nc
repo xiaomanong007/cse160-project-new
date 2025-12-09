@@ -9,4 +9,9 @@ interface CommandHandler{
    event void setTestClient(uint8_t dest, uint8_t srcPort, uint8_t destPort, uint16_t transfer);
    event void setAppServer();
    event void setAppClient();
+
+   event void greet(uint8_t dest, uint8_t port, uint8_t length, uint8_t* username);
+   event void broadcastMessage(uint8_t legnth, uint8_t* payload);
+   event void unicastMessage(uint8_t len_username ,uint8_t* username, uint8_t legnth, uint8_t* payload);
+   event void printAllUsers();
 }

@@ -209,6 +209,8 @@ implementation {
             socketArray[fd].lastAck = socketArray[fd].lastSent;
             socketArray[fd].lastWritten = socketArray[fd].lastSent;
             socketArray[fd].ISN = random_seq;
+            socketArray[fd].lastRcvd = call Random.rand16() % 127;
+            socketArray[fd].lastRead = socketArray[fd].lastRcvd;
             socketArray[fd].type = TYPICAL;
             makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, ATTEMPT_CONNECT, SYN, socketArray[fd].effectiveWindow, (uint8_t*)&empty_payload, 1);
             makeReSend(&tcp_pkt, fd, addr->addr, TCP_HEADER_LENDTH, OTHER);

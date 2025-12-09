@@ -78,6 +78,26 @@ implementation{
                 signal CommandHandler.setTestServer(buff[0]);
                 break;
 
+            case CMD_HELLO_CLIENT:
+                dbg(COMMAND_CHANNEL, "Command Type: HELLO CLIENT\n");
+                signal CommandHandler.greet(buff[0], buff[1], buff[2], &buff[3]);
+                break;
+
+            case CMD_BROAD_MSG:
+                dbg(COMMAND_CHANNEL, "Command Type: BROADCAST MSG\n");
+                signal CommandHandler.broadcastMessage(buff[0], &buff[1]);
+                break;
+
+            case CMD_UNICAST_MSG:
+                dbg(COMMAND_CHANNEL, "Command Type: UNICAST MSG\n");
+                signal CommandHandler.unicastMessage(buff[0], &buff[1], buff[1 + buff[0]], &buff[2 + buff[0]]);
+                break;
+
+            case CMD_PRINT_CLIENTS:
+                dbg(COMMAND_CHANNEL, "Command Type: PRINT CLIENTS\n");
+                signal CommandHandler.printAllUsers();
+                break;
+
             default:
                 dbg(COMMAND_CHANNEL, "CMD_ERROR: \"%d\" does not match any known commands.\n", msg->id);
                 break;

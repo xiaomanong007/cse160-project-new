@@ -46,14 +46,21 @@ def main():
     # s.routeDMP(5);
     # s.runTime(1);
 
-    s.cmdTestServer(1, 80);
+    s.cmdTestServer(1, 41);
     s.runTime(10);
 
-    s.cmdTestClient(5, 1, 60, 80, 200);
-    s.runTime(60);
+    s.greet(1, 7, 22, 4, "jack");
+    s.runTime(2);
 
-    s.cmdTestClient(7, 1, 40, 80, 50);
-    s.runTime(60);
+    s.broadcastMsg(7, 5, "hello");
+    s.runTime(2);
+
+    s.unicastMsg(7, 4, "jack", 5, "hello");
+    s.runTime(2);
+
+    s.printAllUser(8);
+    s.runTime(2);
+
     s.runTime(300);
 
 if __name__ == '__main__':

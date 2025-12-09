@@ -15,6 +15,10 @@ class TestSim:
     CMD_ROUTE_DUMP=3
     CMD_TEST_CLIENT=4
     CMD_TEST_SERVER=5
+    CMD_HELLO_CLIENT = 10
+    CMD_BROAD_MSG = 11
+    CMD_UNICAST_MSG = 12
+    CMD_PRINT_CLIENTS = 13
 
     # CHANNELS - see includes/channels.h
     COMMAND_CHANNEL="command";
@@ -146,6 +150,18 @@ class TestSim:
 
     def cmdTestClient(self, client_address, dest, srcPort, destPort, transfer):
         self.sendCMD(self.CMD_TEST_CLIENT, client_address, "{0}{1}{2}{3}".format(chr(dest), chr(srcPort), chr(destPort), chr(transfer)));
+
+    def greet(self, server_address, dest, port, len, msg):
+        self.sendCMD(self.CMD_HELLO_CLIENT, server_address, "{0}{1}{2}{3}".format(chr(dest), chr(port), chr(len), msg));
+
+    def broadcastMsg(self, client_address, len, msg):
+        self.sendCMD(self.CMD_BROAD_MSG, client_address, "{0}{1}".format(chr(len), msg));
+    
+    def unicastMsg(self, client_address, len_user, username, len, msg):
+        self.sendCMD(self.CMD_UNICAST_MSG, client_address, "{0}{1}{2}{3}".format(chr(len_user), username, chr(len), msg));
+
+    def printAllUser(self, client_address):
+        self.sendCMD(self.CMD_PRINT_CLIENTS, client_address, "print command");
 
 def main():
     s = TestSim();
