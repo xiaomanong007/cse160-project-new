@@ -52,8 +52,8 @@ def main():
     s.greet(1, 7, 22, 4, "jack");
     s.runTime(10);
 
-    # s.broadcastMsg(7, 5, "hello");
-    # s.runTime(2);
+    s.broadcastMsg(7, 11, "hello world");
+    s.runTime(2);
 
     # s.unicastMsg(7, 4, "jack", 5, "hello");
     # s.runTime(2);

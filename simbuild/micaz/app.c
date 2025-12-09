@@ -4440,6 +4440,21 @@ typedef struct routingInfo {
   uint8_t next_hop;
   uint16_t cost;
 } routingInfo_t;
+# 6 "lib/modules/../../includes/app.h"
+enum __nesc_unnamed4345 {
+  MAX_USERNAME_LENTH = 10
+};
+
+
+
+
+
+#line 10
+typedef struct userInfo {
+  socket_t fd;
+  uint8_t username[MAX_USERNAME_LENTH];
+  bool accept;
+} userInfo_t;
 typedef uint16_t CpmModelC__ReadRssi__val_t;
 typedef sendInfo /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__Pool__t;
 typedef sendInfo */*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__Queue__t;
@@ -4466,7 +4481,7 @@ typedef /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__precision_
 typedef /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__precision_tag /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__precision_tag;
 typedef uint32_t /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__size_type;
 typedef uint16_t RandomMlcgC__SeedInit__parameter;
-enum AMQueueP____nesc_unnamed4345 {
+enum AMQueueP____nesc_unnamed4346 {
   AMQueueP__NUM_CLIENTS = 4U
 };
 typedef sendInfo /*NodeC.SimpleSendC.PoolC*/PoolC__1__pool_t;
@@ -4787,13 +4802,15 @@ static void Node__PacketHandler__gotIpPkt(uint8_t *incomingMsg);
 #line 4
 static void Node__PacketHandler__gotNDPkt(uint8_t *incomingMsg);
 # 154 "lib/interfaces/Transport.nc"
-static void Node__Transport__hasData(socket_t fd);
+static void Node__Transport__hasData(socket_t fd, uint8_t from);
 #line 152
 static void Node__Transport__connectDone(socket_t fd);
 
 
 
 static void Node__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len);
+
+static void Node__Transport__accepted(socket_t fd, uint8_t id);
 # 78 "/opt/tinyos-main/tos/interfaces/Receive.nc"
 static 
 #line 74
@@ -4940,15 +4957,15 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__f
 #line 83
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5bb950);
+uint8_t arg_0x7ffffa5b8950);
 # 92 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static bool /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__isRunning(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5bb950);
+uint8_t arg_0x7ffffa5b8950);
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5bb950, 
+uint8_t arg_0x7ffffa5b8950, 
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 uint32_t dt);
 
@@ -4957,7 +4974,7 @@ uint32_t dt);
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__stop(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5bb950);
+uint8_t arg_0x7ffffa5b8950);
 # 82 "/opt/tinyos-main/tos/lib/timer/Counter.nc"
 static void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__overflow(void );
 # 52 "/opt/tinyos-main/tos/interfaces/Random.nc"
@@ -4990,7 +5007,7 @@ error_t error);
 # 110 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__sendDone(
 # 48 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-am_id_t arg_0x7ffffa508b60, 
+am_id_t arg_0x7ffffa504b60, 
 # 103 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 message_t * msg, 
 
@@ -5003,7 +5020,7 @@ error_t error);
 # 75 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__send(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa509940, 
+uint8_t arg_0x7ffffa505940, 
 # 67 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -5017,7 +5034,7 @@ uint8_t len);
 #line 100
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa509940, 
+uint8_t arg_0x7ffffa505940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -5513,8 +5530,6 @@ static error_t TransportP__Transport__connect(socket_t fd, socket_addr_t *addr);
 static uint16_t TransportP__Transport__write(socket_t fd, uint8_t *buff, uint16_t bufflen);
 #line 20
 static void TransportP__Transport__onBoot(void );
-#line 128
-static error_t TransportP__Transport__close(socket_t fd);
 # 75 "/opt/tinyos-main/tos/interfaces/TaskBasic.nc"
 static void TransportP__closeTask__runTask(void );
 # 83 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
@@ -5565,13 +5580,15 @@ static void /*TransportC.CloseQueue*/ListC__9__List__pushback(/*TransportC.Close
 
 static /*TransportC.CloseQueue*/ListC__9__List__t /*TransportC.CloseQueue*/ListC__9__List__popfront(void );
 # 154 "lib/interfaces/Transport.nc"
-static void AppP__Transport__hasData(socket_t fd);
+static void AppP__Transport__hasData(socket_t fd, uint8_t from);
 #line 152
 static void AppP__Transport__connectDone(socket_t fd);
 
 
 
 static void AppP__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len);
+
+static void AppP__Transport__accepted(socket_t fd, uint8_t id);
 # 3 "lib/interfaces/App.nc"
 static void AppP__App__broadcastMsg(uint8_t *payload, uint8_t legnth);
 #line 2
@@ -5607,7 +5624,7 @@ uint8_t arg_0x7ffffadb8020);
 
 
 
-enum SimSchedulerBasicP____nesc_unnamed4346 {
+enum SimSchedulerBasicP____nesc_unnamed4347 {
 
   SimSchedulerBasicP__NUM_TASKS = 19U, 
   SimSchedulerBasicP__NO_TASK = 255
@@ -5964,7 +5981,7 @@ double reverseGain);
 static bool TossimPacketModelC__GainRadioModel__clearChannel(void );
 static void TossimPacketModelC__GainRadioModel__setPendingTransmission(void );
 # 96 "/opt/tinyos-main/tos/lib/tossim/TossimPacketModelC.nc"
-enum TossimPacketModelC____nesc_unnamed4347 {
+enum TossimPacketModelC____nesc_unnamed4348 {
 #line 96
   TossimPacketModelC__startDoneTask = 0U
 };
@@ -5974,14 +5991,14 @@ typedef int TossimPacketModelC____nesc_sillytask_startDoneTask[TossimPacketModel
 
 
 
-enum TossimPacketModelC____nesc_unnamed4348 {
+enum TossimPacketModelC____nesc_unnamed4349 {
 #line 101
   TossimPacketModelC__stopDoneTask = 1U
 };
 #line 101
 typedef int TossimPacketModelC____nesc_sillytask_stopDoneTask[TossimPacketModelC__stopDoneTask];
 #line 145
-enum TossimPacketModelC____nesc_unnamed4349 {
+enum TossimPacketModelC____nesc_unnamed4350 {
 #line 145
   TossimPacketModelC__sendDoneTask = 2U
 };
@@ -6079,7 +6096,7 @@ static void CpmModelC__Model__acked(message_t *msg);
 
 static bool CpmModelC__Model__shouldAck(message_t *msg);
 # 528 "/opt/tinyos-main/tos/lib/tossim/CpmModelC.nc"
-enum CpmModelC____nesc_unnamed4350 {
+enum CpmModelC____nesc_unnamed4351 {
 #line 528
   CpmModelC__read_rssi_task = 3U
 };
@@ -6315,9 +6332,11 @@ static inline void Node__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t 
 
 static inline void Node__Transport__connectDone(socket_t fd);
 
-static inline void Node__Transport__hasData(socket_t fd);
+static inline void Node__Transport__hasData(socket_t fd, uint8_t from);
 
 static inline void Node__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len);
+
+static inline void Node__Transport__accepted(socket_t fd, uint8_t id);
 # 89 "/opt/tinyos-main/tos/interfaces/Pool.nc"
 static error_t /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__Pool__put(
 #line 85
@@ -6378,7 +6397,7 @@ static bool /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__sendTimer__isRunnin
 #line 73
 static void /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__sendTimer__startOneShot(uint32_t dt);
 # 81 "lib/modules/SimpleSendP.nc"
-enum /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0____nesc_unnamed4351 {
+enum /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0____nesc_unnamed4352 {
 #line 81
   SimpleSendP__0__sendBufferTask = 4U
 };
@@ -6452,7 +6471,7 @@ uint32_t /*AlarmCounterMilliP.Atm128AlarmAsyncC.Atm128AlarmAsyncP*/Atm128AlarmAs
 
 
 
-enum /*AlarmCounterMilliP.Atm128AlarmAsyncC.Atm128AlarmAsyncP*/Atm128AlarmAsyncP__0____nesc_unnamed4352 {
+enum /*AlarmCounterMilliP.Atm128AlarmAsyncC.Atm128AlarmAsyncP*/Atm128AlarmAsyncP__0____nesc_unnamed4353 {
   Atm128AlarmAsyncP__0__MINDT = 2, 
   Atm128AlarmAsyncP__0__MAXT = 230
 };
@@ -6690,7 +6709,7 @@ static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__stop(void )
 # 83 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__fired(void );
 # 74 "/opt/tinyos-main/tos/lib/timer/AlarmToTimerC.nc"
-enum /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0____nesc_unnamed4353 {
+enum /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0____nesc_unnamed4354 {
 #line 74
   AlarmToTimerC__0__fired = 5U
 };
@@ -6732,16 +6751,16 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__s
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5bb950);
+uint8_t arg_0x7ffffa5b8950);
 #line 71
-enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4354 {
+enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4355 {
 #line 71
   VirtualizeTimerC__0__updateFromTimer = 6U
 };
 #line 71
 typedef int /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_sillytask_updateFromTimer[/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer];
 #line 53
-enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4355 {
+enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4356 {
 
   VirtualizeTimerC__0__NUM_TIMERS = 13U, 
   VirtualizeTimerC__0__END_OF_LIST = 255
@@ -6755,7 +6774,7 @@ enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4355 
 
 
 #line 59
-typedef struct /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4356 {
+typedef struct /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4357 {
 
   uint32_t t0;
   uint32_t dt;
@@ -6860,7 +6879,7 @@ static inline void /*NodeC.SimpleSendC.AMSenderC.SenderC.AMQueueEntryP*/AMQueueE
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(
 # 48 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-am_id_t arg_0x7ffffa508b60, 
+am_id_t arg_0x7ffffa504b60, 
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
 am_addr_t addr, 
 #line 71
@@ -6877,7 +6896,7 @@ uint8_t len);
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa509940, 
+uint8_t arg_0x7ffffa505940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -6907,14 +6926,14 @@ static am_id_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMPacket__type(
 #line 143
 message_t * amsg);
 # 126 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-enum /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_unnamed4357 {
+enum /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_unnamed4358 {
 #line 126
   AMQueueImplP__0__CancelTask = 7U
 };
 #line 126
 typedef int /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_sillytask_CancelTask[/*AMQueueP.AMQueueImplP*/AMQueueImplP__0__CancelTask];
 #line 169
-enum /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_unnamed4358 {
+enum /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_unnamed4359 {
 #line 169
   AMQueueImplP__0__errorTask = 8U
 };
@@ -6922,7 +6941,7 @@ enum /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_unnamed4358 {
 typedef int /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_sillytask_errorTask[/*AMQueueP.AMQueueImplP*/AMQueueImplP__0__errorTask];
 #line 57
 #line 55
-typedef struct /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_unnamed4359 {
+typedef struct /*AMQueueP.AMQueueImplP*/AMQueueImplP__0____nesc_unnamed4360 {
   message_t * msg;
 } /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__queue_entry_t;
 
@@ -7065,7 +7084,7 @@ static void CommandHandlerP__CommandHandler__printRouteTable(uint16_t destinatio
 #line 3
 static void CommandHandlerP__CommandHandler__ping(uint16_t destination, uint8_t *payload);
 # 22 "lib/modules/CommandHandlerP.nc"
-enum CommandHandlerP____nesc_unnamed4360 {
+enum CommandHandlerP____nesc_unnamed4361 {
 #line 22
   CommandHandlerP__processCommand = 9U
 };
@@ -7159,21 +7178,21 @@ static bool NeighborDiscoveryP__NeighborTable__contains(uint32_t key);
 
 static uint16_t NeighborDiscoveryP__NeighborTable__size(void );
 # 47 "lib/modules/NeighborDiscoveryP.nc"
-enum NeighborDiscoveryP____nesc_unnamed4361 {
+enum NeighborDiscoveryP____nesc_unnamed4362 {
 #line 47
   NeighborDiscoveryP__discover = 10U
 };
 #line 47
 typedef int NeighborDiscoveryP____nesc_sillytask_discover[NeighborDiscoveryP__discover];
 #line 60
-enum NeighborDiscoveryP____nesc_unnamed4362 {
+enum NeighborDiscoveryP____nesc_unnamed4363 {
 #line 60
   NeighborDiscoveryP__updateTable = 11U
 };
 #line 60
 typedef int NeighborDiscoveryP____nesc_sillytask_updateTable[NeighborDiscoveryP__updateTable];
 #line 22
-enum NeighborDiscoveryP____nesc_unnamed4363 {
+enum NeighborDiscoveryP____nesc_unnamed4364 {
   NeighborDiscoveryP__START_DELAY_LOWER = 8000, 
   NeighborDiscoveryP__START_DELAY_UPPER = 10000, 
 
@@ -7356,7 +7375,7 @@ static bool /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1__sendTi
 #line 73
 static void /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1__sendTimer__startOneShot(uint32_t dt);
 # 81 "lib/modules/SimpleSendP.nc"
-enum /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1____nesc_unnamed4364 {
+enum /*NeighborDiscoveryC.SimpleSendC.SimpleSendP*/SimpleSendP__1____nesc_unnamed4365 {
 #line 81
   SimpleSendP__1__sendBufferTask = 12U
 };
@@ -7573,7 +7592,7 @@ static uint16_t FloodingP__NeighborDiscovery__numNeighbors(void );
 #line 3
 static uint32_t *FloodingP__NeighborDiscovery__neighbors(void );
 # 20 "lib/modules/FloodingP.nc"
-enum FloodingP____nesc_unnamed4365 {
+enum FloodingP____nesc_unnamed4366 {
   FloodingP__MAX_NODES = 30
 };
 
@@ -7686,7 +7705,7 @@ static bool /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__sendTimer__isRu
 #line 73
 static void /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2__sendTimer__startOneShot(uint32_t dt);
 # 81 "lib/modules/SimpleSendP.nc"
-enum /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2____nesc_unnamed4366 {
+enum /*FloodingC.SimpleSendC.SimpleSendP*/SimpleSendP__2____nesc_unnamed4367 {
 #line 81
   SimpleSendP__2__sendBufferTask = 13U
 };
@@ -7903,14 +7922,14 @@ static void LinkStateRoutingP__DijstraTimer__stop(void );
 #line 73
 static void LinkStateRoutingP__ShareTimer__startOneShot(uint32_t dt);
 # 42 "lib/modules/LinkStateRoutingP.nc"
-enum LinkStateRoutingP____nesc_unnamed4367 {
+enum LinkStateRoutingP____nesc_unnamed4368 {
 #line 42
   LinkStateRoutingP__DijstraTask = 14U
 };
 #line 42
 typedef int LinkStateRoutingP____nesc_sillytask_DijstraTask[LinkStateRoutingP__DijstraTask];
 #line 26
-enum LinkStateRoutingP____nesc_unnamed4368 {
+enum LinkStateRoutingP____nesc_unnamed4369 {
   LinkStateRoutingP__START_DELAY_LOWER = 295000 * 2, 
   LinkStateRoutingP__START_DELAY_UPPER = 300000 * 2, 
 
@@ -8086,14 +8105,14 @@ static void IPP__PendingSeqQueue__pushback(IPP__PendingSeqQueue__t input);
 # 5 "lib/interfaces/IP.nc"
 static void IPP__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t len);
 # 46 "lib/modules/IPP.nc"
-enum IPP____nesc_unnamed4369 {
+enum IPP____nesc_unnamed4370 {
 #line 46
   IPP__pendingTask = 15U
 };
 #line 46
 typedef int IPP____nesc_sillytask_pendingTask[IPP__pendingTask];
 #line 22
-enum IPP____nesc_unnamed4370 {
+enum IPP____nesc_unnamed4371 {
   IPP__MAX_NUM_PENDING = 30, 
 
   IPP__PENDING_DROP_TIME = 30000, 
@@ -8235,7 +8254,7 @@ static bool /*IPC.SimpleSendC.SimpleSendP*/SimpleSendP__3__sendTimer__isRunning(
 #line 73
 static void /*IPC.SimpleSendC.SimpleSendP*/SimpleSendP__3__sendTimer__startOneShot(uint32_t dt);
 # 81 "lib/modules/SimpleSendP.nc"
-enum /*IPC.SimpleSendC.SimpleSendP*/SimpleSendP__3____nesc_unnamed4371 {
+enum /*IPC.SimpleSendC.SimpleSendP*/SimpleSendP__3____nesc_unnamed4372 {
 #line 81
   SimpleSendP__3__sendBufferTask = 16U
 };
@@ -8442,13 +8461,15 @@ static void TransportP__ReSendDataQueue__pushback(TransportP__ReSendDataQueue__t
 
 static TransportP__ReSendDataQueue__t TransportP__ReSendDataQueue__popfront(void );
 # 154 "lib/interfaces/Transport.nc"
-static void TransportP__Transport__hasData(socket_t fd);
+static void TransportP__Transport__hasData(socket_t fd, uint8_t from);
 #line 152
 static void TransportP__Transport__connectDone(socket_t fd);
 
 
 
 static void TransportP__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len);
+
+static void TransportP__Transport__accepted(socket_t fd, uint8_t id);
 # 17 "dataStructures/interfaces/List.nc"
 static void TransportP__AcceptSockets__pushback(TransportP__AcceptSockets__t input);
 #line 17
@@ -8493,21 +8514,21 @@ static uint16_t TransportP__IP__estimateRTT(uint8_t dest);
 #line 2
 static void TransportP__IP__onBoot(void );
 # 53 "lib/modules/TransportP.nc"
-enum TransportP____nesc_unnamed4372 {
+enum TransportP____nesc_unnamed4373 {
 #line 53
   TransportP__receiveDATA = 17U
 };
 #line 53
 typedef int TransportP____nesc_sillytask_receiveDATA[TransportP__receiveDATA];
 #line 67
-enum TransportP____nesc_unnamed4373 {
+enum TransportP____nesc_unnamed4374 {
 #line 67
   TransportP__closeTask = 18U
 };
 #line 67
 typedef int TransportP____nesc_sillytask_closeTask[TransportP__closeTask];
 #line 32
-enum TransportP____nesc_unnamed4374 {
+enum TransportP____nesc_unnamed4375 {
   TransportP__MAX_PAYLOAD = 16
 };
 
@@ -8562,14 +8583,12 @@ static socket_t TransportP__Transport__socket(void );
 
 static error_t TransportP__Transport__bind(socket_t fd, socket_addr_t *addr);
 #line 152
-static inline uint16_t TransportP__Transport__write(socket_t fd, uint8_t *buff, uint16_t bufflen);
-#line 178
+static uint16_t TransportP__Transport__write(socket_t fd, uint8_t *buff, uint16_t bufflen);
+#line 180
 static inline uint16_t TransportP__Transport__read(socket_t fd, uint8_t *buff, uint16_t bufflen);
-#line 194
+#line 196
 static inline error_t TransportP__Transport__connect(socket_t fd, socket_addr_t *addr);
-#line 221
-static inline error_t TransportP__Transport__close(socket_t fd);
-#line 247
+#line 249
 static inline error_t TransportP__Transport__listen(socket_t fd);
 
 
@@ -8579,15 +8598,15 @@ static inline error_t TransportP__Transport__listen(socket_t fd);
 
 
 static inline void TransportP__receiveSYN(tcpPkt_t *payload, uint8_t from);
-#line 291
+#line 293
 static inline void TransportP__receiveSYNACK(tcpPkt_t *payload, uint8_t from);
-#line 320
+#line 322
 static inline void TransportP__receiveACK(tcpPkt_t *payload, uint8_t from);
-#line 367
+#line 370
 static inline void TransportP__receiveDATA__runTask(void );
-#line 409
+#line 417
 static inline void TransportP__receiveFIN(tcpPkt_t *payload, uint8_t from);
-#line 480
+#line 488
 static void TransportP__makeTCPPkt(tcpPkt_t *Package, socket_addr_t src, socket_addr_t dest, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t *payload, uint16_t length);
 
 
@@ -8599,13 +8618,13 @@ static void TransportP__makeTCPPkt(tcpPkt_t *Package, socket_addr_t src, socket_
 
 
 static void TransportP__makeReSend(tcpPkt_t *Package, socket_t fd, uint8_t dest, uint8_t length, uint8_t type);
-#line 514
+#line 522
 static void TransportP__sendData(socket_t fd);
-#line 590
+#line 598
 static inline void TransportP__update(socket_t fd, uint8_t ack_num, uint8_t seq);
-#line 621
+#line 629
 static inline void TransportP__reSendData(socket_t fd);
-#line 706
+#line 714
 static inline void TransportP__closeTask__runTask(void );
 
 
@@ -8618,7 +8637,7 @@ static inline void TransportP__closeTask__runTask(void );
 
 
 static inline void TransportP__ReSendTimer__fired(void );
-#line 729
+#line 737
 static inline void TransportP__ReSendDataTimer__fired(void );
 
 
@@ -8742,18 +8761,22 @@ static error_t AppP__Transport__initClientAndConnect(uint8_t dest, uint8_t srcPo
 static uint16_t AppP__Transport__write(socket_t fd, uint8_t *buff, uint16_t bufflen);
 # 3 "lib/interfaces/IP.nc"
 static void AppP__IP__send(uint8_t dest, uint8_t protocol, uint8_t TTL, uint8_t *payload, uint16_t length);
-# 20 "lib/modules/AppP.nc"
-enum AppP____nesc_unnamed4375 {
-  AppP__MAX_USERNAME_LENTH = 10, 
+# 22 "lib/modules/AppP.nc"
+enum AppP____nesc_unnamed4376 {
   AppP__SERVER_ID = 1, 
   AppP__SERVER_PORT = 41, 
 
-  AppP__MSG_LEN = 4, 
+  AppP__MAX_NUM_USERS = 25, 
+
   AppP__WHISPER_LEN = 8, 
   AppP__LIST_LEN = 7
 };
 
-uint8_t AppP__name[1000][AppP__MAX_USERNAME_LENTH];
+socket_t AppP__local_fd[1000];
+
+userInfo_t AppP__users[1000][AppP__MAX_NUM_USERS];
+
+uint8_t AppP__name[1000][MAX_USERNAME_LENTH];
 uint8_t AppP__username_len[1000];
 
 
@@ -8763,11 +8786,9 @@ uint8_t AppP__username_len[1000];
 static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t *payload, uint8_t length);
 
 static inline void AppP__App__helloClient(uint8_t dest, uint8_t port, uint8_t *username, uint8_t length);
-#line 75
+#line 83
 static inline void AppP__App__broadcastMsg(uint8_t *payload, uint8_t legnth);
-
-
-
+#line 100
 static inline void AppP__App__unicastMsg(uint8_t *username, uint8_t len_username, uint8_t *payload, uint8_t legnth);
 
 
@@ -8789,14 +8810,12 @@ static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t 
 static inline void AppP__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t len);
 
 static inline void AppP__Transport__connectDone(socket_t fd);
-#line 118
-static inline void AppP__Transport__hasData(socket_t fd);
-
-
-
-
-
+#line 139
+static inline void AppP__Transport__hasData(socket_t fd, uint8_t from);
+#line 168
 static inline void AppP__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len);
+#line 195
+static inline void AppP__Transport__accepted(socket_t fd, uint8_t id);
 # 80 "/opt/tinyos-main/tos/lib/tossim/heap.c"
 static inline void init_heap(heap_t *heap)
 #line 80
@@ -9350,9 +9369,9 @@ static inline void Node__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t 
 {
 }
 
-# 97 "lib/modules/AppP.nc"
+# 118 "lib/modules/AppP.nc"
 static inline void AppP__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t len)
-#line 97
+#line 118
 {
 }
 
@@ -10839,9 +10858,9 @@ inline static TransportP__SocketTable__t TransportP__SocketTable__get(uint32_t k
 #line 13
 }
 #line 13
-# 255 "lib/modules/TransportP.nc"
+# 257 "lib/modules/TransportP.nc"
 static inline void TransportP__receiveSYN(tcpPkt_t *payload, uint8_t from)
-#line 255
+#line 257
 {
   tcpPkt_t tcp_pkt;
   socket_addr_t temp;
@@ -10849,7 +10868,7 @@ static inline void TransportP__receiveSYN(tcpPkt_t *payload, uint8_t from)
   char empty_payload[1] = " ";
   uint8_t random_seq = TransportP__Random__rand16() % 126;
 
-#line 261
+#line 263
   if (TransportP__socketArray[sim_node()][TransportP__global_fd[sim_node()]].state == LISTEN) {
       __nesc_hton_uint16(temp.addr.nxdata, from);
       __nesc_hton_uint8(temp.port.nxdata, payload->srcPort);
@@ -10857,7 +10876,7 @@ static inline void TransportP__receiveSYN(tcpPkt_t *payload, uint8_t from)
           fd = TransportP__SocketTable__get(from);
         }
       else 
-#line 266
+#line 268
         {
           fd = TransportP__FDQueue__popback();
           TransportP__SocketTable__insert(from, fd);
@@ -10879,7 +10898,7 @@ static inline void TransportP__receiveSYN(tcpPkt_t *payload, uint8_t from)
         }
     }
   else 
-#line 285
+#line 287
     {
       temp = TransportP__socketArray[sim_node()][TransportP__global_fd[sim_node()]].src;
       sim_log_debug(257U, TRANSPORT_CHANNEL, "Server (node %d, port %d) is not in LISTEN state\n", TOS_NODE_ID, __nesc_ntoh_uint8(temp.port.nxdata));
@@ -11084,39 +11103,6 @@ static inline void Node__Transport__connectDone(socket_t fd)
 {
 }
 
-# 152 "lib/modules/TransportP.nc"
-static inline uint16_t TransportP__Transport__write(socket_t fd, uint8_t *buff, uint16_t bufflen)
-#line 152
-{
-  uint16_t writtenBytes = bufflen <= SOCKET_BUFFER_SIZE ? bufflen : TransportP__socketArray[sim_node()][fd].effectiveWindow;
-  uint8_t left = SOCKET_BUFFER_SIZE - TransportP__socketArray[sim_node()][fd].lastWritten;
-
-#line 155
-  memcpy(TransportP__socketArray[sim_node()][fd].sendBuff + TransportP__socketArray[sim_node()][fd].lastWritten, buff, left);
-  if (left > writtenBytes) {
-      TransportP__socketArray[sim_node()][fd].lastWritten = TransportP__socketArray[sim_node()][fd].lastWritten + writtenBytes;
-    }
-  else {
-#line 158
-    if (left == writtenBytes) {
-        TransportP__socketArray[sim_node()][fd].type = WRAP;
-        TransportP__socketArray[sim_node()][fd].lastWritten = 0;
-      }
-    else 
-#line 161
-      {
-        TransportP__socketArray[sim_node()][fd].type = WRAP;
-        memcpy(TransportP__socketArray[sim_node()][fd].sendBuff, buff + left, writtenBytes - left);
-        TransportP__socketArray[sim_node()][fd].lastWritten = writtenBytes - left;
-      }
-    }
-  if (TransportP__socketArray[sim_node()][fd].remain == 0) {
-      TransportP__socketArray[sim_node()][fd].remain = writtenBytes;
-      TransportP__sendData(fd);
-    }
-  return writtenBytes;
-}
-
 # 76 "lib/interfaces/Transport.nc"
 inline static uint16_t AppP__Transport__write(socket_t fd, uint8_t *buff, uint16_t bufflen){
 #line 76
@@ -11132,13 +11118,15 @@ inline static uint16_t AppP__Transport__write(socket_t fd, uint8_t *buff, uint16
 #line 76
 }
 #line 76
-# 99 "lib/modules/AppP.nc"
+# 120 "lib/modules/AppP.nc"
 static inline void AppP__Transport__connectDone(socket_t fd)
-#line 99
+#line 120
 {
   uint8_t idx = 0;
   uint8_t size = 6 + AppP__username_len[sim_node()] + 2;
   uint8_t data[size];
+
+  AppP__local_fd[sim_node()] = fd;
 
   memcpy(data + idx, "hello ", 6);
   idx += 6;
@@ -11149,9 +11137,7 @@ static inline void AppP__Transport__connectDone(socket_t fd)
   memcpy(data + idx, "\r\n", 2);
   idx += 2;
 
-  printf("idx = %d\n", idx);
-
-  AppP__Transport__write(fd, &data, idx);
+  AppP__Transport__write(fd, data, idx);
 }
 
 # 152 "lib/interfaces/Transport.nc"
@@ -11163,9 +11149,9 @@ inline static void TransportP__Transport__connectDone(socket_t fd){
 #line 152
 }
 #line 152
-# 291 "lib/modules/TransportP.nc"
+# 293 "lib/modules/TransportP.nc"
 static inline void TransportP__receiveSYNACK(tcpPkt_t *payload, uint8_t from)
-#line 291
+#line 293
 {
   tcpPkt_t tcp_pkt;
   socket_t fd;
@@ -11199,14 +11185,14 @@ static __inline  uint16_t __nesc_ntoh_uint16(const void * source)
   return ((uint16_t )base[0] << 8) | base[1];
 }
 
-# 590 "lib/modules/TransportP.nc"
+# 598 "lib/modules/TransportP.nc"
 static inline void TransportP__update(socket_t fd, uint8_t ack_num, uint8_t seq)
-#line 590
+#line 598
 {
   uint8_t ack = (ack_num - 1) % SOCKET_BUFFER_SIZE;
   uint8_t distnace;
 
-#line 593
+#line 601
   if (TransportP__socketArray[sim_node()][fd].type != WRAP) {
       if (ack > TransportP__socketArray[sim_node()][fd].lastAck && ack <= TransportP__socketArray[sim_node()][fd].lastSent) {
           TransportP__socketArray[sim_node()][fd].lastAck = ack;
@@ -11216,7 +11202,7 @@ static inline void TransportP__update(socket_t fd, uint8_t ack_num, uint8_t seq)
         }
     }
   else 
-#line 600
+#line 608
     {
       if (TransportP__socketArray[sim_node()][fd].lastAck >= TransportP__socketArray[sim_node()][fd].lastSent) {
           if (ack > TransportP__socketArray[sim_node()][fd].lastAck || ack <= TransportP__socketArray[sim_node()][fd].lastSent) {
@@ -11229,7 +11215,7 @@ static inline void TransportP__update(socket_t fd, uint8_t ack_num, uint8_t seq)
             }
         }
       else 
-#line 610
+#line 618
         {
           if (ack > TransportP__socketArray[sim_node()][fd].lastAck && ack <= TransportP__socketArray[sim_node()][fd].lastSent) {
               TransportP__socketArray[sim_node()][fd].lastAck = ack;
@@ -11255,6 +11241,29 @@ inline static void TransportP__SocketTable__remove(uint32_t key){
 #line 12
 }
 #line 12
+# 158 "Node.nc"
+static inline void Node__Transport__accepted(socket_t fd, uint8_t id)
+#line 158
+{
+}
+
+# 195 "lib/modules/AppP.nc"
+static inline void AppP__Transport__accepted(socket_t fd, uint8_t id)
+#line 195
+{
+  AppP__users[sim_node()][id - 1].accept = TRUE;
+  AppP__users[sim_node()][id - 1].fd = fd;
+}
+
+# 158 "lib/interfaces/Transport.nc"
+inline static void TransportP__Transport__accepted(socket_t fd, uint8_t id){
+#line 158
+  AppP__Transport__accepted(fd, id);
+#line 158
+  Node__Transport__accepted(fd, id);
+#line 158
+}
+#line 158
 # 21 "dataStructures/modules/ListC.nc"
 static inline void /*TransportC.AcceptSockets*/ListC__4__List__pushback(/*TransportC.AcceptSockets*/ListC__4__t input)
 #line 21
@@ -11274,9 +11283,9 @@ inline static void TransportP__AcceptSockets__pushback(TransportP__AcceptSockets
 #line 17
 }
 #line 17
-# 320 "lib/modules/TransportP.nc"
+# 322 "lib/modules/TransportP.nc"
 static inline void TransportP__receiveACK(tcpPkt_t *payload, uint8_t from)
-#line 320
+#line 322
 {
   socket_t fd = TransportP__SocketTable__get(from);
   socket_addr_t *self_addr = & TransportP__socketArray[sim_node()][fd].src;
@@ -11294,6 +11303,7 @@ static inline void TransportP__receiveACK(tcpPkt_t *payload, uint8_t from)
       TransportP__socketArray[sim_node()][fd].type = TYPICAL;
       TransportP__socketArray[sim_node()][fd].pending_seq = payload->seq - 1;
       TransportP__AcceptSockets__pushback(from);
+      TransportP__Transport__accepted(fd, from);
       sim_log_debug(260U, TRANSPORT_CHANNEL, "Node %d establish connection with Node %d\n", TOS_NODE_ID, from);
       return;
       case FIN_WAIT_1: 
@@ -11404,9 +11414,9 @@ inline static void TransportP__CloseQueue__pushback(TransportP__CloseQueue__t in
 #line 17
 }
 #line 17
-# 409 "lib/modules/TransportP.nc"
+# 417 "lib/modules/TransportP.nc"
 static inline void TransportP__receiveFIN(tcpPkt_t *payload, uint8_t from)
-#line 409
+#line 417
 {
   tcpPkt_t tcp_pkt;
   socket_t fd = TransportP__SocketTable__get(from);
@@ -11533,18 +11543,20 @@ inline static error_t AppP__Transport__initClientAndConnect(uint8_t dest, uint8_
 #line 22
 }
 #line 22
-# 124 "lib/modules/AppP.nc"
+# 168 "lib/modules/AppP.nc"
 static inline void AppP__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len)
-#line 124
+#line 168
 {
   tcpPkt_t tcp_pkt;
   uint8_t i = 0;
   uint8_t size = len - TCP_HEADER_LENDTH;
   uint8_t port;
 
-#line 129
+#line 173
   size = size - (6 + 2);
   memcpy(&tcp_pkt, incomingMsg, len);
+
+  printf("Client (%d) get greet from Server (%d), payload = %s", TOS_NODE_ID, from, tcp_pkt.payload);
   while (i < size) {
       if (tcp_pkt.payload[6 + i] == ' ') {
           i++;
@@ -11594,9 +11606,9 @@ inline static uint16_t TransportP__FDQueue__size(void ){
 #line 24
 }
 #line 24
-# 194 "lib/modules/TransportP.nc"
+# 196 "lib/modules/TransportP.nc"
 static inline error_t TransportP__Transport__connect(socket_t fd, socket_addr_t *addr)
-#line 194
+#line 196
 {
   tcpPkt_t tcp_pkt;
   char empty_payload[1] = " ";
@@ -12570,9 +12582,9 @@ inline static void CommandHandlerP__CommandHandler__printAllUsers(void ){
 #line 16
 }
 #line 16
-# 79 "lib/modules/AppP.nc"
+# 100 "lib/modules/AppP.nc"
 static inline void AppP__App__unicastMsg(uint8_t *username, uint8_t len_username, uint8_t *payload, uint8_t legnth)
-#line 79
+#line 100
 {
   AppP__username_len[sim_node()] = len_username;
   memcpy(AppP__name[sim_node()], username, len_username);
@@ -12604,11 +12616,24 @@ inline static void CommandHandlerP__CommandHandler__unicastMessage(uint8_t len_u
 #line 15
 }
 #line 15
-# 75 "lib/modules/AppP.nc"
+# 83 "lib/modules/AppP.nc"
 static inline void AppP__App__broadcastMsg(uint8_t *payload, uint8_t legnth)
-#line 75
+#line 83
 {
-  printf("client = %d, len = %d, msg = %s\n", TOS_NODE_ID, legnth, payload);
+  uint8_t idx = 0;
+  uint8_t size = 4 + legnth + 2;
+  uint8_t data[size];
+
+  memcpy(data + idx, "msg ", 4);
+  idx += 4;
+
+  memcpy(data + idx, payload, legnth);
+  idx += legnth + 1;
+
+  memcpy(data + idx, "\r\n", 2);
+  idx += 2;
+
+  AppP__Transport__write(AppP__local_fd[sim_node()], data, idx);
 }
 
 # 3 "lib/interfaces/App.nc"
@@ -12639,9 +12664,9 @@ inline static void AppP__IP__send(uint8_t dest, uint8_t protocol, uint8_t TTL, u
 #line 3
 }
 #line 3
-# 87 "lib/modules/AppP.nc"
+# 108 "lib/modules/AppP.nc"
 static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t *payload, uint8_t length)
-#line 87
+#line 108
 {
   Package->srcPort = srcPort;
   Package->destPort = destPort;
@@ -12652,16 +12677,18 @@ static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t 
   memcpy(Package->payload, payload, length);
 }
 
-#line 39
+#line 45
 static inline void AppP__App__helloClient(uint8_t dest, uint8_t port, uint8_t *username, uint8_t length)
-#line 39
+#line 45
 {
   tcpPkt_t tcp_pkt;
-  uint8_t payload[6 + AppP__MAX_USERNAME_LENTH + 3 + 2];
+  uint8_t payload[6 + MAX_USERNAME_LENTH + 3 + 2];
   uint8_t idx = 0;
   uint8_t p = port;
   char port_buf[3];
   uint8_t p_len = 0;
+
+  memcpy(AppP__users[sim_node()][dest - 1].username, username, length);
 
   memcpy(payload + idx, "hello ", 6);
   idx += 6;
@@ -12712,9 +12739,9 @@ inline static void CommandHandlerP__CommandHandler__greet(uint8_t dest, uint8_t 
 #line 13
 }
 #line 13
-# 247 "lib/modules/TransportP.nc"
+# 249 "lib/modules/TransportP.nc"
 static inline error_t TransportP__Transport__listen(socket_t fd)
-#line 247
+#line 249
 {
   if (TransportP__socketArray[sim_node()][fd].state == CLOSED) {
       TransportP__socketArray[sim_node()][fd].state = LISTEN;
@@ -14410,14 +14437,14 @@ static inline void /*IPC.SimpleSendC.SimpleSendP*/SimpleSendP__3__sendBufferTask
 }
 
 # 154 "Node.nc"
-static inline void Node__Transport__hasData(socket_t fd)
+static inline void Node__Transport__hasData(socket_t fd, uint8_t from)
 #line 154
 {
 }
 
-# 178 "lib/modules/TransportP.nc"
+# 180 "lib/modules/TransportP.nc"
 static inline uint16_t TransportP__Transport__read(socket_t fd, uint8_t *buff, uint16_t bufflen)
-#line 178
+#line 180
 {
   uint16_t i;
   uint16_t readBytes;
@@ -14449,23 +14476,49 @@ inline static uint16_t AppP__Transport__read(socket_t fd, uint8_t *buff, uint16_
 #line 103
 }
 #line 103
-# 118 "lib/modules/AppP.nc"
-static inline void AppP__Transport__hasData(socket_t fd)
-#line 118
+# 139 "lib/modules/AppP.nc"
+static inline void AppP__Transport__hasData(socket_t fd, uint8_t from)
+#line 139
 {
-  uint8_t content[20];
+  uint8_t i = 0;
+  uint8_t temp[40];
+  uint8_t content[30];
+  uint16_t size;
+  uint8_t keyword_len;
+  uint8_t content_len;
 
-#line 120
-  AppP__Transport__read(fd, &content, 20);
-  printf("%s\n", content);
+#line 146
+  size = AppP__Transport__read(fd, temp, 40);
+  size = size - 2;
+
+  printf("size = %d\n", size);
+  while (i < size) {
+      if (temp[i] == ' ') {
+          keyword_len = i;
+          i++;
+          break;
+        }
+      i++;
+    }
+  content_len = size - i;
+  memcpy(content, temp + i, size - i);
+
+  if (TOS_NODE_ID == AppP__SERVER_ID) {
+      printf("Server (%d) get message from user (%s), payload = %s\n", TOS_NODE_ID, AppP__users[sim_node()][from - 1].username, temp);
+    }
+  else 
+#line 163
+    {
+      printf("User (%s) get message from Server (%d), payload = %s\n", AppP__name[sim_node()], AppP__SERVER_ID, temp);
+    }
 }
 
 # 154 "lib/interfaces/Transport.nc"
-inline static void TransportP__Transport__hasData(socket_t fd){
+inline static void TransportP__Transport__hasData(socket_t fd, uint8_t from){
 #line 154
-  AppP__Transport__hasData(fd);
+  AppP__Transport__hasData(fd, from);
 #line 154
-  Node__Transport__hasData(fd);
+  Node__Transport__hasData(fd, from);
 #line 154
 }
 #line 154
@@ -14503,9 +14556,9 @@ inline static TransportP__ReceiveQueue__t TransportP__ReceiveQueue__popfront(voi
 #line 20
 }
 #line 20
-# 367 "lib/modules/TransportP.nc"
+# 370 "lib/modules/TransportP.nc"
 static inline void TransportP__receiveDATA__runTask(void )
-#line 367
+#line 370
 {
   receiveTCP_t r_pkt = TransportP__ReceiveQueue__popfront();
   uint8_t i;
@@ -14514,6 +14567,8 @@ static inline void TransportP__receiveDATA__runTask(void )
   tcpPkt_t *tcp_pkt = & r_pkt.pkt;
   tcpPkt_t reply_pkt;
   uint8_t size = r_pkt.len - TCP_HEADER_LENDTH;
+  uint8_t distance;
+  uint8_t pos;
   char empty_payload[1] = " ";
 
   if (TransportP__socketArray[sim_node()][fd].state != ESTABLISHED) {
@@ -14533,11 +14588,14 @@ static inline void TransportP__receiveDATA__runTask(void )
       for (i = 0; i < size; i++) {
           TransportP__socketArray[sim_node()][fd].rcvdBuff[TransportP__socketArray[sim_node()][fd].lastRcvd] = tcp_pkt->payload[i];
           TransportP__socketArray[sim_node()][fd].lastRcvd = (TransportP__socketArray[sim_node()][fd].lastRcvd + 1) % 128;
-        }
-
-      if (tcp_pkt->payload[size - 2] == '\r' && tcp_pkt->payload[size - 1] == '\n') {
-          printf("last rcd = %d, last read = %d\n", TransportP__socketArray[sim_node()][fd].lastRcvd, TransportP__socketArray[sim_node()][fd].lastRead);
-          TransportP__Transport__hasData(fd);
+          pos = TransportP__socketArray[sim_node()][fd].lastRcvd - 2;
+          pos = pos % SOCKET_BUFFER_SIZE;
+          if (TransportP__socketArray[sim_node()][fd].rcvdBuff[TransportP__socketArray[sim_node()][fd].lastRcvd - 1] == '\n' && TransportP__socketArray[sim_node()][fd].rcvdBuff[pos] == '\r') {
+              distance = TransportP__socketArray[sim_node()][fd].lastRcvd - TransportP__socketArray[sim_node()][fd].lastRead;
+              distance = distance % SOCKET_BUFFER_SIZE;
+              printf("d = %d\n", distance);
+              TransportP__Transport__hasData(fd, r_pkt.from);
+            }
         }
     }
   ad_window = TransportP__socketArray[sim_node()][fd].lastRcvd - TransportP__socketArray[sim_node()][fd].lastRead;
@@ -14581,15 +14639,15 @@ inline static TransportP__CloseQueue__t TransportP__CloseQueue__popfront(void ){
 #line 20
 }
 #line 20
-# 706 "lib/modules/TransportP.nc"
+# 714 "lib/modules/TransportP.nc"
 static inline void TransportP__closeTask__runTask(void )
-#line 706
+#line 714
 {
   socket_t fd = TransportP__CloseQueue__popfront();
   socket_addr_t *self_addr = & TransportP__socketArray[sim_node()][fd].src;
   socket_addr_t *dest_addr = & TransportP__socketArray[sim_node()][fd].dest;
 
-#line 710
+#line 718
   TransportP__socketArray[sim_node()][fd].state = CLOSED;
   TransportP__socketInUse[sim_node()][fd] = FALSE;
   TransportP__FDQueue__pushback(fd);
@@ -14783,13 +14841,13 @@ inline static am_addr_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMPacket__dest
 }
 #line 78
 # 80 "/opt/tinyos-main/tos/interfaces/AMSend.nc"
-inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(am_id_t arg_0x7ffffa508b60, am_addr_t addr, message_t * msg, uint8_t len){
+inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__AMSend__send(am_id_t arg_0x7ffffa504b60, am_addr_t addr, message_t * msg, uint8_t len){
 #line 80
   unsigned char __nesc_result;
 #line 80
 
 #line 80
-  __nesc_result = TossimActiveMessageC__AMSend__send(arg_0x7ffffa508b60, addr, msg, len);
+  __nesc_result = TossimActiveMessageC__AMSend__send(arg_0x7ffffa504b60, addr, msg, len);
 #line 80
 
 #line 80
@@ -16069,13 +16127,13 @@ inline static TransportP__ReSendQueue__t TransportP__ReSendQueue__popfront(void 
 #line 20
 }
 #line 20
-# 717 "lib/modules/TransportP.nc"
+# 725 "lib/modules/TransportP.nc"
 static inline void TransportP__ReSendTimer__fired(void )
-#line 717
+#line 725
 {
   reSendTCP_t resend_info = TransportP__ReSendQueue__popfront();
 
-#line 719
+#line 727
   if (resend_info.type == OTHER) {
       if (TransportP__reSend[sim_node()][resend_info.fd] == TRUE) {
           TransportP__IP__send(resend_info.dest, PROTOCOL_TCP, 50, (uint8_t *)& resend_info.pkt, resend_info.length);
@@ -16093,35 +16151,9 @@ inline static void TransportP__ReSendDataQueue__pushback(TransportP__ReSendDataQ
 #line 17
 }
 #line 17
-# 221 "lib/modules/TransportP.nc"
-static inline error_t TransportP__Transport__close(socket_t fd)
-#line 221
-{
-  tcpPkt_t tcp_pkt;
-  char empty_payload[1] = " ";
-  socket_addr_t *self_addr = & TransportP__socketArray[sim_node()][fd].src;
-  socket_addr_t *temp = & TransportP__socketArray[sim_node()][fd].dest;
-
-  if (TransportP__socketArray[sim_node()][fd].state == ESTABLISHED || TransportP__socketArray[sim_node()][fd].state == FIN_WAIT_1) {
-      sim_log_debug(254U, TRANSPORT_CHANNEL, "Node %d (port %d) : all data are transmitted and received, start to close the connection with node %d (port %d)\n", __nesc_ntoh_uint16(self_addr->addr.nxdata), __nesc_ntoh_uint8(self_addr->port.nxdata), __nesc_ntoh_uint16(temp->addr.nxdata), __nesc_ntoh_uint8(temp->port.nxdata));
-      TransportP__socketArray[sim_node()][fd].state = FIN_WAIT_1;
-      sim_log_debug(255U, TRANSPORT_CHANNEL, "Node %d FIN_WAIT_1\n", TOS_NODE_ID);
-      TransportP__socketArray[sim_node()][fd].lastSent = TransportP__socketArray[sim_node()][fd].lastSent + 1;
-      TransportP__makeTCPPkt(&tcp_pkt, TransportP__socketArray[sim_node()][fd].src, TransportP__socketArray[sim_node()][fd].dest, TransportP__socketArray[sim_node()][fd].lastSent, TransportP__socketArray[sim_node()][fd].pending_seq + 1, FIN, TransportP__socketArray[sim_node()][fd].effectiveWindow, (uint8_t *)&empty_payload, 1);
-      TransportP__makeReSend(&tcp_pkt, fd, __nesc_ntoh_uint16(temp->addr.nxdata), TCP_HEADER_LENDTH, OTHER);
-      TransportP__IP__send(__nesc_ntoh_uint16(temp->addr.nxdata), PROTOCOL_TCP, 50, (uint8_t *)&tcp_pkt, TCP_HEADER_LENDTH);
-      TransportP__socketArray[sim_node()][fd].RTT = TransportP__IP__estimateRTT(__nesc_ntoh_uint16(temp->addr.nxdata));
-      TransportP__ReSendTimer__startOneShot(2 * TransportP__socketArray[sim_node()][fd].RTT);
-      return SUCCESS;
-    }
-
-  sim_log_debug(256U, TRANSPORT_CHANNEL, "Error: unable to close (socket state is neither ESTABLISHED nor FIN_WAIT_1)\n");
-  return FAIL;
-}
-
-#line 621
+# 629 "lib/modules/TransportP.nc"
 static inline void TransportP__reSendData(socket_t fd)
-#line 621
+#line 629
 {
   tcpPkt_t tcp_pkt;
   uint8_t dataSize = TransportP__MAX_PAYLOAD - TCP_HEADER_LENDTH;
@@ -16136,7 +16168,7 @@ static inline void TransportP__reSendData(socket_t fd)
   reSendTCP_t resend;
 
   if (TransportP__socketArray[sim_node()][fd].remain == 0 && TransportP__socketArray[sim_node()][fd].state == ESTABLISHED) {
-      TransportP__Transport__close(fd);
+
       return;
     }
 
@@ -16167,14 +16199,14 @@ static inline void TransportP__reSendData(socket_t fd)
       TransportP__IP__send(__nesc_ntoh_uint16(dest.addr.nxdata), PROTOCOL_TCP, 50, (uint8_t *)&tcp_pkt, TCP_HEADER_LENDTH + r);
     }
   else 
-#line 664
+#line 672
     {
       if (TransportP__socketArray[sim_node()][fd].lastSent <= lastAck) {
           k = (TransportP__socketArray[sim_node()][fd].lastSent + SOCKET_BUFFER_SIZE - lastAck) / dataSize;
           r = TransportP__socketArray[sim_node()][fd].lastSent + SOCKET_BUFFER_SIZE - lastAck - k * dataSize;
         }
       else 
-#line 668
+#line 676
         {
           k = (TransportP__socketArray[sim_node()][fd].lastSent - lastAck) / dataSize;
           r = TransportP__socketArray[sim_node()][fd].lastSent - lastAck - k * dataSize;
@@ -16189,7 +16221,7 @@ static inline void TransportP__reSendData(socket_t fd)
               TransportP__IP__send(__nesc_ntoh_uint16(dest.addr.nxdata), PROTOCOL_TCP, 50, (uint8_t *)&tcp_pkt, TransportP__MAX_PAYLOAD);
             }
           else 
-#line 680
+#line 688
             {
               if (left != 0) {
                   memcpy(&temp, TransportP__socketArray[sim_node()][fd].sendBuff + (lastAck + i * dataSize), left);
@@ -16197,7 +16229,7 @@ static inline void TransportP__reSendData(socket_t fd)
                   left = 0;
                 }
               else 
-#line 685
+#line 693
                 {
                   memcpy(temp, TransportP__socketArray[sim_node()][fd].sendBuff + (lastAck + i * dataSize) % 128, dataSize);
                 }
@@ -16253,13 +16285,13 @@ inline static TransportP__ReSendDataQueue__t TransportP__ReSendDataQueue__popfro
 #line 20
 }
 #line 20
-# 729 "lib/modules/TransportP.nc"
+# 737 "lib/modules/TransportP.nc"
 static inline void TransportP__ReSendDataTimer__fired(void )
-#line 729
+#line 737
 {
   reSendTCP_t resend_info = TransportP__ReSendDataQueue__popfront();
 
-#line 731
+#line 739
   TransportP__reSendData(resend_info.fd);
 }
 
@@ -16297,13 +16329,13 @@ inline static TransportP__InitSendQueue__t TransportP__InitSendQueue__popfront(v
 #line 20
 }
 #line 20
-# 734 "lib/modules/TransportP.nc"
+# 742 "lib/modules/TransportP.nc"
 static inline void TransportP__InitSendTimer__fired(void )
-#line 734
+#line 742
 {
   socket_t fd = TransportP__InitSendQueue__popfront();
 
-#line 736
+#line 744
   TransportP__sendData(fd);
 }
 
@@ -16322,9 +16354,9 @@ inline static error_t TransportP__closeTask__postTask(void ){
 #line 67
 }
 #line 67
-# 739 "lib/modules/TransportP.nc"
+# 747 "lib/modules/TransportP.nc"
 static inline void TransportP__CloseTimer__fired(void )
-#line 739
+#line 747
 {
   TransportP__closeTask__postTask();
 }
@@ -16335,9 +16367,9 @@ static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 }
 
 # 83 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa5bb950){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa5b8950){
 #line 83
-  switch (arg_0x7ffffa5bb950) {
+  switch (arg_0x7ffffa5b8950) {
 #line 83
     case 0U:
 #line 83
@@ -16419,7 +16451,7 @@ inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 #line 83
     default:
 #line 83
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa5bb950);
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa5b8950);
 #line 83
       break;
 #line 83
@@ -19217,14 +19249,14 @@ static void LinkStateRoutingP__DijstraTimer__startOneShot(uint32_t dt){
 #line 73
 }
 #line 73
-# 744 "lib/modules/TransportP.nc"
+# 752 "lib/modules/TransportP.nc"
 static void TransportP__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t len)
-#line 744
+#line 752
 {
   tcpPkt_t tcp_pkt;
   receiveTCP_t temp;
 
-#line 747
+#line 755
   memcpy(&tcp_pkt, incomingMsg, sizeof(tcpPkt_t ));
   memcpy(& temp.pkt, &tcp_pkt, sizeof(tcpPkt_t ));
 
@@ -19238,7 +19270,7 @@ static void TransportP__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t l
             TransportP__receiveSYN(&tcp_pkt, from);
           }
         else 
-#line 758
+#line 766
           {
             sim_log_debug(274U, TRANSPORT_CHANNEL, "Port %d of Node %d receive { SYN + ACK } from Port %d of Node %d\n", tcp_pkt.destPort, TOS_NODE_ID, tcp_pkt.srcPort, from);
             TransportP__receiveSYNACK(&tcp_pkt, from);
@@ -19394,9 +19426,9 @@ static /*LinkStateRoutingC.RoutingTable*/HashmapC__1__t /*LinkStateRoutingC.Rout
   return /*LinkStateRoutingC.RoutingTable*/HashmapC__1__map[sim_node()][0].value;
 }
 
-# 480 "lib/modules/TransportP.nc"
+# 488 "lib/modules/TransportP.nc"
 static void TransportP__makeTCPPkt(tcpPkt_t *Package, socket_addr_t src, socket_addr_t dest, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t *payload, uint16_t length)
-#line 480
+#line 488
 {
   Package->srcPort = __nesc_ntoh_uint8(src.port.nxdata);
   Package->destPort = __nesc_ntoh_uint8(dest.port.nxdata);
@@ -19549,13 +19581,13 @@ static void /*IPC.SimpleSendC.SimpleSendP*/SimpleSendP__3__postSendTask(void )
     }
 }
 
-# 490 "lib/modules/TransportP.nc"
+# 498 "lib/modules/TransportP.nc"
 static void TransportP__makeReSend(tcpPkt_t *Package, socket_t fd, uint8_t dest, uint8_t length, uint8_t type)
-#line 490
+#line 498
 {
   reSendTCP_t resend_info;
 
-#line 492
+#line 500
   memcpy(& resend_info.pkt, Package, length);
   resend_info.fd = fd;
   resend_info.dest = dest;
@@ -19584,9 +19616,47 @@ static void TransportP__ReSendTimer__startOneShot(uint32_t dt){
 #line 73
 }
 #line 73
-# 514 "lib/modules/TransportP.nc"
+# 152 "lib/modules/TransportP.nc"
+static uint16_t TransportP__Transport__write(socket_t fd, uint8_t *buff, uint16_t bufflen)
+#line 152
+{
+  uint16_t writtenBytes = bufflen <= SOCKET_BUFFER_SIZE ? bufflen : TransportP__socketArray[sim_node()][fd].effectiveWindow;
+  uint8_t left = SOCKET_BUFFER_SIZE - TransportP__socketArray[sim_node()][fd].lastWritten;
+
+#line 155
+  memcpy(TransportP__socketArray[sim_node()][fd].sendBuff + TransportP__socketArray[sim_node()][fd].lastWritten, buff, left);
+  if (left > writtenBytes) {
+      TransportP__socketArray[sim_node()][fd].lastWritten = TransportP__socketArray[sim_node()][fd].lastWritten + writtenBytes;
+    }
+  else {
+#line 158
+    if (left == writtenBytes) {
+        TransportP__socketArray[sim_node()][fd].type = WRAP;
+        TransportP__socketArray[sim_node()][fd].lastWritten = 0;
+      }
+    else 
+#line 161
+      {
+        TransportP__socketArray[sim_node()][fd].type = WRAP;
+        memcpy(TransportP__socketArray[sim_node()][fd].sendBuff, buff + left, writtenBytes - left);
+        TransportP__socketArray[sim_node()][fd].lastWritten = writtenBytes - left;
+      }
+    }
+  if (TransportP__socketArray[sim_node()][fd].remain == 0) {
+      TransportP__socketArray[sim_node()][fd].remain = writtenBytes;
+      TransportP__sendData(fd);
+    }
+  else 
+#line 170
+    {
+      TransportP__socketArray[sim_node()][fd].remain = TransportP__socketArray[sim_node()][fd].remain + writtenBytes;
+    }
+  return writtenBytes;
+}
+
+#line 522
 static void TransportP__sendData(socket_t fd)
-#line 514
+#line 522
 {
   tcpPkt_t tcp_pkt;
   uint8_t dataSize = TransportP__MAX_PAYLOAD - TCP_HEADER_LENDTH;
@@ -19624,7 +19694,7 @@ static void TransportP__sendData(socket_t fd)
       TransportP__IP__send(__nesc_ntoh_uint16(dest.addr.nxdata), PROTOCOL_TCP, 50, (uint8_t *)&tcp_pkt, TCP_HEADER_LENDTH + r);
     }
   else 
-#line 549
+#line 557
     {
       k = (TransportP__socketArray[sim_node()][fd].lastWritten + SOCKET_BUFFER_SIZE - TransportP__socketArray[sim_node()][fd].lastSent) / dataSize;
       r = (TransportP__socketArray[sim_node()][fd].lastWritten + SOCKET_BUFFER_SIZE - TransportP__socketArray[sim_node()][fd].lastSent) % dataSize;
@@ -19638,7 +19708,7 @@ static void TransportP__sendData(socket_t fd)
               TransportP__IP__send(__nesc_ntoh_uint16(dest.addr.nxdata), PROTOCOL_TCP, 50, (uint8_t *)&tcp_pkt, TransportP__MAX_PAYLOAD);
             }
           else 
-#line 560
+#line 568
             {
               if (left != 0) {
                   memcpy(&temp, TransportP__socketArray[sim_node()][fd].sendBuff + TransportP__socketArray[sim_node()][fd].lastSent, left);
@@ -19648,7 +19718,7 @@ static void TransportP__sendData(socket_t fd)
                   left = 0;
                 }
               else 
-#line 567
+#line 575
                 {
                   memcpy(temp, TransportP__socketArray[sim_node()][fd].sendBuff + TransportP__socketArray[sim_node()][fd].lastSent, dataSize);
                   TransportP__socketArray[sim_node()][fd].lastSent = (TransportP__socketArray[sim_node()][fd].lastSent + dataSize) % SOCKET_BUFFER_SIZE;
@@ -20114,9 +20184,9 @@ static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(ui
 }
 
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
-static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa509940, message_t * msg, error_t error){
+static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa505940, message_t * msg, error_t error){
 #line 100
-  switch (arg_0x7ffffa509940) {
+  switch (arg_0x7ffffa505940) {
 #line 100
     case 0U:
 #line 100
@@ -20144,7 +20214,7 @@ static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg
 #line 100
     default:
 #line 100
-      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa509940, msg, error);
+      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa505940, msg, error);
 #line 100
       break;
 #line 100
@@ -21898,6 +21968,18 @@ static int __nesc_nido_resolve(int __nesc_mote,
   }
 
   /* Module AppP */
+  if (!strcmp(varname, "AppP__local_fd"))
+  {
+    *addr = (uintptr_t)&AppP__local_fd[__nesc_mote];
+    *size = sizeof(AppP__local_fd[__nesc_mote]);
+    return 0;
+  }
+  if (!strcmp(varname, "AppP__users"))
+  {
+    *addr = (uintptr_t)&AppP__users[__nesc_mote];
+    *size = sizeof(AppP__users[__nesc_mote]);
+    return 0;
+  }
   if (!strcmp(varname, "AppP__name"))
   {
     *addr = (uintptr_t)&AppP__name[__nesc_mote];
@@ -22192,6 +22274,8 @@ static void __nesc_nido_initialise(int __nesc_mote)
   /*TransportC.CloseQueue*/ListC__9__size[__nesc_mote] = 0;
 
   /* Module AppP */
+  memset((void *)&AppP__local_fd[__nesc_mote], 0, sizeof AppP__local_fd[__nesc_mote]);
+  memset((void *)&AppP__users[__nesc_mote], 0, sizeof AppP__users[__nesc_mote]);
   memset((void *)&AppP__name[__nesc_mote], 0, sizeof AppP__name[__nesc_mote]);
   AppP__username_len[__nesc_mote] = 0;
 

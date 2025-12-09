@@ -167,6 +167,8 @@ implementation {
         if (socketArray[fd].remain == 0) {
             socketArray[fd].remain = writtenBytes;
             sendData(fd);
+        } else {
+            socketArray[fd].remain = socketArray[fd].remain + writtenBytes;
         }
         return writtenBytes;
     }
@@ -334,6 +336,7 @@ implementation {
                 socketArray[fd].type = TYPICAL;
                 socketArray[fd].pending_seq = payload->seq - 1;
                 call AcceptSockets.pushback(from);
+                signal Transport.accepted(fd, from);
                 dbg(TRANSPORT_CHANNEL, "Node %d establish connection with Node %d\n", TOS_NODE_ID, from);
                 return;
             case FIN_WAIT_1:
@@ -372,6 +375,8 @@ implementation {
         tcpPkt_t* tcp_pkt = &r_pkt.pkt;
         tcpPkt_t reply_pkt;
         uint8_t size = r_pkt.len - TCP_HEADER_LENDTH;
+        uint8_t distance;
+        uint8_t pos;
         char empty_payload[1] = " ";
 
         if (socketArray[fd].state != ESTABLISHED)
@@ -391,10 +396,14 @@ implementation {
             for (i = 0; i < size; i++) {
                 socketArray[fd].rcvdBuff[socketArray[fd].lastRcvd] = *(tcp_pkt->payload + i);
                 socketArray[fd].lastRcvd = (socketArray[fd].lastRcvd + 1) % 128;
-            }
-
-            if (*(tcp_pkt->payload + (size - 2)) == '\r' && *(tcp_pkt->payload + (size - 1)) == '\n') {
-                signal Transport.hasData(fd);
+                pos = socketArray[fd].lastRcvd - 2;
+                pos = pos % SOCKET_BUFFER_SIZE;
+                if (socketArray[fd].rcvdBuff[socketArray[fd].lastRcvd - 1] == '\n' && socketArray[fd].rcvdBuff[pos] == '\r') {
+                    distance = socketArray[fd].lastRcvd - socketArray[fd].lastRead;
+                    distance = distance % SOCKET_BUFFER_SIZE;
+                    printf("d = %d\n", distance);
+                    signal Transport.hasData(fd, r_pkt.from);
+                }
             }
         }
         ad_window = (socketArray[fd].lastRcvd - socketArray[fd].lastRead);
@@ -631,7 +640,7 @@ implementation {
         reSendTCP_t resend;
 
         if (socketArray[fd].remain == 0 && socketArray[fd].state == ESTABLISHED) {
-            call Transport.close(fd);
+            // call Transport.close(fd);
             return;
         }
 

@@ -1,9 +1,11 @@
 #include "../../includes/tcpPkt.h"
 #include "../../includes/socket.h"
 #include "../../includes/channels.h"
+#include "../../includes/app.h"
 
 #define HELLO_LEN 6
 #define END_LEN 2
+#define MSG_LEN 4
 
 module AppP{
     provides {
@@ -18,14 +20,18 @@ module AppP{
 
 implementation {
     enum {
-        MAX_USERNAME_LENTH = 10,
         SERVER_ID = 1,
         SERVER_PORT = 41,
 
-        MSG_LEN = 4,
+        MAX_NUM_USERS = 25,
+
         WHISPER_LEN = 8,
         LIST_LEN = 7,
     };
+
+    socket_t local_fd;
+
+    userInfo_t users[MAX_NUM_USERS];
 
     uint8_t name[MAX_USERNAME_LENTH];
     uint8_t username_len = 0;
@@ -43,6 +49,8 @@ implementation {
         uint8_t p = port;
         char port_buf[3];
         uint8_t p_len = 0;
+
+        memcpy(users[dest - 1].username, username, length);
 
         memcpy(payload + idx, "hello ", HELLO_LEN);
         idx += HELLO_LEN;
@@ -73,7 +81,20 @@ implementation {
     }
 
     command void App.broadcastMsg(uint8_t* payload, uint8_t legnth) {
-        printf("client = %d, len = %d, msg = %s\n", TOS_NODE_ID, legnth, payload);
+        uint8_t idx = 0;
+        uint8_t size = MSG_LEN + legnth + END_LEN;
+        uint8_t data[size];
+
+        memcpy(data + idx, "msg ", MSG_LEN);
+        idx += MSG_LEN;
+
+        memcpy(data + idx, payload, legnth);
+        idx += (legnth + 1);
+
+        memcpy(data + idx, "\r\n", END_LEN);
+        idx += END_LEN;
+
+        call Transport.write(local_fd, data, idx);
     }
 
     command void App.unicastMsg(uint8_t* username, uint8_t len_username, uint8_t* payload, uint8_t legnth) {
@@ -101,6 +122,8 @@ implementation {
         uint8_t size = HELLO_LEN + username_len + END_LEN;
         uint8_t data[size];
 
+        local_fd = fd;
+
         memcpy(data + idx, "hello ", HELLO_LEN);
         idx += HELLO_LEN;
 
@@ -110,13 +133,36 @@ implementation {
         memcpy(data + idx, "\r\n", END_LEN);
         idx += END_LEN;
 
-        call Transport.write(fd, &data, idx);
+        call Transport.write(fd, data, idx);
     }
 
-    event void Transport.hasData(socket_t fd) {
-        uint8_t content[20];
-        call Transport.read(fd, &content, 20);
-        printf("%s\n", content);
+    event void Transport.hasData(socket_t fd, uint8_t from) {
+        uint8_t i = 0;
+        uint8_t temp[40];
+        uint8_t content[30];
+        uint16_t size;
+        uint8_t keyword_len;
+        uint8_t content_len;
+        size = call Transport.read(fd, temp, 40);
+        size = size - END_LEN;
+
+        printf("size = %d\n", size);
+        while(i < size) {
+            if (temp[i] == ' ') {
+                keyword_len = i;
+                i++;
+                break;
+            }
+            i++;
+        }
+        content_len = size - i;
+        memcpy(content, temp + i, size - i);
+
+        if (TOS_NODE_ID == SERVER_ID) {
+            printf("Server (%d) get message from user (%s), payload = %s\n", TOS_NODE_ID, users[from - 1].username, temp);
+        } else {
+            printf("User (%s) get message from Server (%d), payload = %s\n", name, SERVER_ID, temp);
+        }
     }
 
     event void Transport.getGreet(tcpPkt_t* incomingMsg, uint8_t from, uint8_t len) {
@@ -126,6 +172,8 @@ implementation {
         uint8_t port;
         size = size - (HELLO_LEN + END_LEN);
         memcpy(&tcp_pkt, incomingMsg, len);
+
+        printf("Client (%d) get greet from Server (%d), payload = %s", TOS_NODE_ID, from, tcp_pkt.payload);
         while(i < size) {
             if (tcp_pkt.payload[HELLO_LEN + i] == ' ') {
                 i++;
@@ -142,5 +190,10 @@ implementation {
         }
 
         call Transport.initClientAndConnect(from, tcp_pkt.destPort, tcp_pkt.srcPort, 10);
+    }
+
+    event void Transport.accepted(socket_t fd, uint8_t id) {
+        users[id - 1].accept = TRUE;
+        users[id - 1].fd = fd;
     }
 }
