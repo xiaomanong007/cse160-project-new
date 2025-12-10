@@ -14046,7 +14046,7 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:16" name="MAX_PAYLOAD" ref="0x7ffffa0d9750" loc="33:lib/modules/TransportP.nc">
+    <constant cst="I:32" name="MAX_PAYLOAD" ref="0x7ffffa0d9750" loc="33:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>

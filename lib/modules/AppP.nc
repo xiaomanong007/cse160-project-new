@@ -234,7 +234,7 @@ implementation {
         for (; i < MAX_NUM_USERS; i++) {
             if (users[i].accept) {
                 call Transport.write(users[i].fd, content, idx);
-                printf("send to node %d\n", i + 1);
+                printf("send to node %d, fd = %d\n", i + 1, users[i].fd);
             }
         }
     }

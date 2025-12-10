@@ -30,7 +30,7 @@ module TransportP {
 
 implementation {
     enum {
-        MAX_PAYLOAD = 16,
+        MAX_PAYLOAD = 32,
     };
 
     socket_t global_fd;
@@ -654,7 +654,6 @@ implementation {
         call ReSendDataQueue.pushback(resend);
 
         socketArray[fd].RTT = call IP.estimateRTT(dest.addr);
-
 
         if (socketArray[fd].type == TYPICAL) {
             k = (socketArray[fd].lastSent - lastAck) / dataSize;
