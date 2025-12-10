@@ -43,6 +43,8 @@ implementation {
 
     void unicast(uint8_t* message, uint8_t length);
 
+    void replyAllUsers(socket_t fd);
+
     command void App.helloClient(uint8_t dest, uint8_t port, uint8_t* username, uint8_t length) {
         storedPkt_t store;
         tcpPkt_t tcp_pkt;
@@ -53,6 +55,7 @@ implementation {
         uint8_t p_len = 0;
 
         memcpy(users[dest - 1].username, username, length);
+        users[dest - 1].length = length;
 
         memcpy(payload + idx, "hello ", HELLO_LEN);
         idx += HELLO_LEN;
@@ -90,7 +93,7 @@ implementation {
 
     command void App.broadcastMsg(uint8_t* payload, uint8_t legnth) {
         uint8_t idx = 0;
-        uint8_t size = LIST_LEN + END_LEN;
+        uint8_t size = MSG_LEN + END_LEN;
         uint8_t data[size];
 
         memcpy(data + idx, "msg ", MSG_LEN);
@@ -127,7 +130,19 @@ implementation {
         call Transport.write(local_fd, data, idx);
     }
 
-    command void App.printUsers() { }
+    command void App.printUsers() {
+        uint8_t idx = 0;
+        uint8_t size = LIST_LEN + END_LEN;
+        uint8_t data[size];
+
+        memcpy(data + idx, "listusr", LIST_LEN);
+        idx += LIST_LEN;
+
+        memcpy(data + idx, "\r\n", END_LEN);
+        idx += END_LEN;
+
+        call Transport.write(local_fd, data, idx);
+    }
 
     void makeTCPPkt(tcpPkt_t* Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t* payload, uint8_t length) {
         Package->srcPort = srcPort;
@@ -196,6 +211,7 @@ implementation {
                     unicast(content, content_len);
                     break;
                 case LIST_LEN:
+                    replyAllUsers(fd);
                     break;
                 default:
                     return;
@@ -261,6 +277,27 @@ implementation {
             }
         }
         printf("whisper to unknown user %s\n", send_name);
+    }
+
+    void replyAllUsers(socket_t fd) {
+        uint8_t data[100];
+        uint8_t idx = 0;
+        uint8_t i = 0;
+
+        memcpy(data, "listusrRply ", 12);
+        idx += 12;
+
+        for (; i < MAX_NUM_USERS; i++) {
+            if (users[i].accept) {
+                memcpy(data + idx, users[i].username, users[i].length);
+                idx += users[i].length;
+                data[idx++] = ' ';
+            }
+        }
+        idx--;
+        memcpy(data + idx, "\r\n", END_LEN);
+        idx += END_LEN;
+        call Transport.write(fd, data, idx);
     }
 
     event void GreetTimer.fired() {

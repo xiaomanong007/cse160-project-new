@@ -1313,7 +1313,7 @@
     </component>
     <component qname="SimpleSendC" loc="3:lib/modules/SimpleSendC.nc" abstract="">
       <parameters>
-        <constant name="channel" ref="0x7ffffa85d110" loc="3:lib/modules/SimpleSendC.nc">
+        <constant name="channel" ref="0x7ffffa85e110" loc="3:lib/modules/SimpleSendC.nc">
           <component-ref qname="SimpleSendC"/>
           <type-int cname="int" size="I:4" alignment="I:4"></type-int>
         </constant>
@@ -1390,7 +1390,7 @@
         <long>&#10; An AM send queue that provides a Service Instance pattern for&#10; formatted packets and calls an underlying AMSend in a round-robin&#10; fashion. Used to share L2 bandwidth between different communication&#10; clients.&#10;&#10; @author Philip Levis&#10; @date   Jan 16 2006&#10;</long>
       </documentation>
       <parameters>
-        <constant name="numClients" ref="0x7ffffa509ca0" loc="45:/opt/tinyos-main/tos/system/AMQueueImplP.nc">
+        <constant name="numClients" ref="0x7ffffa50aca0" loc="45:/opt/tinyos-main/tos/system/AMQueueImplP.nc">
           <component-ref qname="AMQueueImplP"/>
           <type-int cname="int" size="I:4" alignment="I:4"></type-int>
         </constant>
@@ -1403,7 +1403,7 @@
         <long>&#10; The virtualized AM reception abstraction.&#10;&#10; @author Philip Levis&#10; @date   Jan 16 2006&#10; @see    TEP 116: Packet Protocols&#10;</long>
       </documentation>
       <parameters>
-        <constant name="amId" ref="0x7ffffa8709b0" loc="43:/opt/tinyos-main/tos/system/AMReceiverC.nc">
+        <constant name="amId" ref="0x7ffffa86c6b0" loc="43:/opt/tinyos-main/tos/system/AMReceiverC.nc">
           <component-ref qname="AMReceiverC"/>
           <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
             <typename><typedef-ref name="am_id_t" ref="0x7ffffae077f0"/></typename>
@@ -1482,11 +1482,11 @@
         <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10;&#10;</long>
       </documentation>
       <parameters>
-        <typedef name="t" ref="0x7ffffa15ba00" loc="11:dataStructures/modules/ListC.nc">
+        <typedef name="t" ref="0x7ffffa15ca00" loc="11:dataStructures/modules/ListC.nc">
           <component-ref qname="ListC"/>
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa15ba00"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa15ca00"/></type-var>
         </typedef>
-        <constant name="n" ref="0x7ffffa15bcd0" loc="11:dataStructures/modules/ListC.nc">
+        <constant name="n" ref="0x7ffffa15ccd0" loc="11:dataStructures/modules/ListC.nc">
           <component-ref qname="ListC"/>
           <type-int cname="int" size="I:4" alignment="I:4"></type-int>
         </constant>
@@ -1546,9 +1546,9 @@
         <long>&#10; CounterToLocalTimeC converts a 32-bit LocalTime to a Counter.  &#10;&#10; &#60;p>See TEP102 for more details.&#10; @param precision_tag A type indicating the precision of the LocalTime and&#10; Counter being converted.&#10;&#10; @author Cory Sharp &#60;cssharp@eecs.berkeley.edu>&#10;</long>
       </documentation>
       <parameters>
-        <typedef name="precision_tag" ref="0x7ffffa56ae00" loc="46:/opt/tinyos-main/tos/lib/timer/CounterToLocalTimeC.nc">
+        <typedef name="precision_tag" ref="0x7ffffa56be00" loc="46:/opt/tinyos-main/tos/lib/timer/CounterToLocalTimeC.nc">
           <component-ref qname="CounterToLocalTimeC"/>
-          <type-var size="U:" alignment="U:"><typedef-ref name="precision_tag" scoped="" ref="0x7ffffa56ae00"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="precision_tag" scoped="" ref="0x7ffffa56be00"/></type-var>
         </typedef>
       </parameters>
       <module/>
@@ -1803,7 +1803,7 @@
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="insert" ref="0x7ffffa3c8c80" loc="11:dataStructures/interfaces/Hashmap.nc">
+      <function command="" provided="0" name="insert" ref="0x7ffffa3c9c80" loc="11:dataStructures/interfaces/Hashmap.nc">
         <interfacedef-ref qname="Hashmap"/>
         <type-function size="I:1" alignment="I:1">
           <type-void size="I:1" alignment="I:1"></type-void>
@@ -1815,12 +1815,12 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="key" ref="0x7ffffa3c86e0" loc="11:dataStructures/interfaces/Hashmap.nc">
+          <variable name="key" ref="0x7ffffa3c96e0" loc="11:dataStructures/interfaces/Hashmap.nc">
             <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
               <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
             </type-int>
           </variable>
-          <variable name="input" ref="0x7ffffa3c89f0" loc="11:dataStructures/interfaces/Hashmap.nc">
+          <variable name="input" ref="0x7ffffa3c99f0" loc="11:dataStructures/interfaces/Hashmap.nc">
             <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa3cce70"/></type-var>
           </variable>
         </parameters>
@@ -1996,9 +1996,9 @@
         <long>&#10;  An allocation pool of a specific type memory objects.&#10;  The Pool allows components to allocate (&#60;code>get&#60;/code>)&#10;  and deallocate (&#60;code>put&#60;/code>) elements. The pool&#10;  does not require that deallocations be items which were&#10;  originally allocated. E.g., a program can create two&#10;  pools of the same type and pass items between them.&#10;  This allows, for example, a component to allocate a pool&#10;  of message buffers and freely buffer swap them on&#10;  Receive.receive events.&#10;&#10;  @author Philip Levis&#10;  @author Kyle Jamieson&#10;  @date   $Date: 2008-06-04 03:00:31 $&#10;</long>
       </documentation>
       <parameters>
-        <typedef name="t" ref="0x7ffffa84c6d0" loc="50:/opt/tinyos-main/tos/interfaces/Pool.nc">
+        <typedef name="t" ref="0x7ffffa84d6d0" loc="50:/opt/tinyos-main/tos/interfaces/Pool.nc">
           <interfacedef-ref qname="Pool"/>
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84c6d0"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84d6d0"/></type-var>
         </typedef>
       </parameters>
       <function command="" provided="0" name="get" ref="0x7ffffa8468b0" loc="97:/opt/tinyos-main/tos/interfaces/Pool.nc">
@@ -2009,7 +2009,7 @@
         <interfacedef-ref qname="Pool"/>
         <type-function size="I:1" alignment="I:1">
           <type-pointer size="I:8" alignment="I:8">
-            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84c6d0"/></type-var>
+            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84d6d0"/></type-var>
           </type-pointer>
           <function-parameters>
           </function-parameters>
@@ -2033,7 +2033,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="empty" ref="0x7ffffa849020" loc="61:/opt/tinyos-main/tos/interfaces/Pool.nc">
+      <function command="" provided="0" name="empty" ref="0x7ffffa84a020" loc="61:/opt/tinyos-main/tos/interfaces/Pool.nc">
         <documentation loc="52:/opt/tinyos-main/tos/interfaces/Pool.nc">
           <short>&#10; Returns whether there any elements remaining in the pool.</short>
           <long>&#10; Returns whether there any elements remaining in the pool.&#10; If empty returns TRUE, then &#60;code>get&#60;/code> will return&#10; NULL. If empty returns FALSE, then &#60;code>get&#60;/code> will&#10; return a pointer to an object.&#10;&#10; @return Whether the pool is empty.&#10;</long>
@@ -2061,19 +2061,19 @@
           </type-int>
           <function-parameters>
             <type-pointer size="I:8" alignment="I:8">
-              <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84c6d0"/></type-var>
+              <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84d6d0"/></type-var>
             </type-pointer>
           </function-parameters>
         </type-function>
         <parameters>
           <variable name="newVal" ref="0x7ffffa8488e0" loc="89:/opt/tinyos-main/tos/interfaces/Pool.nc">
             <type-pointer size="I:8" alignment="I:8">
-              <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84c6d0"/></type-var>
+              <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa84d6d0"/></type-var>
             </type-pointer>
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="size" ref="0x7ffffa849870" loc="72:/opt/tinyos-main/tos/interfaces/Pool.nc">
+      <function command="" provided="0" name="size" ref="0x7ffffa84a870" loc="72:/opt/tinyos-main/tos/interfaces/Pool.nc">
         <documentation loc="63:/opt/tinyos-main/tos/interfaces/Pool.nc">
           <short>&#10; Returns how many elements are in the pool.</short>
           <long>&#10; Returns how many elements are in the pool. If size&#10; returns 0, empty() will return TRUE. If size returns&#10; a non-zero value, empty() will return FALSE. The&#10; return value of size is always &#38;lte; the return&#10; value of maxSize().&#10;&#10; @return How many elements are in the pool.&#10;</long>
@@ -2141,7 +2141,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="compareBusy" ref="0x7ffffa74b030" loc="44:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerAsync.nc">
+      <function command="" provided="0" name="compareBusy" ref="0x7ffffa74c030" loc="44:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerAsync.nc">
         <documentation loc="40:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerAsync.nc">
           <short>&#10; Check if compare register OCR0 is busy (should not be updated if true)&#10; </short>
           <long>&#10; Check if compare register OCR0 is busy (should not be updated if true)&#10; @return TRUE if OCR0 is busy, FALSE otherwise (can be updated)&#10;</long>
@@ -2168,7 +2168,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="countBusy" ref="0x7ffffa74b840" loc="50:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerAsync.nc">
+      <function command="" provided="0" name="countBusy" ref="0x7ffffa74c840" loc="50:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerAsync.nc">
         <documentation loc="46:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerAsync.nc">
           <short>&#10; Check if current timer value (TCNT0) is busy (should not be updated if true)&#10; </short>
           <long>&#10; Check if current timer value (TCNT0) is busy (should not be updated if true)&#10; @return TRUE if TCNT0 is busy, FALSE otherwise (can be updated)&#10;</long>
@@ -2257,12 +2257,12 @@
         <long>&#10; A LocalTime interface counts time in some units. If you need to detect&#10; time overflow, you should use a component offering the Counter&#10; interface.&#10;&#10; &#60;p>The LocalTime interface is parameterised by its &#34;precision&#34;&#10; (milliseconds, microseconds, etc), identified by a type. This prevents,&#10; e.g., unintentionally mixing components expecting milliseconds with&#10; those expecting microseconds as those interfaces have a different type.&#10;&#10; &#60;p>See TEP102 for more details.&#10;&#10; @param precision_tag A type indicating the precision of this Counter.&#10;&#10; @author Cory Sharp &#60;cssharp@eecs.berkeley.edu>&#10;</long>
       </documentation>
       <parameters>
-        <typedef name="precision_tag" ref="0x7ffffa7d3d10" loc="53:/opt/tinyos-main/tos/lib/timer/LocalTime.nc">
+        <typedef name="precision_tag" ref="0x7ffffa7d4d10" loc="53:/opt/tinyos-main/tos/lib/timer/LocalTime.nc">
           <interfacedef-ref qname="LocalTime"/>
-          <type-var size="U:" alignment="U:"><typedef-ref name="precision_tag" scoped="" ref="0x7ffffa7d3d10"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="precision_tag" scoped="" ref="0x7ffffa7d4d10"/></type-var>
         </typedef>
       </parameters>
-      <function command="" provided="0" name="get" ref="0x7ffffa7d0680" loc="61:/opt/tinyos-main/tos/lib/timer/LocalTime.nc">
+      <function command="" provided="0" name="get" ref="0x7ffffa7d1680" loc="61:/opt/tinyos-main/tos/lib/timer/LocalTime.nc">
         <documentation loc="55:/opt/tinyos-main/tos/lib/timer/LocalTime.nc">
           <short> &#10; Return current time.</short>
           <long> &#10; Return current time. Time starts counting at boot - some time sources&#10; may stop counting while the processor is in low-power mode.&#10;&#10; @return Current time.&#10;</long>
@@ -2436,7 +2436,7 @@
           <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa859660"/></type-var>
         </typedef>
       </parameters>
-      <function command="" provided="0" name="head" ref="0x7ffffa853020" loc="80:/opt/tinyos-main/tos/interfaces/Queue.nc">
+      <function command="" provided="0" name="head" ref="0x7ffffa854020" loc="80:/opt/tinyos-main/tos/interfaces/Queue.nc">
         <documentation loc="74:/opt/tinyos-main/tos/interfaces/Queue.nc">
           <short>&#10; Get the head of the queue without removing it.</short>
           <long>&#10; Get the head of the queue without removing it. If the queue&#10; is empty, the return value is undefined.&#10;&#10; @return 't ONE' The head of the queue.&#10;</long>
@@ -2530,7 +2530,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="dequeue" ref="0x7ffffa853c00" loc="88:/opt/tinyos-main/tos/interfaces/Queue.nc">
+      <function command="" provided="0" name="dequeue" ref="0x7ffffa854c00" loc="88:/opt/tinyos-main/tos/interfaces/Queue.nc">
         <documentation loc="82:/opt/tinyos-main/tos/interfaces/Queue.nc">
           <short>&#10; Remove the head of the queue.</short>
           <long>&#10; Remove the head of the queue. If the queue is empty, the return&#10; value is undefined.&#10;&#10; @return 't ONE' The head of the queue.&#10;</long>
@@ -2742,7 +2742,7 @@
       </function>
     </interfacedef>
     <interfacedef qname="Graph" loc="1:dataStructures/interfaces/Graph.nc">
-      <function command="" provided="0" name="removeEdge" ref="0x7ffffa29c120" loc="4:dataStructures/interfaces/Graph.nc">
+      <function command="" provided="0" name="removeEdge" ref="0x7ffffa29d120" loc="4:dataStructures/interfaces/Graph.nc">
         <interfacedef-ref qname="Graph"/>
         <type-function size="I:1" alignment="I:1">
           <type-void size="I:1" alignment="I:1"></type-void>
@@ -2806,7 +2806,7 @@
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="isEmpty" ref="0x7ffffa298540" loc="9:dataStructures/interfaces/Graph.nc">
+      <function command="" provided="0" name="isEmpty" ref="0x7ffffa299540" loc="9:dataStructures/interfaces/Graph.nc">
         <interfacedef-ref qname="Graph"/>
         <type-function size="I:1" alignment="I:1">
           <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
@@ -2882,7 +2882,7 @@
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="cost" ref="0x7ffffa29cdb0" loc="5:dataStructures/interfaces/Graph.nc">
+      <function command="" provided="0" name="cost" ref="0x7ffffa29ddb0" loc="5:dataStructures/interfaces/Graph.nc">
         <interfacedef-ref qname="Graph"/>
         <type-function size="I:1" alignment="I:1">
           <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
@@ -2898,19 +2898,19 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="i" ref="0x7ffffa29c7f0" loc="5:dataStructures/interfaces/Graph.nc">
+          <variable name="i" ref="0x7ffffa29d7f0" loc="5:dataStructures/interfaces/Graph.nc">
             <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
               <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
             </type-int>
           </variable>
-          <variable name="j" ref="0x7ffffa29cb20" loc="5:dataStructures/interfaces/Graph.nc">
+          <variable name="j" ref="0x7ffffa29db20" loc="5:dataStructures/interfaces/Graph.nc">
             <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
               <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
             </type-int>
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="num_nodes" ref="0x7ffffa298c70" loc="10:dataStructures/interfaces/Graph.nc">
+      <function command="" provided="0" name="num_nodes" ref="0x7ffffa299c70" loc="10:dataStructures/interfaces/Graph.nc">
         <interfacedef-ref qname="Graph"/>
         <type-function size="I:1" alignment="I:1">
           <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
@@ -3074,7 +3074,7 @@
         <short> &#10; Interface for generating 16-bit and 32-bit random numbers.</short>
         <long> &#10; Interface for generating 16-bit and 32-bit random numbers.&#10;&#10; @author Barbara Hohlt &#10; @date   March 1 2005 &#10;</long>
       </documentation>
-      <function command="" provided="0" name="rand16" ref="0x7ffffa82fca0" loc="52:/opt/tinyos-main/tos/interfaces/Random.nc">
+      <function command="" provided="0" name="rand16" ref="0x7ffffa830ca0" loc="52:/opt/tinyos-main/tos/interfaces/Random.nc">
         <documentation loc="48:/opt/tinyos-main/tos/interfaces/Random.nc">
           <short> &#10; Produces a 16-bit pseudorandom number.</short>
           <long> &#10; Produces a 16-bit pseudorandom number. &#10; @return Returns low 16 bits of the pseudorandom number.&#10;</long>
@@ -3090,7 +3090,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="rand32" ref="0x7ffffa82f4a0" loc="46:/opt/tinyos-main/tos/interfaces/Random.nc">
+      <function command="" provided="0" name="rand32" ref="0x7ffffa8304a0" loc="46:/opt/tinyos-main/tos/interfaces/Random.nc">
         <documentation loc="42:/opt/tinyos-main/tos/interfaces/Random.nc">
           <short> &#10; Produces a 32-bit pseudorandom number.</short>
           <long> &#10; Produces a 32-bit pseudorandom number. &#10; @return Returns the 32-bit pseudorandom number.&#10;</long>
@@ -3127,7 +3127,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="getInterruptFlag" ref="0x7ffffa75b5e0" loc="53:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerCtrl8.nc">
+      <function command="" provided="0" name="getInterruptFlag" ref="0x7ffffa75c5e0" loc="53:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerCtrl8.nc">
         <documentation loc="52:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerCtrl8.nc">
           <short>Interrupt flag register: Direct access</short>
         </documentation>
@@ -3148,8 +3148,8 @@
         </documentation>
         <interfacedef-ref qname="HplAtm128TimerCtrl8"/>
         <type-function size="I:1" alignment="I:1">
-          <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7bd4d0"/>
-            <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7bd8f0"/></typename>
+          <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7be4d0"/>
+            <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7be8f0"/></typename>
           </type-tag>
           <function-parameters>
           </function-parameters>
@@ -3162,15 +3162,15 @@
         <type-function size="I:1" alignment="I:1">
           <type-void size="I:1" alignment="I:1"></type-void>
           <function-parameters>
-            <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7bd4d0"/>
-              <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7bd8f0"/></typename>
+            <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7be4d0"/>
+              <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7be8f0"/></typename>
             </type-tag>
           </function-parameters>
         </type-function>
         <parameters>
           <variable name="mask" ref="0x7ffffa75db00" loc="50:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerCtrl8.nc">
-            <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7bd4d0"/>
-              <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7bd8f0"/></typename>
+            <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7be4d0"/>
+              <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7be8f0"/></typename>
             </type-tag>
           </variable>
         </parameters>
@@ -3186,7 +3186,7 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="flags" ref="0x7ffffa75bda0" loc="54:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerCtrl8.nc">
+          <variable name="flags" ref="0x7ffffa75cda0" loc="54:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128TimerCtrl8.nc">
             <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7bbd30"/>
               <typename><typedef-ref name="Atm128_TIFR_t" ref="0x7ffffa7ba180"/></typename>
             </type-tag>
@@ -3217,7 +3217,7 @@
         <short>&#10; </short>
         <long>&#10; @author Phil Levis&#10; @author David Gay&#10; Revision:  $Revision: 1.12 $&#10;&#10; Defines global error codes for error_t in TinyOS.&#10;</long>
       </documentation>
-      <function command="" provided="0" name="send" ref="0x7ffffa525030" loc="75:/opt/tinyos-main/tos/interfaces/Send.nc">
+      <function command="" provided="0" name="send" ref="0x7ffffa526030" loc="75:/opt/tinyos-main/tos/interfaces/Send.nc">
         <documentation loc="57:/opt/tinyos-main/tos/interfaces/Send.nc">
           <short> &#10; Send a packet with a data payload of &#60;tt>len&#60;/tt>.</short>
           <long> &#10; Send a packet with a data payload of &#60;tt>len&#60;/tt>. To determine&#10; the maximum available size, use the Packet interface of the&#10; component providing Send. If send returns SUCCESS, then the&#10; component will signal the sendDone event in the future; if send&#10; returns an error, it will not signal sendDone.  Note that a&#10; component may accept a send request which it later finds it&#10; cannot satisfy; in this case, it will signal sendDone with an&#10; appropriate error code.&#10;&#10; @param   'message_t* ONE msg'     the packet to send&#10; @param   len     the length of the packet payload&#10; @return          SUCCESS if the request was accepted and will issue&#10;                  a sendDone event, EBUSY if the component cannot accept&#10;                  the request now but will be able to later, FAIL&#10;                  if the stack is in a state that cannot accept requests&#10;                  (e.g., it's off).&#10;</long>
@@ -3239,21 +3239,21 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="msg" ref="0x7ffffa528a40" loc="75:/opt/tinyos-main/tos/interfaces/Send.nc">
+          <variable name="msg" ref="0x7ffffa529a40" loc="75:/opt/tinyos-main/tos/interfaces/Send.nc">
             <type-pointer size="I:8" alignment="I:8">
               <type-tag size="I:48" alignment="I:1"><nx_struct-ref name="message_t" ref="0x7ffffadf2e00"/>
                 <typename><typedef-ref name="message_t" ref="0x7ffffadf0450"/></typename>
               </type-tag>
             </type-pointer>
           </variable>
-          <variable name="len" ref="0x7ffffa528d70" loc="75:/opt/tinyos-main/tos/interfaces/Send.nc">
+          <variable name="len" ref="0x7ffffa529d70" loc="75:/opt/tinyos-main/tos/interfaces/Send.nc">
             <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
               <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
             </type-int>
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="getPayload" ref="0x7ffffa521660" loc="125:/opt/tinyos-main/tos/interfaces/Send.nc">
+      <function command="" provided="0" name="getPayload" ref="0x7ffffa522660" loc="125:/opt/tinyos-main/tos/interfaces/Send.nc">
         <documentation loc="115:/opt/tinyos-main/tos/interfaces/Send.nc">
           <short>&#10; Return a pointer to a protocol's payload region in a packet which&#10; at least a certain length.</short>
           <long>&#10; Return a pointer to a protocol's payload region in a packet which&#10; at least a certain length.  If the payload region is smaller than&#10; the len parameter, then getPayload returns NULL. This command&#10; behaves identicallt to &#60;tt>Packet.getPayload&#60;/tt> and is&#10; included in this interface as a convenience.&#10;&#10; @param   'message_t* ONE msg'    the packet&#10; @return  'void* COUNT_NOK(len)'  a pointer to the packet's payload&#10;</long>
@@ -3275,21 +3275,21 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="msg" ref="0x7ffffa521060" loc="125:/opt/tinyos-main/tos/interfaces/Send.nc">
+          <variable name="msg" ref="0x7ffffa522060" loc="125:/opt/tinyos-main/tos/interfaces/Send.nc">
             <type-pointer size="I:8" alignment="I:8">
               <type-tag size="I:48" alignment="I:1"><nx_struct-ref name="message_t" ref="0x7ffffadf2e00"/>
                 <typename><typedef-ref name="message_t" ref="0x7ffffadf0450"/></typename>
               </type-tag>
             </type-pointer>
           </variable>
-          <variable name="len" ref="0x7ffffa521390" loc="125:/opt/tinyos-main/tos/interfaces/Send.nc">
+          <variable name="len" ref="0x7ffffa522390" loc="125:/opt/tinyos-main/tos/interfaces/Send.nc">
             <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
               <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
             </type-int>
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="maxPayloadLength" ref="0x7ffffa520790" loc="112:/opt/tinyos-main/tos/interfaces/Send.nc">
+      <function command="" provided="0" name="maxPayloadLength" ref="0x7ffffa521790" loc="112:/opt/tinyos-main/tos/interfaces/Send.nc">
         <documentation loc="102:/opt/tinyos-main/tos/interfaces/Send.nc">
           <short>&#10; Return the maximum payload length that this communication layer&#10; can provide.</short>
           <long>&#10; Return the maximum payload length that this communication layer&#10; can provide. This command behaves identically to&#10; &#60;tt>Packet.maxPayloadLength&#60;/tt> and is included in this&#10; interface as a convenience.&#10;&#10; @return  the maximum payload length&#10;</long>
@@ -3525,7 +3525,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="startAt" ref="0x7ffffa792e10" loc="103:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
+      <function command="" provided="0" name="startAt" ref="0x7ffffa793e10" loc="103:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
         <documentation loc="90:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
           <short>&#10; Set a single-short alarm to time t0+dt.</short>
           <long>&#10; Set a single-short alarm to time t0+dt. Replaces any current alarm&#10; time. The &#60;code>fired&#60;/code> will be signaled when the alarm expires.&#10; Alarms set in the past will fire &#34;soon&#34;.&#10; &#10; &#60;p>Because the current time may wrap around, it is possible to use&#10; values of t0 greater than the &#60;code>getNow&#60;/code>'s result. These&#10; values represent times in the past, i.e., the time at which getNow()&#10; would last of returned that value.&#10;&#10; @param t0 Base time for alarm.&#10; @param dt Alarm time as offset from t0.&#10;</long>
@@ -3539,15 +3539,15 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="t0" ref="0x7ffffa792840" loc="103:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
+          <variable name="t0" ref="0x7ffffa793840" loc="103:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
             <type-var size="U:" alignment="U:"><typedef-ref name="size_type" scoped="" ref="0x7ffffa798af0"/></type-var>
           </variable>
-          <variable name="dt" ref="0x7ffffa792b80" loc="103:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
+          <variable name="dt" ref="0x7ffffa793b80" loc="103:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
             <type-var size="U:" alignment="U:"><typedef-ref name="size_type" scoped="" ref="0x7ffffa798af0"/></type-var>
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="isRunning" ref="0x7ffffa792020" loc="88:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
+      <function command="" provided="0" name="isRunning" ref="0x7ffffa793020" loc="88:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
         <documentation loc="81:/opt/tinyos-main/tos/lib/timer/Alarm.nc">
           <short>&#10; Check if alarm is running.</short>
           <long>&#10; Check if alarm is running. Note that a FALSE return does not indicate&#10; that the &#60;code>fired&#60;/code> event will not be signaled (it may have&#10; already started executing, but not reached your code yet).&#10;&#10; @return TRUE if the alarm is still running.&#10;</long>
@@ -4266,12 +4266,12 @@
         <long>&#10; ANDES Lab - University of California, Merced&#10; This class provides a simple list.&#10;&#10; @author UCM ANDES Lab&#10; @author Alex Beltran&#10; @date   2013/09/03&#10; &#10;</long>
       </documentation>
       <parameters>
-        <typedef name="t" ref="0x7ffffa1ce8c0" loc="11:dataStructures/interfaces/List.nc">
+        <typedef name="t" ref="0x7ffffa1cf8c0" loc="11:dataStructures/interfaces/List.nc">
           <interfacedef-ref qname="List"/>
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
         </typedef>
       </parameters>
-      <function command="" provided="0" name="size" ref="0x7ffffa1c7770" loc="24:dataStructures/interfaces/List.nc">
+      <function command="" provided="0" name="size" ref="0x7ffffa1c8770" loc="24:dataStructures/interfaces/List.nc">
         <interfacedef-ref qname="List"/>
         <type-function size="I:1" alignment="I:1">
           <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
@@ -4286,14 +4286,14 @@
       <function command="" provided="0" name="front" ref="0x7ffffa1c9270" loc="21:dataStructures/interfaces/List.nc">
         <interfacedef-ref qname="List"/>
         <type-function size="I:1" alignment="I:1">
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           <function-parameters>
           </function-parameters>
         </type-function>
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="isEmpty" ref="0x7ffffa1c7070" loc="23:dataStructures/interfaces/List.nc">
+      <function command="" provided="0" name="isEmpty" ref="0x7ffffa1c8070" loc="23:dataStructures/interfaces/List.nc">
         <interfacedef-ref qname="List"/>
         <type-function size="I:1" alignment="I:1">
           <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
@@ -4308,7 +4308,7 @@
       <function command="" provided="0" name="get" ref="0x7ffffa1c6110" loc="25:dataStructures/interfaces/List.nc">
         <interfacedef-ref qname="List"/>
         <type-function size="I:1" alignment="I:1">
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           <function-parameters>
             <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
               <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
@@ -4316,7 +4316,7 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="position" ref="0x7ffffa1c7e30" loc="25:dataStructures/interfaces/List.nc">
+          <variable name="position" ref="0x7ffffa1c8e30" loc="25:dataStructures/interfaces/List.nc">
             <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
               <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
             </type-int>
@@ -4332,19 +4332,19 @@
         <type-function size="I:1" alignment="I:1">
           <type-void size="I:1" alignment="I:1"></type-void>
           <function-parameters>
-            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           </function-parameters>
         </type-function>
         <parameters>
           <variable name="input" ref="0x7ffffa1cb150" loc="17:dataStructures/interfaces/List.nc">
-            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           </variable>
         </parameters>
       </function>
       <function command="" provided="0" name="popfront" ref="0x7ffffa1cab50" loc="20:dataStructures/interfaces/List.nc">
         <interfacedef-ref qname="List"/>
         <type-function size="I:1" alignment="I:1">
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           <function-parameters>
           </function-parameters>
         </type-function>
@@ -4354,7 +4354,7 @@
       <function command="" provided="0" name="popback" ref="0x7ffffa1ca470" loc="19:dataStructures/interfaces/List.nc">
         <interfacedef-ref qname="List"/>
         <type-function size="I:1" alignment="I:1">
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           <function-parameters>
           </function-parameters>
         </type-function>
@@ -4366,19 +4366,19 @@
         <type-function size="I:1" alignment="I:1">
           <type-void size="I:1" alignment="I:1"></type-void>
           <function-parameters>
-            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           </function-parameters>
         </type-function>
         <parameters>
           <variable name="input" ref="0x7ffffa1cbad0" loc="18:dataStructures/interfaces/List.nc">
-            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+            <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           </variable>
         </parameters>
       </function>
       <function command="" provided="0" name="back" ref="0x7ffffa1c9920" loc="22:dataStructures/interfaces/List.nc">
         <interfacedef-ref qname="List"/>
         <type-function size="I:1" alignment="I:1">
-          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1ce8c0"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa1cf8c0"/></type-var>
           <function-parameters>
           </function-parameters>
         </type-function>
@@ -4813,7 +4813,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="clearOverflow" ref="0x7ffffa788120" loc="76:/opt/tinyos-main/tos/lib/timer/Counter.nc">
+      <function command="" provided="0" name="clearOverflow" ref="0x7ffffa789120" loc="76:/opt/tinyos-main/tos/lib/timer/Counter.nc">
         <documentation loc="73:/opt/tinyos-main/tos/lib/timer/Counter.nc">
           <short>&#10; Cancel a pending overflow interrupt.</short>
         </documentation>
@@ -4842,7 +4842,7 @@
         <parameters>
         </parameters>
       </function>
-      <function event="" provided="0" name="overflow" ref="0x7ffffa788880" loc="82:/opt/tinyos-main/tos/lib/timer/Counter.nc">
+      <function event="" provided="0" name="overflow" ref="0x7ffffa789880" loc="82:/opt/tinyos-main/tos/lib/timer/Counter.nc">
         <documentation loc="78:/opt/tinyos-main/tos/lib/timer/Counter.nc">
           <short>&#10; Signals that the current time has overflowed.</short>
           <long>&#10; Signals that the current time has overflowed.  That is, the current&#10; time has wrapped around from its maximum value to zero.&#10;</long>
@@ -5496,7 +5496,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="reset" ref="0x7ffffa7692b0" loc="75:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128Timer.nc">
+      <function command="" provided="0" name="reset" ref="0x7ffffa76a2b0" loc="75:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128Timer.nc">
         <documentation loc="74:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128Timer.nc">
           <short> Clear the overflow interrupt flag.</short>
           <long> Clear the overflow interrupt flag. *</long>
@@ -5558,7 +5558,7 @@
           </variable>
         </parameters>
       </function>
-      <function command="" provided="0" name="start" ref="0x7ffffa769a20" loc="78:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128Timer.nc">
+      <function command="" provided="0" name="start" ref="0x7ffffa76aa20" loc="78:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128Timer.nc">
         <documentation loc="77:/opt/tinyos-main/tos/chips/atm128/timer/HplAtm128Timer.nc">
           <short> Enable the overflow interrupt.</short>
           <long> Enable the overflow interrupt. *</long>
@@ -6285,9 +6285,9 @@
         <long>&#10; A Timer is TinyOS's general purpose timing interface. For more precise&#10; timing, you may wish to use a (platform-specific) component offering&#10; an Alarm interface.&#10;&#10; &#60;p>A Timer is parameterised by its &#34;precision&#34; (milliseconds,&#10; microseconds, etc), identified by a type. This prevents, e.g.,&#10; unintentionally mixing components expecting milliseconds with those&#10; expecting microseconds as those interfaces have a different type.&#10;&#10; &#60;p>See TEP102 for more details.&#10;&#10; @param precision_tag A type indicating the precision of this Alarm.&#10;&#10; @author Cory Sharp &#60;cssharp@eecs.berkeley.edu>&#10;</long>
       </documentation>
       <parameters>
-        <typedef name="precision_tag" ref="0x7ffffa841350" loc="53:/opt/tinyos-main/tos/lib/timer/Timer.nc">
+        <typedef name="precision_tag" ref="0x7ffffa842350" loc="53:/opt/tinyos-main/tos/lib/timer/Timer.nc">
           <interfacedef-ref qname="Timer"/>
-          <type-var size="U:" alignment="U:"><typedef-ref name="precision_tag" scoped="" ref="0x7ffffa841350"/></type-var>
+          <type-var size="U:" alignment="U:"><typedef-ref name="precision_tag" scoped="" ref="0x7ffffa842350"/></type-var>
         </typedef>
       </parameters>
       <function command="" provided="0" name="getNow" ref="0x7ffffa83a1f0" loc="136:/opt/tinyos-main/tos/lib/timer/Timer.nc">
@@ -6320,7 +6320,7 @@
         <parameters>
         </parameters>
       </function>
-      <function command="" provided="0" name="startPeriodicAt" ref="0x7ffffa83c820" loc="114:/opt/tinyos-main/tos/lib/timer/Timer.nc">
+      <function command="" provided="0" name="startPeriodicAt" ref="0x7ffffa83d820" loc="114:/opt/tinyos-main/tos/lib/timer/Timer.nc">
         <documentation loc="100:/opt/tinyos-main/tos/lib/timer/Timer.nc">
           <short>&#10; Set a periodic timer to repeat every dt time units.</short>
           <long>&#10; Set a periodic timer to repeat every dt time units. Replaces any&#10; current timer settings. The &#60;code>fired&#60;/code> will be signaled every&#10; dt units (first event at t0+dt units). Periodic timers set in the past&#10; will get a bunch of events in succession, until the timer &#34;catches up&#34;.&#10;&#10; &#60;p>Because the current time may wrap around, it is possible to use&#10; values of t0 greater than the &#60;code>getNow&#60;/code>'s result. These&#10; values represent times in the past, i.e., the time at which getNow()&#10; would last of returned that value.&#10;&#10; @param t0 Base time for timer.&#10; @param dt Time until the timer fires.&#10;</long>
@@ -6338,12 +6338,12 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="t0" ref="0x7ffffa83c250" loc="114:/opt/tinyos-main/tos/lib/timer/Timer.nc">
+          <variable name="t0" ref="0x7ffffa83d250" loc="114:/opt/tinyos-main/tos/lib/timer/Timer.nc">
             <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
               <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
             </type-int>
           </variable>
-          <variable name="dt" ref="0x7ffffa83c590" loc="114:/opt/tinyos-main/tos/lib/timer/Timer.nc">
+          <variable name="dt" ref="0x7ffffa83d590" loc="114:/opt/tinyos-main/tos/lib/timer/Timer.nc">
             <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
               <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
             </type-int>
@@ -6429,7 +6429,7 @@
           </function-parameters>
         </type-function>
         <parameters>
-          <variable name="dt" ref="0x7ffffa841c40" loc="64:/opt/tinyos-main/tos/lib/timer/Timer.nc">
+          <variable name="dt" ref="0x7ffffa842c40" loc="64:/opt/tinyos-main/tos/lib/timer/Timer.nc">
             <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
               <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
             </type-int>
@@ -6728,6 +6728,19 @@
         <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4"></type-int>
       </field>
     </struct>
+    <union loc="133:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7be4d0" defined="" size="I:1" alignment="I:1">
+      <field name="flat" ref="0x7ffffa7be6e0" bit-offset="I:0" size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="bits" ref="0x7ffffa7be790" bit-offset="I:0" size="I:1">
+        <type-tag size="I:1" alignment="I:1"><struct-ref ref="0x7ffffa7bfae0"/></type-tag>
+      </field>
+    </union>
+    <enum loc="211:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7b4c50" defined="" size="I:4" alignment="I:4">
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
     <struct loc="41:/opt/tinyos-main/tos/lib/timer/Timer.h" ref="0x7ffffad89280" defined="" size="I:4" alignment="I:4">
       <field name="notUsed" ref="0x7ffffad89490" bit-offset="I:0" size="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
@@ -7370,9 +7383,16 @@
         </type-pointer>
       </field>
     </attribute>
-    <enum loc="52:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7d14d0" defined="" size="I:4" alignment="I:4">
-      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-    </enum>
+    <union loc="312:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa79a110" defined="" size="I:1" alignment="I:1">
+      <field name="flat" ref="0x7ffffa79a320" bit-offset="I:0" size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="bits" ref="0x7ffffa79a3d0" bit-offset="I:0" size="I:1">
+        <type-tag size="I:1" alignment="I:1"><struct-ref ref="0x7ffffa79c810"/></type-tag>
+      </field>
+    </union>
     <nx_struct name="cc2420_packet_t" loc="111:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h" ref="0x7ffffac9c770" defined="" size="I:12" alignment="I:1">
       <field name="packet" ref="0x7ffffac9ce80" bit-offset="I:0" size="I:12">
         <type-tag size="I:12" alignment="I:1"><nx_struct-ref name="cc2420_header_t" ref="0x7ffffaca1510"/>
@@ -7393,38 +7413,6 @@
       </field>
       <field name="tz_dsttime" ref="0x7ffffb0190d0" bit-offset="I:32" size="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-      </field>
-    </struct>
-    <struct loc="170:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7b86a0" defined="" size="I:1" alignment="I:1">
-      <field name="psr321" ref="0x7ffffa7b88b0" bit-offset="I:0" bit-size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="psr0" ref="0x7ffffa7b8960" bit-offset="I:1" bit-size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="pud" ref="0x7ffffa7b8a10" bit-offset="I:2" bit-size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="acme" ref="0x7ffffa7b8ac0" bit-offset="I:3" bit-size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="rsvd" ref="0x7ffffa7b8b70" bit-offset="I:4" bit-size="I:3">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="tsm" ref="0x7ffffa7b8c20" bit-offset="I:7" bit-size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
       </field>
     </struct>
     <union name="wait" loc="66:/usr/include/x86_64-linux-gnu/bits/waitstatus.h" ref="0x7ffffb479710" defined="" size="I:4" alignment="I:4">
@@ -7628,22 +7616,22 @@
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="ocie1a" ref="0x7ffffa7bd020" bit-offset="I:4" bit-size="I:1">
+      <field name="ocie1a" ref="0x7ffffa7be020" bit-offset="I:4" bit-size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="ticie1" ref="0x7ffffa7bd0d0" bit-offset="I:5" bit-size="I:1">
+      <field name="ticie1" ref="0x7ffffa7be0d0" bit-offset="I:5" bit-size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="toie2" ref="0x7ffffa7bd180" bit-offset="I:6" bit-size="I:1">
+      <field name="toie2" ref="0x7ffffa7be180" bit-offset="I:6" bit-size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="ocie2" ref="0x7ffffa7bd230" bit-offset="I:7" bit-size="I:1">
+      <field name="ocie2" ref="0x7ffffa7be230" bit-offset="I:7" bit-size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
@@ -7675,16 +7663,26 @@
         </type-int>
       </field>
     </nx_struct>
-    <enum name="__itimer_which" loc="91:/usr/include/x86_64-linux-gnu/sys/time.h" ref="0x7ffffb015d50" defined="" size="I:4" alignment="I:4">
-      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-    </enum>
-    <struct name="floodingInfo" loc="9:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2fedd0" defined="" size="I:64" alignment="I:4">
-      <field name="num_neighbors" ref="0x7ffffa2fb6b0" bit-offset="I:0" size="I:1">
+    <union loc="167:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7b9ec0" defined="" size="I:1" alignment="I:1">
+      <field name="flat" ref="0x7ffffa7b7100" bit-offset="I:0" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
         </type-int>
       </field>
-      <field name="neighbors" ref="0x7ffffa2fb760" bit-offset="I:32" size="I:60">
+      <field name="bits" ref="0x7ffffa7b71b0" bit-offset="I:0" size="I:1">
+        <type-tag size="I:1" alignment="I:1"><struct-ref ref="0x7ffffa7b96a0"/></type-tag>
+      </field>
+    </union>
+    <enum name="__itimer_which" loc="91:/usr/include/x86_64-linux-gnu/sys/time.h" ref="0x7ffffb015d50" defined="" size="I:4" alignment="I:4">
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
+    <struct name="floodingInfo" loc="9:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2ffdd0" defined="" size="I:64" alignment="I:4">
+      <field name="num_neighbors" ref="0x7ffffa2fc6b0" bit-offset="I:0" size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="neighbors" ref="0x7ffffa2fc760" bit-offset="I:32" size="I:60">
         <type-array elements="I:15" size="I:60" alignment="I:4">
           <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
             <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
@@ -7706,6 +7704,9 @@
         </type-int>
       </field>
     </struct>
+    <enum loc="5:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2ff730" defined="" size="I:4" alignment="I:4">
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
     <struct loc="26:/usr/include/_G_config.h" ref="0x7ffffb1c5a10" defined="" size="I:16" alignment="I:8">
       <field name="__pos" ref="0x7ffffb1c5c20" bit-offset="I:0" size="I:8">
         <type-int cname="long" size="I:8" alignment="I:8">
@@ -7718,9 +7719,6 @@
         </type-tag>
       </field>
     </struct>
-    <enum loc="6:lib/modules/../../includes/am_types.h" ref="0x7ffffa8609a0" defined="" size="I:4" alignment="I:4">
-      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-    </enum>
     <union loc="236:/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h" ref="0x7ffffb4244c0" defined="" size="I:4" alignment="I:4">
       <field name="__size" ref="0x7ffffb4246d0" bit-offset="I:0" size="I:4">
         <type-array elements="I:4" size="I:4" alignment="I:1">
@@ -7892,23 +7890,28 @@
         </type-array>
       </field>
     </struct>
-    <struct name="userInfo" loc="10:lib/modules/../../includes/app.h" ref="0x7ffff9eb7370" defined="" size="I:12" alignment="I:1">
-      <field name="fd" ref="0x7ffff9eb7d10" bit-offset="I:0" size="I:1">
+    <struct name="userInfo" loc="10:lib/modules/../../includes/app.h" ref="0x7ffff9eb7370" defined="" size="I:13" alignment="I:1">
+      <field name="fd" ref="0x7ffff9eb7ee0" bit-offset="I:0" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
           <typename><typedef-ref name="socket_t" ref="0x7ffffa90a4c0"/></typename>
         </type-int>
       </field>
-      <field name="username" ref="0x7ffff9eb7dc0" bit-offset="I:8" size="I:10">
+      <field name="accept" ref="0x7ffff9eb6020" bit-offset="I:8" size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="bool" ref="0x7ffffb124020"/></typename>
+        </type-int>
+      </field>
+      <field name="length" ref="0x7ffff9eb60d0" bit-offset="I:16" size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="username" ref="0x7ffff9eb6180" bit-offset="I:24" size="I:10">
         <type-array elements="I:10" size="I:10" alignment="I:1">
           <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
             <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
           </type-int>
         </type-array>
-      </field>
-      <field name="accept" ref="0x7ffff9eb7e70" bit-offset="I:88" size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="bool" ref="0x7ffffb124020"/></typename>
-        </type-int>
       </field>
     </struct>
     <struct loc="97:/usr/include/stdlib.h" ref="0x7ffffb46f020" defined="" size="I:8" alignment="I:4">
@@ -8428,9 +8431,6 @@
         </type-int>
       </field>
     </struct>
-    <enum loc="211:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7b3c50" defined="" size="I:4" alignment="I:4">
-      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-    </enum>
     <struct loc="105:/usr/include/stdlib.h" ref="0x7ffffb46fac0" defined="" size="I:16" alignment="I:8">
       <field name="quot" ref="0x7ffffb46fcd0" bit-offset="I:0" size="I:8">
         <type-int cname="long" size="I:8" alignment="I:8"></type-int>
@@ -8439,16 +8439,6 @@
         <type-int cname="long" size="I:8" alignment="I:8"></type-int>
       </field>
     </struct>
-    <union loc="133:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7bd4d0" defined="" size="I:1" alignment="I:1">
-      <field name="flat" ref="0x7ffffa7bd6e0" bit-offset="I:0" size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="bits" ref="0x7ffffa7bd790" bit-offset="I:0" size="I:1">
-        <type-tag size="I:1" alignment="I:1"><struct-ref ref="0x7ffffa7bfae0"/></type-tag>
-      </field>
-    </union>
     <attribute name="atleastonce" loc="98:/opt/tinyos-main/tos/lib/tossim/tos.h" ref="0x7ffffb0f9720" defined="" size="I:0" alignment="I:1">
     </attribute>
     <enum loc="51:/opt/tinyos-main/tos/chips/atm128/adc/Atm128Adc.h" ref="0x7ffffacd0800" defined="" size="I:4" alignment="I:4">
@@ -8767,9 +8757,44 @@
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </field>
     </attribute>
+    <enum loc="52:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7d24d0" defined="" size="I:4" alignment="I:4">
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
     <enum name="cc2420_fsmtc_enums" loc="372:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h" ref="0x7ffffac6d4b0" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
+    <struct loc="170:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7b96a0" defined="" size="I:1" alignment="I:1">
+      <field name="psr321" ref="0x7ffffa7b98b0" bit-offset="I:0" bit-size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="psr0" ref="0x7ffffa7b9960" bit-offset="I:1" bit-size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="pud" ref="0x7ffffa7b9a10" bit-offset="I:2" bit-size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="acme" ref="0x7ffffa7b9ac0" bit-offset="I:3" bit-size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="rsvd" ref="0x7ffffa7b9b70" bit-offset="I:4" bit-size="I:3">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+      <field name="tsm" ref="0x7ffffa7b9c20" bit-offset="I:7" bit-size="I:1">
+        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
+          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
+        </type-int>
+      </field>
+    </struct>
     <enum loc="6:includes/ipPkt.h" ref="0x7ffffa9156f0" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -8923,16 +8948,6 @@
         </type-tag>
       </field>
     </struct>
-    <union loc="312:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa799110" defined="" size="I:1" alignment="I:1">
-      <field name="flat" ref="0x7ffffa799320" bit-offset="I:0" size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="bits" ref="0x7ffffa7993d0" bit-offset="I:0" size="I:1">
-        <type-tag size="I:1" alignment="I:1"><struct-ref ref="0x7ffffa79c810"/></type-tag>
-      </field>
-    </union>
     <attribute name="nts" loc="17:/usr/lib/ncc/deputy_nodeputy.h" ref="0x7ffffb688980" defined="" size="I:4" alignment="I:4">
       <field name="dummy" ref="0x7ffffb688cf0" bit-offset="I:0" size="I:4">
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
@@ -9031,6 +9046,9 @@
         </type-pointer>
       </field>
     </struct>
+    <enum loc="6:lib/modules/../../includes/am_types.h" ref="0x7ffffa8619a0" defined="" size="I:4" alignment="I:4">
+      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
+    </enum>
     <union loc="98:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7c5150" defined="" size="I:1" alignment="I:1">
       <field name="flat" ref="0x7ffffa7c5360" bit-offset="I:0" size="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
@@ -9243,19 +9261,6 @@
     <enum name="cc2420_manfidl_enums" loc="362:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h" ref="0x7ffffac6fe60" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <union loc="167:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h" ref="0x7ffffa7b8ec0" defined="" size="I:1" alignment="I:1">
-      <field name="flat" ref="0x7ffffa7b7100" bit-offset="I:0" size="I:1">
-        <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-          <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
-        </type-int>
-      </field>
-      <field name="bits" ref="0x7ffffa7b71b0" bit-offset="I:0" size="I:1">
-        <type-tag size="I:1" alignment="I:1"><struct-ref ref="0x7ffffa7b86a0"/></type-tag>
-      </field>
-    </union>
-    <enum loc="5:lib/modules/../../includes/floodingInfo.h" ref="0x7ffffa2fe730" defined="" size="I:4" alignment="I:4">
-      <type-int cname="int" size="I:4" alignment="I:4"></type-int>
-    </enum>
     <enum name="cc2420_iocfg1_enums" loc="356:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h" ref="0x7ffffac6f020" defined="" size="I:4" alignment="I:4">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -9445,15 +9450,15 @@
       <component-ref qname="VirtualizeTimerC"/>
       <type-int cname="unknown int" size="U:" alignment="U:"></type-int>
     </enum>
+    <enum loc="169:/opt/tinyos-main/tos/system/AMQueueImplP.nc" ref="0x7ffffa508d00" defined="" scoped="" size="U:" alignment="U:">
+      <component-ref qname="AMQueueImplP"/>
+      <type-int cname="unknown int" size="U:" alignment="U:"></type-int>
+    </enum>
     <enum loc="47:/opt/tinyos-main/tos/system/AMQueueP.nc" ref="0x7ffffa50b830" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="AMQueueP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
     <enum loc="126:/opt/tinyos-main/tos/system/AMQueueImplP.nc" ref="0x7ffffa4bae10" defined="" scoped="" size="U:" alignment="U:">
-      <component-ref qname="AMQueueImplP"/>
-      <type-int cname="unknown int" size="U:" alignment="U:"></type-int>
-    </enum>
-    <enum loc="169:/opt/tinyos-main/tos/system/AMQueueImplP.nc" ref="0x7ffffa507d00" defined="" scoped="" size="U:" alignment="U:">
       <component-ref qname="AMQueueImplP"/>
       <type-int cname="unknown int" size="U:" alignment="U:"></type-int>
     </enum>
@@ -9485,12 +9490,12 @@
     </enum>
     <struct name="hashmapEntry" loc="20:dataStructures/modules/HashmapC.nc" ref="0x7ffffa33be00" defined="" scoped="" size="U:" alignment="U:">
       <component-ref qname="HashmapC"/>
-      <field name="key" ref="0x7ffffa339430" bit-offset="I:0" size="I:4">
+      <field name="key" ref="0x7ffffa33a430" bit-offset="I:0" size="I:4">
         <type-int cname="unsigned int" unsigned="" size="I:4" alignment="I:4">
           <typename><typedef-ref name="uint32_t" ref="0x7ffffb67e130"/></typename>
         </type-int>
       </field>
-      <field name="value" ref="0x7ffffa3394e0" bit-offset="U:" size="U:">
+      <field name="value" ref="0x7ffffa33a4e0" bit-offset="U:" size="U:">
         <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa342970"/></type-var>
       </field>
     </struct>
@@ -9510,7 +9515,7 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="22:lib/modules/IPP.nc" ref="0x7ffffa1b4660" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="22:lib/modules/IPP.nc" ref="0x7ffffa1b5660" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -9522,11 +9527,11 @@
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="32:lib/modules/TransportP.nc" ref="0x7ffffa0d8460" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="32:lib/modules/TransportP.nc" ref="0x7ffffa0d9460" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
-    <enum loc="26:lib/modules/AppP.nc" ref="0x7ffff9ea8de0" defined="" scoped="" size="I:4" alignment="I:4">
+    <enum loc="26:lib/modules/AppP.nc" ref="0x7ffff9ea9de0" defined="" scoped="" size="I:4" alignment="I:4">
       <component-ref qname="AppP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </enum>
@@ -10272,7 +10277,7 @@
         <typename><typedef-ref name="pack" ref="0x7ffffad7ab40"/></typename>
       </type-tag>
     </variable>
-    <variable name="sequenceNum" ref="0x7ffffa830790" loc="32:lib/modules/SimpleSendP.nc">
+    <variable name="sequenceNum" ref="0x7ffffa831790" loc="32:lib/modules/SimpleSendP.nc">
       <component-ref qname="SimpleSendP"/>
       <type-int cname="unsigned short" unsigned="" size="I:2" alignment="I:2">
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
@@ -10290,7 +10295,7 @@
         <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
       </type-int>
     </variable>
-    <variable name="busy" ref="0x7ffffa830c10" loc="33:lib/modules/SimpleSendP.nc">
+    <variable name="busy" ref="0x7ffffa831c10" loc="33:lib/modules/SimpleSendP.nc">
       <component-ref qname="SimpleSendP"/>
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
         <typename><typedef-ref name="bool" ref="0x7ffffb124020"/></typename>
@@ -10352,7 +10357,7 @@
         </type-tag>
       </type-pointer>
     </variable>
-    <variable name="compare" ref="0x7ffffa6bbb30" loc="185:/opt/tinyos-main/tos/chips/atm128/timer/sim/HplAtm128Timer0AsyncP.nc">
+    <variable name="compare" ref="0x7ffffa6bcb30" loc="185:/opt/tinyos-main/tos/chips/atm128/timer/sim/HplAtm128Timer0AsyncP.nc">
       <component-ref qname="HplAtm128Timer0AsyncP"/>
       <type-pointer size="I:8" alignment="I:8">
         <type-tag size="I:48" alignment="I:8"><struct-ref name="sim_event" ref="0x7ffffb117020"/>
@@ -10542,11 +10547,11 @@
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="map" ref="0x7ffffa339af0" loc="25:dataStructures/modules/HashmapC.nc">
+    <variable name="map" ref="0x7ffffa33aaf0" loc="25:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
       <type-array elements="U:" size="U:" alignment="U:">
         <type-tag size="U:" alignment="U:"><struct-ref name="hashmapEntry" scoped="" ref="0x7ffffa33be00"/>
-          <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa339640"/></typename>
+          <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa33a640"/></typename>
         </type-tag>
       </type-array>
     </variable>
@@ -10567,8 +10572,8 @@
     <variable name="flooding_table" ref="0x7ffffa2f7aa0" loc="24:lib/modules/FloodingP.nc">
       <component-ref qname="FloodingP"/>
       <type-array elements="I:30" size="I:1920" alignment="I:4">
-        <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2fedd0"/>
-          <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2fb8c0"/></typename>
+        <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2ffdd0"/>
+          <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2fc8c0"/></typename>
         </type-tag>
       </type-array>
     </variable>
@@ -10604,7 +10609,7 @@
         <typename><typedef-ref name="uint8_t" ref="0x7ffffb67f920"/></typename>
       </type-int>
     </variable>
-    <variable name="adjacency_matrix" ref="0x7ffffa20e360" loc="9:dataStructures/modules/GraphP.nc">
+    <variable name="adjacency_matrix" ref="0x7ffffa20f360" loc="9:dataStructures/modules/GraphP.nc">
       <component-ref qname="GraphP"/>
       <type-array elements="U:" size="U:" alignment="I:2">
         <type-array elements="U:" size="U:" alignment="I:2">
@@ -10620,7 +10625,7 @@
         <typename><typedef-ref name="uint16_t" ref="0x7ffffb67fd20"/></typename>
       </type-int>
     </variable>
-    <variable name="node_arr" ref="0x7ffffa20e9b0" loc="11:dataStructures/modules/GraphP.nc">
+    <variable name="node_arr" ref="0x7ffffa20f9b0" loc="11:dataStructures/modules/GraphP.nc">
       <component-ref qname="GraphP"/>
       <type-array elements="U:" size="U:" alignment="I:1">
         <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
@@ -10665,7 +10670,7 @@
     <variable name="container" ref="0x7ffffa153310" loc="18:dataStructures/modules/ListC.nc">
       <component-ref qname="ListC"/>
       <type-array elements="U:" size="U:" alignment="U:">
-        <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa15ba00"/></type-var>
+        <type-var size="U:" alignment="U:"><typedef-ref name="t" scoped="" ref="0x7ffffa15ca00"/></type-var>
       </type-array>
     </variable>
     <variable name="MAX_SIZE" ref="0x7ffffa154d10" loc="16:dataStructures/modules/ListC.nc">
@@ -10712,7 +10717,7 @@
         </type-tag>
       </type-array>
     </variable>
-    <variable name="global_fd" ref="0x7ffffa0d8b10" loc="36:lib/modules/TransportP.nc">
+    <variable name="global_fd" ref="0x7ffffa0d9b10" loc="36:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
         <typename><typedef-ref name="socket_t" ref="0x7ffffa90a4c0"/></typename>
@@ -10726,9 +10731,9 @@
     </variable>
     <variable name="users" ref="0x7ffff9ea6240" loc="35:lib/modules/AppP.nc">
       <component-ref qname="AppP"/>
-      <type-array elements="I:25" size="I:300" alignment="I:1">
-        <type-tag size="I:12" alignment="I:1"><struct-ref name="userInfo" ref="0x7ffff9eb7370"/>
-          <typename><typedef-ref name="userInfo_t" ref="0x7ffff9eb6020"/></typename>
+      <type-array elements="I:25" size="I:325" alignment="I:1">
+        <type-tag size="I:13" alignment="I:1"><struct-ref name="userInfo" ref="0x7ffff9eb7370"/>
+          <typename><typedef-ref name="userInfo_t" ref="0x7ffff9eb62e0"/></typename>
         </type-tag>
       </type-array>
     </variable>
@@ -11036,7 +11041,7 @@
     <constant cst="I:6" name="DDA6" ref="0x7ffffad05660" loc="1112:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:1" name="ATM128_CLK8_NORMAL" ref="0x7ffffa7d1b90" loc="54:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <constant cst="I:1" name="ATM128_CLK8_NORMAL" ref="0x7ffffa7d2b90" loc="54:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:7" name="ISC71" ref="0x7ffffad486d0" loc="740:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
@@ -12905,7 +12910,7 @@
     <constant cst="I:29" name="CC2420_IOCFG1" ref="0x7ffffac8ec40" loc="202:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:10" name="AM_FLOODING" ref="0x7ffffa860cb0" loc="7:lib/modules/../../includes/am_types.h">
+    <constant cst="I:10" name="AM_FLOODING" ref="0x7ffffa861cb0" loc="7:lib/modules/../../includes/am_types.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:1" name="TYPICAL" ref="0x7ffffa90e730" loc="10:includes/socket.h">
@@ -13361,7 +13366,7 @@
     <constant cst="I:0" name="ATM128_ADC_VREF_OFF" ref="0x7ffffacd1a20" loc="44:/opt/tinyos-main/tos/chips/atm128/adc/Atm128Adc.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:15" name="MAX_NUM_NEIGHBOR" ref="0x7ffffa2fea60" loc="6:lib/modules/../../includes/floodingInfo.h">
+    <constant cst="I:15" name="MAX_NUM_NEIGHBOR" ref="0x7ffffa2ffa60" loc="6:lib/modules/../../includes/floodingInfo.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:4" name="FE" ref="0x7ffffad15930" loc="1013:/opt/tinyos-main/tos/chips/atm128/sim/atm128_sim.h">
@@ -13700,7 +13705,7 @@
     <constant cst="I:362" name="CC2420_RAM_SHORTADR" ref="0x7ffffac86b80" loc="236:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:0" name="ATM128_CLK8_OFF" ref="0x7ffffa7d17f0" loc="53:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <constant cst="I:0" name="ATM128_CLK8_OFF" ref="0x7ffffa7d27f0" loc="53:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
     <constant cst="I:1" name="TOS_AM_ADDRESS" ref="0x7ffffae03020" loc="28:/opt/tinyos-main/tos/types/AM.h">
@@ -13941,11 +13946,11 @@
       <component-ref qname="VirtualizeTimerC"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:4" name="NUM_CLIENTS" ref="0x7ffffa5090d0" loc="48:/opt/tinyos-main/tos/system/AMQueueP.nc">
+    <constant cst="I:4" name="NUM_CLIENTS" ref="0x7ffffa50a0d0" loc="48:/opt/tinyos-main/tos/system/AMQueueP.nc">
       <component-ref qname="AMQueueP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="U:" name="errorTask" ref="0x7ffffa507b10" loc="169:/opt/tinyos-main/tos/system/AMQueueImplP.nc">
+    <constant cst="U:" name="errorTask" ref="0x7ffffa508b10" loc="169:/opt/tinyos-main/tos/system/AMQueueImplP.nc">
       <component-ref qname="AMQueueImplP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -14021,11 +14026,11 @@
       <component-ref qname="LinkStateRoutingP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:30000" name="PENDING_DROP_TIME" ref="0x7ffffa1b4d10" loc="25:lib/modules/IPP.nc">
+    <constant cst="I:30000" name="PENDING_DROP_TIME" ref="0x7ffffa1b5d10" loc="25:lib/modules/IPP.nc">
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:30" name="MAX_NUM_PENDING" ref="0x7ffffa1b4980" loc="23:lib/modules/IPP.nc">
+    <constant cst="I:30" name="MAX_NUM_PENDING" ref="0x7ffffa1b5980" loc="23:lib/modules/IPP.nc">
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -14041,7 +14046,7 @@
       <component-ref qname="IPP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
-    <constant cst="I:16" name="MAX_PAYLOAD" ref="0x7ffffa0d8750" loc="33:lib/modules/TransportP.nc">
+    <constant cst="I:16" name="MAX_PAYLOAD" ref="0x7ffffa0d9750" loc="33:lib/modules/TransportP.nc">
       <component-ref qname="TransportP"/>
       <type-int cname="int" size="I:4" alignment="I:4"></type-int>
     </constant>
@@ -14149,14 +14154,14 @@
         <typename><typedef-ref name="__u_char" ref="0x7ffffb492170"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_TCNT0_t" ref="0x7ffffa7c3020" loc="111:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_TCNT0_t" ref="0x7ffffa7c4020" loc="111:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_TCNT0_t" ref="0x7ffffa7c3020"/></typename>
+        <typename><typedef-ref name="Atm128_TCNT0_t" ref="0x7ffffa7c4020"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_OCR1BL_t" ref="0x7ffffa7a4840" loc="278:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_OCR1BL_t" ref="0x7ffffa7a5840" loc="278:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_OCR1BL_t" ref="0x7ffffa7a4840"/></typename>
+        <typename><typedef-ref name="Atm128_OCR1BL_t" ref="0x7ffffa7a5840"/></typename>
       </type-int>
     </typedef>
     <typedef name="__intptr_t" ref="0x7ffffb480da0" loc="186:/usr/include/x86_64-linux-gnu/bits/types.h">
@@ -14285,9 +14290,9 @@
         <typename><typedef-ref name="security_header_t" ref="0x7ffffaca1180"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="Atm128_OCR1BH_t" ref="0x7ffffa7a4430" loc="277:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_OCR1BH_t" ref="0x7ffffa7a5430" loc="277:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_OCR1BH_t" ref="0x7ffffa7a4430"/></typename>
+        <typename><typedef-ref name="Atm128_OCR1BH_t" ref="0x7ffffa7a5430"/></typename>
       </type-int>
     </typedef>
     <typedef name="cc2420_status_t" ref="0x7ffffacb76c0" loc="4:/opt/tinyos-main/tos/chips/cc2420/sim/CC2420.h">
@@ -14398,9 +14403,9 @@
         <typename><typedef-ref name="int_least64_t" ref="0x7ffffb67d550"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_ETIFR_t" ref="0x7ffffa799530" loc="324:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
-      <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa799110"/>
-        <typename><typedef-ref name="Atm128_ETIFR_t" ref="0x7ffffa799530"/></typename>
+    <typedef name="Atm128_ETIFR_t" ref="0x7ffffa79a530" loc="324:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+      <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa79a110"/>
+        <typename><typedef-ref name="Atm128_ETIFR_t" ref="0x7ffffa79a530"/></typename>
       </type-tag>
     </typedef>
     <typedef name="__pid_t" ref="0x7ffffb48ac90" loc="133:/usr/include/x86_64-linux-gnu/bits/types.h">
@@ -14413,14 +14418,14 @@
         <typename><typedef-ref name="__u_int" ref="0x7ffffb492920"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_TCNT2_t" ref="0x7ffffa7c3ca0" loc="115:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_TCNT2_t" ref="0x7ffffa7c4ca0" loc="115:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_TCNT2_t" ref="0x7ffffa7c3ca0"/></typename>
+        <typename><typedef-ref name="Atm128_TCNT2_t" ref="0x7ffffa7c4ca0"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_OCR1AL_t" ref="0x7ffffa7a4020" loc="276:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_OCR1AL_t" ref="0x7ffffa7a5020" loc="276:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_OCR1AL_t" ref="0x7ffffa7a4020"/></typename>
+        <typename><typedef-ref name="Atm128_OCR1AL_t" ref="0x7ffffa7a5020"/></typename>
       </type-int>
     </typedef>
     <typedef name="sim_event_t" ref="0x7ffffb117410" loc="51:/opt/tinyos-main/tos/lib/tossim/sim_event_queue.h">
@@ -14443,7 +14448,7 @@
       </type-int>
     </typedef>
     <typedef name="Atm128_SFIOR_t" ref="0x7ffffa7b7310" loc="178:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
-      <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7b8ec0"/>
+      <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7b9ec0"/>
         <typename><typedef-ref name="Atm128_SFIOR_t" ref="0x7ffffa7b7310"/></typename>
       </type-tag>
     </typedef>
@@ -14534,9 +14539,9 @@
         <typename><typedef-ref name="Atm128_ICR1H_t" ref="0x7ffffa7a2db0"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_ICR3L_t" ref="0x7ffffa7a09f0" loc="294:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_ICR3L_t" ref="0x7ffffa7a19f0" loc="294:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_ICR3L_t" ref="0x7ffffa7a09f0"/></typename>
+        <typename><typedef-ref name="Atm128_ICR3L_t" ref="0x7ffffa7a19f0"/></typename>
       </type-int>
     </typedef>
     <typedef name="gid_t" ref="0x7ffffb4523d0" loc="65:/usr/include/x86_64-linux-gnu/sys/types.h">
@@ -14549,9 +14554,9 @@
         <typename><typedef-ref name="fsid_t" ref="0x7ffffb454450"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="userInfo_t" ref="0x7ffff9eb6020" loc="14:lib/modules/../../includes/app.h">
-      <type-tag size="I:12" alignment="I:1"><struct-ref name="userInfo" ref="0x7ffff9eb7370"/>
-        <typename><typedef-ref name="userInfo_t" ref="0x7ffff9eb6020"/></typename>
+    <typedef name="userInfo_t" ref="0x7ffff9eb62e0" loc="15:lib/modules/../../includes/app.h">
+      <type-tag size="I:13" alignment="I:1"><struct-ref name="userInfo" ref="0x7ffff9eb7370"/>
+        <typename><typedef-ref name="userInfo_t" ref="0x7ffff9eb62e0"/></typename>
       </type-tag>
     </typedef>
     <typedef name="sim_packet_t" ref="0x7ffffae19910" loc="59:/opt/tinyos-main/tos/lib/tossim/sim_packet.h">
@@ -14883,9 +14888,9 @@
         <typename><typedef-ref name="pthread_rwlockattr_t" ref="0x7ffffb427ba0"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="Atm128_OCR0_t" ref="0x7ffffa7c3420" loc="112:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_OCR0_t" ref="0x7ffffa7c4420" loc="112:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_OCR0_t" ref="0x7ffffa7c3420"/></typename>
+        <typename><typedef-ref name="Atm128_OCR0_t" ref="0x7ffffa7c4420"/></typename>
       </type-int>
     </typedef>
     <typedef name="__uint64_t" ref="0x7ffffb48fd10" loc="44:/usr/include/x86_64-linux-gnu/bits/types.h">
@@ -14964,9 +14969,9 @@
         <typename><typedef-ref name="Atm128TimerCtrlCapture_t" ref="0x7ffffa7ab6a0"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="Atm128_TCCR2_t" ref="0x7ffffa7c38a0" loc="114:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_TCCR2_t" ref="0x7ffffa7c48a0" loc="114:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7c5150"/>
-        <typename><typedef-ref name="Atm128_TCCR2_t" ref="0x7ffffa7c38a0"/></typename>
+        <typename><typedef-ref name="Atm128_TCCR2_t" ref="0x7ffffa7c48a0"/></typename>
       </type-tag>
     </typedef>
     <typedef name="serial_metadata_t" ref="0x7ffffadf5a10" loc="138:/opt/tinyos-main/tos/lib/serial/Serial.h">
@@ -14994,9 +14999,9 @@
         <typename><typedef-ref name="_G_fpos_t" ref="0x7ffffb1c52f0"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="floodingInfo_t" ref="0x7ffffa2fb8c0" loc="12:lib/modules/../../includes/floodingInfo.h">
-      <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2fedd0"/>
-        <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2fb8c0"/></typename>
+    <typedef name="floodingInfo_t" ref="0x7ffffa2fc8c0" loc="12:lib/modules/../../includes/floodingInfo.h">
+      <type-tag size="I:64" alignment="I:4"><struct-ref name="floodingInfo" ref="0x7ffffa2ffdd0"/>
+        <typename><typedef-ref name="floodingInfo_t" ref="0x7ffffa2fc8c0"/></typename>
       </type-tag>
     </typedef>
     <typedef name="u_int8_t" ref="0x7ffffb44b1b0" loc="200:/usr/include/x86_64-linux-gnu/sys/types.h">
@@ -15159,9 +15164,9 @@
         <typename><typedef-ref name="__gwchar_t" ref="0x7ffffb675020"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_ICR1L_t" ref="0x7ffffa7a01f0" loc="292:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_ICR1L_t" ref="0x7ffffa7a11f0" loc="292:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_ICR1L_t" ref="0x7ffffa7a01f0"/></typename>
+        <typename><typedef-ref name="Atm128_ICR1L_t" ref="0x7ffffa7a11f0"/></typename>
       </type-int>
     </typedef>
     <typedef name="register_t" ref="0x7ffffb449800" loc="205:/usr/include/x86_64-linux-gnu/sys/types.h">
@@ -15281,9 +15286,9 @@
         <typename><typedef-ref name="__id_t" ref="0x7ffffb4875a0"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_TCCR1A_t" ref="0x7ffffa7b3500" loc="205:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_TCCR1A_t" ref="0x7ffffa7b4500" loc="205:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7b5b40"/>
-        <typename><typedef-ref name="Atm128_TCCR1A_t" ref="0x7ffffa7b3500"/></typename>
+        <typename><typedef-ref name="Atm128_TCCR1A_t" ref="0x7ffffa7b4500"/></typename>
       </type-tag>
     </typedef>
     <typedef name="uint_least32_t" ref="0x7ffffb67b410" loc="78:/usr/include/stdint.h">
@@ -15454,9 +15459,9 @@
         <typename><typedef-ref name="Atm128_TIFR_t" ref="0x7ffffa7ba180"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="Atm128_TCCR3A_t" ref="0x7ffffa7b39e0" loc="208:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_TCCR3A_t" ref="0x7ffffa7b49e0" loc="208:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7b5b40"/>
-        <typename><typedef-ref name="Atm128_TCCR3A_t" ref="0x7ffffa7b39e0"/></typename>
+        <typename><typedef-ref name="Atm128_TCCR3A_t" ref="0x7ffffa7b49e0"/></typename>
       </type-tag>
     </typedef>
     <typedef name="uint_least64_t" ref="0x7ffffb67b840" loc="80:/usr/include/stdint.h">
@@ -15533,9 +15538,9 @@
         <typename><typedef-ref name="__off64_t" ref="0x7ffffb48a920"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_ICR3H_t" ref="0x7ffffa7a05f0" loc="293:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_ICR3H_t" ref="0x7ffffa7a15f0" loc="293:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_ICR3H_t" ref="0x7ffffa7a05f0"/></typename>
+        <typename><typedef-ref name="Atm128_ICR3H_t" ref="0x7ffffa7a15f0"/></typename>
       </type-int>
     </typedef>
     <typedef name="__fsfilcnt64_t" ref="0x7ffffb483d30" loc="167:/usr/include/x86_64-linux-gnu/bits/types.h">
@@ -15598,9 +15603,9 @@
         <typename><typedef-ref name="nx_uint64_t" ref="0x7ffffb4ea5b0"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128_TIMSK_t" ref="0x7ffffa7bd8f0" loc="146:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
-      <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7bd4d0"/>
-        <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7bd8f0"/></typename>
+    <typedef name="Atm128_TIMSK_t" ref="0x7ffffa7be8f0" loc="146:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+      <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7be4d0"/>
+        <typename><typedef-ref name="Atm128_TIMSK_t" ref="0x7ffffa7be8f0"/></typename>
       </type-tag>
     </typedef>
     <typedef name="loff_t" ref="0x7ffffb454810" loc="44:/usr/include/x86_64-linux-gnu/sys/types.h">
@@ -15724,14 +15729,14 @@
         <typename><typedef-ref name="uart_id_t" ref="0x7ffffadfe200"/></typename>
       </type-int>
     </typedef>
-    <typedef name="Atm128TimerCtrlCompare_t" ref="0x7ffffa7b3020" loc="202:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128TimerCtrlCompare_t" ref="0x7ffffa7b4020" loc="202:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-tag size="I:1" alignment="I:1"><union-ref ref="0x7ffffa7b5b40"/>
-        <typename><typedef-ref name="Atm128TimerCtrlCompare_t" ref="0x7ffffa7b3020"/></typename>
+        <typename><typedef-ref name="Atm128TimerCtrlCompare_t" ref="0x7ffffa7b4020"/></typename>
       </type-tag>
     </typedef>
-    <typedef name="Atm128_OCR1CH_t" ref="0x7ffffa7a4c50" loc="279:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
+    <typedef name="Atm128_OCR1CH_t" ref="0x7ffffa7a5c50" loc="279:/opt/tinyos-main/tos/chips/atm128/timer/Atm128Timer.h">
       <type-int cname="unsigned char" unsigned="" size="I:1" alignment="I:1">
-        <typename><typedef-ref name="Atm128_OCR1CH_t" ref="0x7ffffa7a4c50"/></typename>
+        <typename><typedef-ref name="Atm128_OCR1CH_t" ref="0x7ffffa7a5c50"/></typename>
       </type-int>
     </typedef>
     <typedef name="__nesc_sillytask_startDoneTask" ref="0x7ffffaadd940" loc="96:/opt/tinyos-main/tos/lib/tossim/TossimPacketModelC.nc">
@@ -15824,10 +15829,10 @@
         <type-int cname="int" size="I:4" alignment="I:4"></type-int>
       </type-array>
     </typedef>
-    <typedef name="hashmapEntry" ref="0x7ffffa339640" loc="23:dataStructures/modules/HashmapC.nc">
+    <typedef name="hashmapEntry" ref="0x7ffffa33a640" loc="23:dataStructures/modules/HashmapC.nc">
       <component-ref qname="HashmapC"/>
       <type-tag size="U:" alignment="U:"><struct-ref name="hashmapEntry" scoped="" ref="0x7ffffa33be00"/>
-        <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa339640"/></typename>
+        <typename><typedef-ref name="hashmapEntry" scoped="" ref="0x7ffffa33a640"/></typename>
       </type-tag>
     </typedef>
     <typedef name="__nesc_sillytask_DijstraTask" ref="0x7ffffa229e80" loc="42:lib/modules/LinkStateRoutingP.nc">

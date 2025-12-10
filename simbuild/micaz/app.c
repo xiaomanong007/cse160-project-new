@@ -4449,11 +4449,13 @@ enum __nesc_unnamed4345 {
 
 
 
+
 #line 10
 typedef struct userInfo {
   socket_t fd;
-  uint8_t username[MAX_USERNAME_LENTH];
   bool accept;
+  uint8_t length;
+  uint8_t username[MAX_USERNAME_LENTH];
 } userInfo_t;
 typedef uint16_t CpmModelC__ReadRssi__val_t;
 typedef sendInfo /*NodeC.SimpleSendC.SimpleSendP*/SimpleSendP__0__Pool__t;
@@ -4961,15 +4963,15 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__f
 #line 83
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5b7950);
+uint8_t arg_0x7ffffa5b8950);
 # 92 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static bool /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__isRunning(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5b7950);
+uint8_t arg_0x7ffffa5b8950);
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startOneShot(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5b7950, 
+uint8_t arg_0x7ffffa5b8950, 
 # 73 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
 uint32_t dt);
 
@@ -4978,7 +4980,7 @@ uint32_t dt);
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__stop(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5b7950);
+uint8_t arg_0x7ffffa5b8950);
 # 82 "/opt/tinyos-main/tos/lib/timer/Counter.nc"
 static void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__overflow(void );
 # 52 "/opt/tinyos-main/tos/interfaces/Random.nc"
@@ -5024,7 +5026,7 @@ error_t error);
 # 75 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__send(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa505940, 
+uint8_t arg_0x7ffffa506940, 
 # 67 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -5038,7 +5040,7 @@ uint8_t len);
 #line 100
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa505940, 
+uint8_t arg_0x7ffffa506940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -5595,7 +5597,9 @@ static void AppP__Transport__connectDone(socket_t fd);
 static void AppP__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len);
 
 static void AppP__Transport__accepted(socket_t fd, uint8_t id);
-# 3 "lib/interfaces/App.nc"
+# 5 "lib/interfaces/App.nc"
+static void AppP__App__printUsers(void );
+#line 3
 static void AppP__App__broadcastMsg(uint8_t *payload, uint8_t legnth);
 #line 2
 static void AppP__App__helloClient(uint8_t dest, uint8_t port, uint8_t *username, uint8_t length);
@@ -6254,7 +6258,9 @@ static void Node__Transport__onBoot(void );
 static void Node__NeighborDiscovery__printNeighbors(void );
 #line 2
 static void Node__NeighborDiscovery__onBoot(void );
-# 3 "lib/interfaces/App.nc"
+# 5 "lib/interfaces/App.nc"
+static void Node__App__printUsers(void );
+#line 3
 static void Node__App__broadcastMsg(uint8_t *payload, uint8_t legnth);
 #line 2
 static void Node__App__helloClient(uint8_t dest, uint8_t port, uint8_t *username, uint8_t length);
@@ -6764,7 +6770,7 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__s
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(
 # 48 "/opt/tinyos-main/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x7ffffa5b7950);
+uint8_t arg_0x7ffffa5b8950);
 #line 71
 enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4355 {
 #line 71
@@ -6909,7 +6915,7 @@ uint8_t len);
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(
 # 46 "/opt/tinyos-main/tos/system/AMQueueImplP.nc"
-uint8_t arg_0x7ffffa505940, 
+uint8_t arg_0x7ffffa506940, 
 # 96 "/opt/tinyos-main/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -8805,12 +8811,16 @@ static inline void AppP__broadcast(uint8_t *message, uint8_t length);
 
 static inline void AppP__unicast(uint8_t *message, uint8_t length);
 
+static inline void AppP__replyAllUsers(socket_t fd);
+
 static inline void AppP__App__helloClient(uint8_t dest, uint8_t port, uint8_t *username, uint8_t length);
-#line 91
+#line 94
 static inline void AppP__App__broadcastMsg(uint8_t *payload, uint8_t legnth);
-#line 108
+#line 111
 static inline void AppP__App__unicastMsg(uint8_t *username, uint8_t len_username, uint8_t *payload, uint8_t legnth);
-#line 132
+#line 133
+static inline void AppP__App__printUsers(void );
+#line 147
 static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t *payload, uint8_t length);
 
 
@@ -8824,17 +8834,19 @@ static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t 
 static inline void AppP__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t len);
 
 static inline void AppP__Transport__connectDone(socket_t fd);
-#line 163
+#line 178
 static inline void AppP__Transport__hasData(socket_t fd, uint8_t from, uint8_t len);
-#line 206
+#line 222
 static inline void AppP__broadcast(uint8_t *message, uint8_t length);
-#line 226
+#line 242
 static inline void AppP__unicast(uint8_t *message, uint8_t length);
-#line 266
+#line 282
+static inline void AppP__replyAllUsers(socket_t fd);
+#line 303
 static inline void AppP__GreetTimer__fired(void );
-#line 278
+#line 315
 static inline void AppP__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len);
-#line 309
+#line 346
 static inline void AppP__Transport__accepted(socket_t fd, uint8_t id);
 # 16 "dataStructures/modules/ListC.nc"
 uint16_t /*AppC.GreetQueue*/ListC__10__MAX_SIZE[1000];
@@ -9400,9 +9412,9 @@ static inline void Node__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t 
 {
 }
 
-# 142 "lib/modules/AppP.nc"
+# 157 "lib/modules/AppP.nc"
 static inline void AppP__IP__gotTCP(uint8_t *incomingMsg, uint8_t from, uint8_t len)
-#line 142
+#line 157
 {
 }
 
@@ -11149,9 +11161,9 @@ inline static uint16_t AppP__Transport__write(socket_t fd, uint8_t *buff, uint16
 #line 76
 }
 #line 76
-# 144 "lib/modules/AppP.nc"
+# 159 "lib/modules/AppP.nc"
 static inline void AppP__Transport__connectDone(socket_t fd)
-#line 144
+#line 159
 {
   uint8_t idx = 0;
   uint8_t size = 6 + AppP__username_len[sim_node()] + 2;
@@ -11278,9 +11290,9 @@ static inline void Node__Transport__accepted(socket_t fd, uint8_t id)
 {
 }
 
-# 309 "lib/modules/AppP.nc"
+# 346 "lib/modules/AppP.nc"
 static inline void AppP__Transport__accepted(socket_t fd, uint8_t id)
-#line 309
+#line 346
 {
   AppP__users[sim_node()][id - 1].accept = TRUE;
   AppP__users[sim_node()][id - 1].fd = fd;
@@ -11577,16 +11589,16 @@ inline static error_t AppP__Transport__initClientAndConnect(uint8_t dest, uint8_
 #line 22
 }
 #line 22
-# 278 "lib/modules/AppP.nc"
+# 315 "lib/modules/AppP.nc"
 static inline void AppP__Transport__getGreet(tcpPkt_t *incomingMsg, uint8_t from, uint8_t len)
-#line 278
+#line 315
 {
   tcpPkt_t tcp_pkt;
   uint8_t i = 0;
   uint8_t size = len - TCP_HEADER_LENDTH;
   uint8_t port;
 
-#line 283
+#line 320
   size = size - (6 + 2);
   memcpy(&tcp_pkt, incomingMsg, len);
 
@@ -12606,11 +12618,35 @@ inline static error_t CommandHandlerP__Pool__put(CommandHandlerP__Pool__t * newV
 #line 89
 }
 #line 89
+# 133 "lib/modules/AppP.nc"
+static inline void AppP__App__printUsers(void )
+#line 133
+{
+  uint8_t idx = 0;
+  uint8_t size = 7 + 2;
+  uint8_t data[size];
+
+  memcpy(data + idx, "listusr", 7);
+  idx += 7;
+
+  memcpy(data + idx, "\r\n", 2);
+  idx += 2;
+
+  AppP__Transport__write(AppP__local_fd[sim_node()], data, idx);
+}
+
+# 5 "lib/interfaces/App.nc"
+inline static void Node__App__printUsers(void ){
+#line 5
+  AppP__App__printUsers();
+#line 5
+}
+#line 5
 # 133 "Node.nc"
 static inline void Node__CommandHandler__printAllUsers(void )
 #line 133
 {
-  printf("client = %d, print all users\n", TOS_NODE_ID);
+  Node__App__printUsers();
 }
 
 # 16 "lib/interfaces/CommandHandler.nc"
@@ -12620,9 +12656,9 @@ inline static void CommandHandlerP__CommandHandler__printAllUsers(void ){
 #line 16
 }
 #line 16
-# 108 "lib/modules/AppP.nc"
+# 111 "lib/modules/AppP.nc"
 static inline void AppP__App__unicastMsg(uint8_t *username, uint8_t len_username, uint8_t *payload, uint8_t legnth)
-#line 108
+#line 111
 {
   uint8_t idx = 0;
   uint8_t size = 8 + len_username + legnth + 2 + 2;
@@ -12670,12 +12706,12 @@ inline static void CommandHandlerP__CommandHandler__unicastMessage(uint8_t len_u
 #line 15
 }
 #line 15
-# 91 "lib/modules/AppP.nc"
+# 94 "lib/modules/AppP.nc"
 static inline void AppP__App__broadcastMsg(uint8_t *payload, uint8_t legnth)
-#line 91
+#line 94
 {
   uint8_t idx = 0;
-  uint8_t size = 7 + 2;
+  uint8_t size = 4 + 2;
   uint8_t data[size];
 
   memcpy(data + idx, "msg ", 4);
@@ -12725,9 +12761,9 @@ inline static void AppP__GreetQueue__pushback(AppP__GreetQueue__t input){
 #line 17
 }
 #line 17
-# 132 "lib/modules/AppP.nc"
+# 147 "lib/modules/AppP.nc"
 static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t *payload, uint8_t length)
-#line 132
+#line 147
 {
   Package->srcPort = srcPort;
   Package->destPort = destPort;
@@ -12738,9 +12774,9 @@ static inline void AppP__makeTCPPkt(tcpPkt_t *Package, uint8_t srcPort, uint8_t 
   memcpy(Package->payload, payload, length);
 }
 
-#line 46
+#line 48
 static inline void AppP__App__helloClient(uint8_t dest, uint8_t port, uint8_t *username, uint8_t length)
-#line 46
+#line 48
 {
   storedPkt_t store;
   tcpPkt_t tcp_pkt;
@@ -12751,6 +12787,7 @@ static inline void AppP__App__helloClient(uint8_t dest, uint8_t port, uint8_t *u
   uint8_t p_len = 0;
 
   memcpy(AppP__users[sim_node()][dest - 1].username, username, length);
+  AppP__users[sim_node()][dest - 1].length = length;
 
   memcpy(payload + idx, "hello ", 6);
   idx += 6;
@@ -14510,9 +14547,33 @@ static inline void Node__Transport__hasData(socket_t fd, uint8_t from, uint8_t l
 {
 }
 
-# 226 "lib/modules/AppP.nc"
+# 282 "lib/modules/AppP.nc"
+static inline void AppP__replyAllUsers(socket_t fd)
+#line 282
+{
+  uint8_t data[100];
+  uint8_t idx = 0;
+  uint8_t i = 0;
+
+  memcpy(data, "listusrRply ", 12);
+  idx += 12;
+
+  for (; i < AppP__MAX_NUM_USERS; i++) {
+      if (AppP__users[sim_node()][i].accept) {
+          memcpy(data + idx, AppP__users[sim_node()][i].username, AppP__users[sim_node()][i].length);
+          idx += AppP__users[sim_node()][i].length;
+          data[idx++] = ' ';
+        }
+    }
+  idx--;
+  memcpy(data + idx, "\r\n", 2);
+  idx += 2;
+  AppP__Transport__write(fd, data, idx);
+}
+
+#line 242
 static inline void AppP__unicast(uint8_t *message, uint8_t length)
-#line 226
+#line 242
 {
   uint8_t i = 0;
   uint8_t j = 0;
@@ -14553,9 +14614,9 @@ static inline void AppP__unicast(uint8_t *message, uint8_t length)
   printf("whisper to unknown user %s\n", send_name);
 }
 
-#line 206
+#line 222
 static inline void AppP__broadcast(uint8_t *message, uint8_t length)
-#line 206
+#line 222
 {
   uint8_t size = length + 2;
   uint8_t content[size];
@@ -14610,9 +14671,9 @@ inline static uint16_t AppP__Transport__read(socket_t fd, uint8_t *buff, uint16_
 #line 103
 }
 #line 103
-# 163 "lib/modules/AppP.nc"
+# 178 "lib/modules/AppP.nc"
 static inline void AppP__Transport__hasData(socket_t fd, uint8_t from, uint8_t len)
-#line 163
+#line 178
 {
   uint8_t i = 0;
   uint8_t temp[len + 1];
@@ -14621,7 +14682,7 @@ static inline void AppP__Transport__hasData(socket_t fd, uint8_t from, uint8_t l
   uint8_t keyword_len;
   uint8_t content_len;
 
-#line 170
+#line 185
   size = size - 2;
 
   while (i < size) {
@@ -14640,7 +14701,7 @@ static inline void AppP__Transport__hasData(socket_t fd, uint8_t from, uint8_t l
       printf("Server (%d) get message from user (%s), payload = %s\n", TOS_NODE_ID, AppP__users[sim_node()][from - 1].username, temp);
     }
   else 
-#line 186
+#line 201
     {
       printf("User (%s, node %d) get message from Server (%d), payload = %s\n", AppP__name[sim_node()], TOS_NODE_ID, AppP__SERVER_ID, temp);
     }
@@ -14654,7 +14715,8 @@ static inline void AppP__Transport__hasData(socket_t fd, uint8_t from, uint8_t l
             AppP__unicast(content, content_len);
           break;
           case 7: 
-            break;
+            AppP__replyAllUsers(fd);
+          break;
           default: 
             return;
         }
@@ -16567,13 +16629,13 @@ inline static uint16_t AppP__GreetQueue__size(void ){
 #line 24
 }
 #line 24
-# 266 "lib/modules/AppP.nc"
+# 303 "lib/modules/AppP.nc"
 static inline void AppP__GreetTimer__fired(void )
-#line 266
+#line 303
 {
   storedPkt_t store;
 
-#line 268
+#line 305
   if (AppP__GreetQueue__size() > 0) {
       store = AppP__GreetQueue__popfront();
       if (! AppP__users[sim_node()][store.dest - 1].accept) {
@@ -16590,9 +16652,9 @@ static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 }
 
 # 83 "/opt/tinyos-main/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa5b7950){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x7ffffa5b8950){
 #line 83
-  switch (arg_0x7ffffa5b7950) {
+  switch (arg_0x7ffffa5b8950) {
 #line 83
     case 0U:
 #line 83
@@ -16680,7 +16742,7 @@ inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 #line 83
     default:
 #line 83
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa5b7950);
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x7ffffa5b8950);
 #line 83
       break;
 #line 83
@@ -20413,9 +20475,9 @@ static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(ui
 }
 
 # 100 "/opt/tinyos-main/tos/interfaces/Send.nc"
-static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa505940, message_t * msg, error_t error){
+static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg_0x7ffffa506940, message_t * msg, error_t error){
 #line 100
-  switch (arg_0x7ffffa505940) {
+  switch (arg_0x7ffffa506940) {
 #line 100
     case 0U:
 #line 100
@@ -20443,7 +20505,7 @@ static void /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__sendDone(uint8_t arg
 #line 100
     default:
 #line 100
-      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa505940, msg, error);
+      /*AMQueueP.AMQueueImplP*/AMQueueImplP__0__Send__default__sendDone(arg_0x7ffffa506940, msg, error);
 #line 100
       break;
 #line 100

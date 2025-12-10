@@ -9,8 +9,9 @@ enum{
 
 typedef struct userInfo{
     socket_t fd;
-    uint8_t username[MAX_USERNAME_LENTH];
     bool accept;
+    uint8_t length;
+    uint8_t username[MAX_USERNAME_LENTH];
 }userInfo_t;
 
 #endif

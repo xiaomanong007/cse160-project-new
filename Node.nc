@@ -131,7 +131,7 @@ implementation{
    }
 
    event void CommandHandler.printAllUsers() {
-      printf("client = %d, print all users\n", TOS_NODE_ID);
+      call App.printUsers();
    }
 
    // PacketHandler events
