@@ -176,13 +176,12 @@ implementation {
     // not finish
     command error_t Transport.receive(pack* package) {}
 
-    // not finish
     command uint16_t Transport.read(socket_t fd, uint8_t *buff, uint16_t bufflen) {
         uint16_t i;
         uint16_t readBytes;
         uint8_t distance = (socketArray[fd].lastRcvd - socketArray[fd].lastRead);
 
-        distance = distance % 128;
+        distance = distance % SOCKET_BUFFER_SIZE;
         readBytes = (distance <= bufflen) ? distance : bufflen;
 
         for (i = 0; i < readBytes; i++) {

@@ -29,7 +29,7 @@ def main():
     # s.addChannel(s.NEIGHBOR_CHANNEL);
     # s.addChannel(s.FLOODING_CHANNEL);
     # s.addChannel(s.ROUTING_CHANNEL);
-    s.addChannel(s.TRANSPORT_CHANNEL);
+    # s.addChannel(s.TRANSPORT_CHANNEL);m
 
     # After sending a ping, simulate a little to prevent collision.
     s.runTime(300);
@@ -50,23 +50,28 @@ def main():
     s.runTime(2);
 
     s.greet(1, 7, 22, 4, "jack");
-    s.runTime(10);
-
-    s.greet(1, 5, 17, 3, "leo");
-    s.runTime(10);
-
-    s.runTime(60);
-
-    s.broadcastMsg(7, 11, "hello world");
     s.runTime(20);
 
-    # s.unicastMsg(7, 4, "jack", 5, "hello");
-    # s.runTime(2);
+    s.greet(1, 4, 17, 3, "leo");
+    s.runTime(20);
 
-    # s.printAllUser(8);
-    # s.runTime(2);
+    s.greet(1, 8, 33, 4, "mike");
+    s.runTime(20);
 
-    s.runTime(300);
+    s.runTime(80);
+
+    # s.broadcastMsg(7, 11, "hello world");
+    # s.runTime(20);
+
+    # s.unicastMsg(7, 4, "mike", 11, "how are you");
+    # s.unicastMsg(7, 4, "mike", 5, "OH NO");
+    # s.runTime(20);
+
+    s.printAllUser(7);
+    s.runTime(2);
+
+    s.runTime(120);
+
 
 if __name__ == '__main__':
     main()

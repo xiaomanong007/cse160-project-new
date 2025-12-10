@@ -41,6 +41,8 @@ implementation {
 
     void broadcast(uint8_t* message, uint8_t length);
 
+    void unicast(uint8_t* message, uint8_t length);
+
     command void App.helloClient(uint8_t dest, uint8_t port, uint8_t* username, uint8_t length) {
         storedPkt_t store;
         tcpPkt_t tcp_pkt;
@@ -88,7 +90,7 @@ implementation {
 
     command void App.broadcastMsg(uint8_t* payload, uint8_t legnth) {
         uint8_t idx = 0;
-        uint8_t size = MSG_LEN + legnth + END_LEN + 1;
+        uint8_t size = LIST_LEN + END_LEN;
         uint8_t data[size];
 
         memcpy(data + idx, "msg ", MSG_LEN);
@@ -104,12 +106,28 @@ implementation {
     }
 
     command void App.unicastMsg(uint8_t* username, uint8_t len_username, uint8_t* payload, uint8_t legnth) {
-        username_len = len_username;
-        memcpy(name, username, len_username);
-        printf("client = %d, len_user = %d, username = %s, len = %d, msg = %s\n", TOS_NODE_ID, len_username, name, legnth, payload);
+        uint8_t idx = 0;
+        uint8_t size = WHISPER_LEN + len_username + legnth + END_LEN + 2;
+        uint8_t data[size];
+
+        memcpy(data + idx, "whisper ", WHISPER_LEN);
+        idx += WHISPER_LEN;
+
+        memcpy(data + idx, username, len_username);
+        idx += len_username;
+
+        data[idx++] = ' ';
+
+        memcpy(data + idx, payload, legnth);
+        idx += legnth;
+
+        memcpy(data + idx, "\r\n", END_LEN);
+        idx += END_LEN;
+
+        call Transport.write(local_fd, data, idx);
     }
 
-    command void App.printUsers() {}
+    command void App.printUsers() { }
 
     void makeTCPPkt(tcpPkt_t* Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t* payload, uint8_t length) {
         Package->srcPort = srcPort;
@@ -144,7 +162,7 @@ implementation {
 
     event void Transport.hasData(socket_t fd, uint8_t from, uint8_t len) {
         uint8_t i = 0;
-        uint8_t temp[len];
+        uint8_t temp[len + 1];
         uint16_t size = call Transport.read(fd, temp, len);
         uint8_t content[size - END_LEN];
         uint8_t keyword_len;
@@ -161,6 +179,7 @@ implementation {
         keyword_len = i;
         content_len = size - i;
         memcpy(content, temp + i, size - i);
+        temp[size + 1] = '\0';
 
         if (TOS_NODE_ID == SERVER_ID) {
             printf("Server (%d) get message from user (%s), payload = %s\n", TOS_NODE_ID, users[from - 1].username, temp);
@@ -174,6 +193,7 @@ implementation {
                     broadcast(content, content_len);
                     break;
                 case WHISPER_LEN:
+                    unicast(content, content_len);
                     break;
                 case LIST_LEN:
                     break;
@@ -201,6 +221,46 @@ implementation {
                 printf("send to node %d\n", i + 1);
             }
         }
+    }
+
+    void unicast(uint8_t* message, uint8_t length) {
+        uint8_t i = 0;
+        uint8_t j = 0;
+        uint8_t k = 0;
+        uint8_t content_len;
+        uint8_t name_len;
+        uint8_t content[20];
+        uint8_t send_name[MAX_USERNAME_LENTH];
+
+        while(i < length) {
+            if (*(message + i) == ' ') {
+                i++;
+                break;
+            }
+            i++;
+        }
+        name_len = i - 1;
+        memcpy(send_name, message, name_len);
+        send_name[name_len] = '\0';
+        content_len = length - i;
+        memcpy(content, message + i, content_len);
+
+        for (; j < MAX_NUM_USERS; j++) {
+            if (users[j].accept) {
+                for (k = 0; k < name_len; k++) {
+                    if (users[j].username[k] != send_name[k]) {
+                        break;
+                    }
+                }
+                if (k == name_len) {
+                    memcpy(content + content_len, "\r\n", END_LEN);
+                    printf("send to node %d\n", j + 1);
+                    call Transport.write(users[j].fd, content, content_len + END_LEN);
+                    return;
+                }
+            }
+        }
+        printf("whisper to unknown user %s\n", send_name);
     }
 
     event void GreetTimer.fired() {
