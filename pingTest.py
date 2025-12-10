@@ -15,8 +15,8 @@ def main():
 
 
     # Add a noise model to all of the motes.
-    s.loadNoise("no_noise.txt");
-    # s.loadNoise("some_noise.txt");
+    # s.loadNoise("no_noise.txt");
+    s.loadNoise("some_noise.txt");
     # s.loadNoise("meyer-heavy.txt");
 
 
@@ -47,13 +47,18 @@ def main():
     # s.runTime(1);
 
     s.cmdTestServer(1, 41);
-    s.runTime(10);
+    s.runTime(2);
 
     s.greet(1, 7, 22, 4, "jack");
     s.runTime(10);
 
+    s.greet(1, 5, 17, 3, "leo");
+    s.runTime(10);
+
+    s.runTime(60);
+
     s.broadcastMsg(7, 11, "hello world");
-    s.runTime(2);
+    s.runTime(20);
 
     # s.unicastMsg(7, 4, "jack", 5, "hello");
     # s.runTime(2);

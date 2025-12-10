@@ -6,6 +6,8 @@
 #define HELLO_LEN 6
 #define END_LEN 2
 #define MSG_LEN 4
+#define WHISPER_LEN 8
+#define LIST_LEN 7
 
 module AppP{
     provides {
@@ -15,6 +17,8 @@ module AppP{
     uses {
         interface Transport;
         interface IP;
+        interface List<storedPkt_t> as GreetQueue;
+        interface Timer<TMilli> as GreetTimer;
     }
 }
 
@@ -24,25 +28,21 @@ implementation {
         SERVER_PORT = 41,
 
         MAX_NUM_USERS = 25,
-
-        WHISPER_LEN = 8,
-        LIST_LEN = 7,
     };
 
-    socket_t local_fd;
+    socket_t local_fd = 255;
 
     userInfo_t users[MAX_NUM_USERS];
 
     uint8_t name[MAX_USERNAME_LENTH];
     uint8_t username_len = 0;
 
-    char msg[MSG_LEN] = "msg ";
-    char whisper[WHISPER_LEN] = "whisper ";
-    char listusr[LIST_LEN] = "listusr";
-
     void makeTCPPkt(tcpPkt_t* Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t* payload, uint8_t length);
 
+    void broadcast(uint8_t* message, uint8_t length);
+
     command void App.helloClient(uint8_t dest, uint8_t port, uint8_t* username, uint8_t length) {
+        storedPkt_t store;
         tcpPkt_t tcp_pkt;
         uint8_t payload[HELLO_LEN + MAX_USERNAME_LENTH + 3 + END_LEN];
         uint8_t idx = 0;
@@ -77,12 +77,18 @@ implementation {
         idx += END_LEN;
 
         makeTCPPkt(&tcp_pkt, SERVER_PORT, port, 0, 0, GREET, 0, (uint8_t *)&payload, idx);
+        store.dest = dest;
+        store.TTL = 50;
+        store.length = TCP_HEADER_LENDTH + idx;
+        memcpy(&store.pkt, &tcp_pkt, store.length);
+        call GreetQueue.pushback(store);
         call IP.send(dest, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH + idx);
+        call GreetTimer.startOneShot(2 * call IP.estimateRTT(dest));
     }
 
     command void App.broadcastMsg(uint8_t* payload, uint8_t legnth) {
         uint8_t idx = 0;
-        uint8_t size = MSG_LEN + legnth + END_LEN;
+        uint8_t size = MSG_LEN + legnth + END_LEN + 1;
         uint8_t data[size];
 
         memcpy(data + idx, "msg ", MSG_LEN);
@@ -136,32 +142,76 @@ implementation {
         call Transport.write(fd, data, idx);
     }
 
-    event void Transport.hasData(socket_t fd, uint8_t from) {
+    event void Transport.hasData(socket_t fd, uint8_t from, uint8_t len) {
         uint8_t i = 0;
-        uint8_t temp[40];
-        uint8_t content[30];
-        uint16_t size;
+        uint8_t temp[len];
+        uint16_t size = call Transport.read(fd, temp, len);
+        uint8_t content[size - END_LEN];
         uint8_t keyword_len;
         uint8_t content_len;
-        size = call Transport.read(fd, temp, 40);
         size = size - END_LEN;
 
-        printf("size = %d\n", size);
         while(i < size) {
             if (temp[i] == ' ') {
-                keyword_len = i;
                 i++;
                 break;
             }
             i++;
         }
+        keyword_len = i;
         content_len = size - i;
         memcpy(content, temp + i, size - i);
 
         if (TOS_NODE_ID == SERVER_ID) {
             printf("Server (%d) get message from user (%s), payload = %s\n", TOS_NODE_ID, users[from - 1].username, temp);
         } else {
-            printf("User (%s) get message from Server (%d), payload = %s\n", name, SERVER_ID, temp);
+            printf("User (%s, node %d) get message from Server (%d), payload = %s\n", name, TOS_NODE_ID, SERVER_ID, temp);
+        }
+
+        if (TOS_NODE_ID == SERVER_ID) {
+            switch(keyword_len) {
+                case MSG_LEN:
+                    broadcast(content, content_len);
+                    break;
+                case WHISPER_LEN:
+                    break;
+                case LIST_LEN:
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
+    void broadcast(uint8_t* message, uint8_t length) {
+        uint8_t size = length + END_LEN;
+        uint8_t content[size];
+        uint8_t idx = 0;
+        uint8_t i = 0;
+
+        memcpy(content + idx, message, length);
+        idx += length;
+
+        memcpy(content + idx, "\r\n", END_LEN);
+        idx += END_LEN;
+
+        for (; i < MAX_NUM_USERS; i++) {
+            if (users[i].accept) {
+                call Transport.write(users[i].fd, content, idx);
+                printf("send to node %d\n", i + 1);
+            }
+        }
+    }
+
+    event void GreetTimer.fired() {
+        storedPkt_t store;
+        if (call GreetQueue.size() > 0) {
+            store = call GreetQueue.popfront();
+            if (!users[store.dest - 1].accept) {
+                call GreetQueue.pushback(store);
+                call IP.send(store.dest, PROTOCOL_TCP, store.TTL, (uint8_t *)&store.pkt, store.length);
+                call GreetTimer.startOneShot(2 * call IP.estimateRTT(store.dest));
+            }
         }
     }
 
@@ -172,6 +222,10 @@ implementation {
         uint8_t port;
         size = size - (HELLO_LEN + END_LEN);
         memcpy(&tcp_pkt, incomingMsg, len);
+
+        if (username_len != 0) {
+            return;
+        }
 
         printf("Client (%d) get greet from Server (%d), payload = %s", TOS_NODE_ID, from, tcp_pkt.payload);
         while(i < size) {

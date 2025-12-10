@@ -54,7 +54,7 @@ implementation {
 
     void receiveFIN(tcpPkt_t* payload, uint8_t from);
 
-    void printClientBuffer(socket_t fd);
+    void printBufferInfo(socket_t fd);
 
     void printArray(uint8_t* arr, uint8_t legnth);
 
@@ -335,6 +335,9 @@ implementation {
                 reSend[fd] = FALSE;
                 socketArray[fd].type = TYPICAL;
                 socketArray[fd].pending_seq = payload->seq - 1;
+                socketArray[fd].lastWritten = call Random.rand16() % 127;
+                socketArray[fd].lastSent = socketArray[fd].lastWritten;
+                socketArray[fd].lastAck = socketArray[fd].lastWritten;
                 call AcceptSockets.pushback(from);
                 signal Transport.accepted(fd, from);
                 dbg(TRANSPORT_CHANNEL, "Node %d establish connection with Node %d\n", TOS_NODE_ID, from);
@@ -390,7 +393,6 @@ implementation {
 
         if (tcp_pkt->ack_num == socketArray[fd].ISN + 1) {
             socketArray[fd].ISN = socketArray[fd].ISN + 1;
-            socketArray[fd].pending_seq = tcp_pkt->seq;
             socketArray[fd].nextExpected = (tcp_pkt->seq + 1) % SOCKET_BUFFER_SIZE;
 
             for (i = 0; i < size; i++) {
@@ -398,11 +400,14 @@ implementation {
                 socketArray[fd].lastRcvd = (socketArray[fd].lastRcvd + 1) % 128;
                 pos = socketArray[fd].lastRcvd - 2;
                 pos = pos % SOCKET_BUFFER_SIZE;
-                if (socketArray[fd].rcvdBuff[socketArray[fd].lastRcvd - 1] == '\n' && socketArray[fd].rcvdBuff[pos] == '\r') {
-                    distance = socketArray[fd].lastRcvd - socketArray[fd].lastRead;
-                    distance = distance % SOCKET_BUFFER_SIZE;
-                    printf("d = %d\n", distance);
-                    signal Transport.hasData(fd, r_pkt.from);
+                if (socketArray[fd].rcvdBuff[pos] == '\r') {
+                    pos = pos + 1;
+                    pos = pos % SOCKET_BUFFER_SIZE;
+                    if (socketArray[fd].rcvdBuff[pos] == '\n') {
+                        distance = socketArray[fd].lastRcvd - socketArray[fd].lastRead;
+                        distance = distance % SOCKET_BUFFER_SIZE;
+                        signal Transport.hasData(fd, r_pkt.from, distance);
+                    }
                 }
             }
         }
@@ -506,8 +511,9 @@ implementation {
         call ReSendQueue.pushback(resend_info);
     }
 
-    void printClientBuffer(socket_t fd) {
-        printf("Node %d CLIENT (fd = %d): lastSent = %d, lastACK = %d, pending seq = %d\n", TOS_NODE_ID, fd, socketArray[fd].lastSent, socketArray[fd].lastAck,socketArray[fd].pending_seq);
+    void printBufferInfo(socket_t fd) {
+        printf("Node %d (fd = %d): ISN = %d, lastSent = %d, lastACK = %d, pending seq = %d, lastRcvd = %d, lastRead = %d, nextExpect = %d\n", 
+        TOS_NODE_ID, fd, socketArray[fd].ISN, socketArray[fd].lastSent, socketArray[fd].lastAck,socketArray[fd].pending_seq, socketArray[fd].lastRcvd, socketArray[fd].lastRead, socketArray[fd].nextExpected);
     }
 
     void printArray(uint8_t* arr, uint8_t legnth) {
