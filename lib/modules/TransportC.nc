@@ -47,4 +47,7 @@ implementation {
 
     components new ListC(socket_t, 10) as CloseQueue;
     TransportP.CloseQueue -> CloseQueue;
+
+    components new TimerMilliC() as LocalTimer;
+    TransportP.LocalTimer -> LocalTimer;
 }

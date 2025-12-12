@@ -25,6 +25,8 @@ module TransportP {
         interface List<socket_t> as InitSendQueue;
         interface Timer<TMilli> as CloseTimer;
         interface List<socket_t> as CloseQueue;
+
+        interface Timer<TMilli> as LocalTimer;
     }
 }
 
@@ -63,6 +65,8 @@ implementation {
     void reSendData(socket_t fd);
 
     void update(socket_t fd, uint8_t ack_num, uint8_t seq);
+
+    void scheduleResend(socket_t fd);
 
     task void closeTask();
 
@@ -546,6 +550,7 @@ implementation {
                 makeTCPPkt(&tcp_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].lastSent, socketArray[fd].pending_seq + (i + 1), DATA, socketArray[fd].effectiveWindow, (uint8_t*)&temp, dataSize);
                 call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
                 if (i == k - 1 && r == 0) {
+                    scheduleResend(fd);
                     call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
                     return;
                 }
@@ -581,6 +586,7 @@ implementation {
                     call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
                 }
                 if (i == k - 1 && r == 0) {
+                    scheduleResend(fd);
                     call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
                     return;
                 }
@@ -592,6 +598,7 @@ implementation {
             call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH + r);
         }
         k++;
+        scheduleResend(fd);
         call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
     }
 
@@ -640,7 +647,7 @@ implementation {
         reSendTCP_t resend;
 
         if (socketArray[fd].remain == 0 && socketArray[fd].state == ESTABLISHED) {
-            // call Transport.close(fd);
+            socketArray[fd].isResend = FALSE;            
             return;
         }
 
@@ -660,6 +667,7 @@ implementation {
                 call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, MAX_PAYLOAD);
                 
                 if (i == k - 1 && r == 0) {
+                    scheduleResend(fd);
                     call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
                     return;
                 }
@@ -698,6 +706,7 @@ implementation {
                 }
 
                 if (i == k - 1 && r == 0) {
+                    scheduleResend(fd);
                     call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
                     return;
                 }
@@ -707,7 +716,15 @@ implementation {
             call IP.send(dest.addr, PROTOCOL_TCP, 50, (uint8_t*)&tcp_pkt, TCP_HEADER_LENDTH + r);
         }
         k++;
+        scheduleResend(fd);
         call ReSendDataTimer.startOneShot(2 * socketArray[fd].RTT);
+    }
+
+
+    void scheduleResend(socket_t fd) {
+        uint32_t now = call LocalTimer.getNow();
+        socketArray[fd].resendTime = now + 2 * socketArray[fd].RTT;
+        socketArray[fd].isResend = TRUE;
     }
 
     task void closeTask() {
@@ -734,9 +751,18 @@ implementation {
         }
     }
 
+    event void LocalTimer.fired() { }
+
     event void ReSendDataTimer.fired() {
-        reSendTCP_t resend_info = call ReSendDataQueue.popfront();
-        reSendData(resend_info.fd);
+        // reSendTCP_t resend_info = call ReSendDataQueue.popfront();
+        // reSendData(resend_info.fd);
+        uint32_t now = call LocalTimer.getNow();
+        uint8_t i;
+        for (i = 0; i < MAX_NUM_OF_SOCKETS; i++) {
+            if (socketArray[i].isResend && socketArray[i].resendTime <= now) {
+                reSendData(i);
+            }
+        }
     }
 
     event void InitSendTimer.fired() {
@@ -747,6 +773,8 @@ implementation {
     event void CloseTimer.fired() {
         post closeTask();
     }
+
+    
 
 
     event void IP.gotTCP(uint8_t* incomingMsg, uint8_t from, uint8_t len) {

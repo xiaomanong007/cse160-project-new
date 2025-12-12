@@ -67,6 +67,10 @@ typedef struct socket_store_t{
 
     uint16_t RTT;
     uint8_t effectiveWindow;
+
+    bool isResend;
+    uint32_t resendTime;
+    
 }socket_store_t;
 
 #endif

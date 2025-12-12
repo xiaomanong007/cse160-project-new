@@ -104,8 +104,7 @@ implementation {
 
         memcpy(data + idx, "\r\n", END_LEN);
         idx += END_LEN;
-        printf("%s", data);
-
+        
         call Transport.write(local_fd, data, idx);
     }
 
