@@ -359,6 +359,7 @@ implementation {
                 call SocketTable.remove(from);
                 call FDQueue.pushback(fd);
                 dbg(TRANSPORT_CHANNEL, "Server (node %d port %d) close connection with Client (node %d port %d)\n", self_addr->addr, self_addr->port, dest_addr->addr, dest_addr->port);
+                signal Transport.closeConnect(fd);
                 return;
             case ESTABLISHED:
                 update(fd, payload->ack_num, payload->seq);
@@ -718,6 +719,7 @@ implementation {
         call FDQueue.pushback(fd);
         call SocketTable.remove(dest_addr->addr);
         dbg(TRANSPORT_CHANNEL, "Client (node %d : port %d) close connection with Server (node %d : port %d)\n", self_addr->addr, self_addr->port, dest_addr->addr, dest_addr->port);
+        signal Transport.closeConnect(fd);
     }
 
     event void ReSendTimer.fired() {

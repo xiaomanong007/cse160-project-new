@@ -166,4 +166,6 @@ implementation{
    event void Transport.getGreet(tcpPkt_t* incomingMsg, uint8_t from, uint8_t len) {}
 
    event void Transport.accepted(socket_t fd, uint8_t id) {}
+
+   event void Transport.closeConnect(socket_t fd) {}
 }

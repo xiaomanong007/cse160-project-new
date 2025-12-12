@@ -156,4 +156,6 @@ interface Transport{
    event void getGreet(tcpPkt_t* incomingMsg, uint8_t from, uint8_t len);
 
    event void accepted(socket_t fd, uint8_t id);
+
+   event void closeConnect(socket_t fd);
 }

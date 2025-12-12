@@ -355,4 +355,18 @@ implementation {
         users[id - 1].accept = TRUE;
         users[id - 1].fd = fd;
     }
+
+    event void Transport.closeConnect(socket_t fd) {
+        uint8_t i;
+        if (TOS_NODE_ID != SERVER_ID) {
+            local_fd = 255;
+        } else {
+            for (i = 0; i < MAX_NUM_USERS; i++) {
+                if (users[i].fd == fd) {
+                    users[i].fd = 255;
+                    users[i].accept = FALSE;
+                }
+            }
+        }
+    }
 }

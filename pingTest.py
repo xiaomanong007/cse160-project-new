@@ -72,9 +72,13 @@ def main():
 
     s.runTime(60);
 
-    s.closeClient(7)
+    # s.closeClient(4);
+    # s.runTime(60);
 
-    s.runTime(20);
+    s.printAllUser(7);
+    s.runTime(60);
+
+    s.runTime(60);
 
 if __name__ == '__main__':
     main()
