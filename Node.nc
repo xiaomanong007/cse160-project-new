@@ -117,21 +117,31 @@ implementation{
    event void CommandHandler.setAppClient(){}
 
    event void CommandHandler.greet(uint8_t dest, uint8_t port, uint8_t length, uint8_t* username) {
-      call App.helloClient(dest, port, username, length);
+      uint8_t name[length];
+      memcpy(name, username, length);
+      call App.helloClient(dest, port, name, length);
    }
 
    event void CommandHandler.broadcastMessage(uint8_t legnth, uint8_t* payload) {
-      call App.broadcastMsg(payload, legnth);
+      uint8_t data[legnth];
+      memcpy(data, payload, legnth);
+      call App.broadcastMsg(data, legnth);
    }
 
    event void CommandHandler.unicastMessage(uint8_t len_username ,uint8_t* username, uint8_t legnth, uint8_t* payload) {
-      char name[len_username];
+      uint8_t name[len_username];
+      uint8_t data[legnth];
+      memcpy(data, payload, legnth);
       memcpy(name, username, len_username);
-      call App.unicastMsg((uint8_t*)&name, len_username, payload, legnth);
+      call App.unicastMsg(name, len_username, data, legnth);
    }
 
    event void CommandHandler.printAllUsers() {
       call App.printUsers();
+   }
+
+   event void CommandHandler.closeConnection() {
+      call App.close();
    }
 
    // PacketHandler events

@@ -19,6 +19,7 @@ class TestSim:
     CMD_BROAD_MSG = 11
     CMD_UNICAST_MSG = 12
     CMD_PRINT_CLIENTS = 13
+    CMD_CLOSE = 14
 
     # CHANNELS - see includes/channels.h
     COMMAND_CHANNEL="command";
@@ -162,6 +163,9 @@ class TestSim:
 
     def printAllUser(self, client_address):
         self.sendCMD(self.CMD_PRINT_CLIENTS, client_address, "print command");
+    
+    def closeClient(self, client_address):
+        self.sendCMD(self.CMD_CLOSE, client_address, "close command");
 
 def main():
     s = TestSim();

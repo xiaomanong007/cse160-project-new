@@ -3,4 +3,5 @@ interface App {
     command void broadcastMsg(uint8_t* payload, uint8_t legnth);
     command void unicastMsg(uint8_t* username, uint8_t len_username, uint8_t* payload, uint8_t legnth);
     command void printUsers();
+    command void close();
 }

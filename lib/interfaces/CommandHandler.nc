@@ -14,4 +14,5 @@ interface CommandHandler{
    event void broadcastMessage(uint8_t legnth, uint8_t* payload);
    event void unicastMessage(uint8_t len_username ,uint8_t* username, uint8_t legnth, uint8_t* payload);
    event void printAllUsers();
+   event void closeConnection();
 }

@@ -23,6 +23,7 @@ enum{
 	CMD_BROAD_MSG = 11,
 	CMD_UNICAST_MSG = 12,
 	CMD_PRINT_CLIENTS = 13,
+	CMD_CLOSE = 14,
 };
 
 enum{

@@ -60,19 +60,21 @@ def main():
 
     s.runTime(80);
 
-    # s.broadcastMsg(7, 11, "hello world");
-    # s.runTime(20);
+    s.broadcastMsg(7, 11, "hello world");
+    s.runTime(20);
 
     # s.unicastMsg(7, 4, "mike", 11, "how are you");
-    # s.unicastMsg(7, 3, "leo", 5, "OH NO");
-    # s.runTime(20);
+    s.unicastMsg(7, 3, "leo", 5, "OH NO");
+    s.runTime(20);
 
-    s.printAllUser(7);
-    s.runTime(2);
+    # s.printAllUser(7);
+    # s.runTime(2);
 
-    s.runTime(120);
+    s.runTime(60);
 
+    s.closeClient(7)
 
+    s.runTime(20);
 
 if __name__ == '__main__':
     main()

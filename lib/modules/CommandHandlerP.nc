@@ -98,6 +98,11 @@ implementation{
                 signal CommandHandler.printAllUsers();
                 break;
 
+            case CMD_CLOSE:
+                dbg(COMMAND_CHANNEL, "Command Type: CLOSE\n");
+                signal CommandHandler.closeConnection();
+                break;
+
             default:
                 dbg(COMMAND_CHANNEL, "CMD_ERROR: \"%d\" does not match any known commands.\n", msg->id);
                 break;

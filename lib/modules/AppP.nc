@@ -93,17 +93,18 @@ implementation {
 
     command void App.broadcastMsg(uint8_t* payload, uint8_t legnth) {
         uint8_t idx = 0;
-        uint8_t size = MSG_LEN + END_LEN;
+        uint8_t size = MSG_LEN + legnth + END_LEN;
         uint8_t data[size];
 
         memcpy(data + idx, "msg ", MSG_LEN);
         idx += MSG_LEN;
 
         memcpy(data + idx, payload, legnth);
-        idx += (legnth + 1);
+        idx += legnth;
 
         memcpy(data + idx, "\r\n", END_LEN);
         idx += END_LEN;
+        printf("%s", data);
 
         call Transport.write(local_fd, data, idx);
     }
@@ -142,6 +143,13 @@ implementation {
         idx += END_LEN;
 
         call Transport.write(local_fd, data, idx);
+    }
+
+    command void App.close() {
+        if (local_fd != 255) {
+            call Transport.close(local_fd);
+
+        }
     }
 
     void makeTCPPkt(tcpPkt_t* Package, uint8_t srcPort, uint8_t destPort, uint8_t seq, uint8_t ack_num, uint8_t flag, uint8_t ad_window, uint8_t* payload, uint8_t length) {

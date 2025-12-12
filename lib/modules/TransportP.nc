@@ -150,18 +150,17 @@ implementation {
     command socket_t Transport.accept(socket_t fd) {}
 
     command uint16_t Transport.write(socket_t fd, uint8_t *buff, uint16_t bufflen) {
-        uint16_t writtenBytes = (bufflen <= SOCKET_BUFFER_SIZE) ? bufflen : socketArray[fd].effectiveWindow;
+        uint16_t writtenBytes = (bufflen <= SOCKET_BUFFER_SIZE) ? bufflen : SOCKET_BUFFER_SIZE;
         uint8_t left = SOCKET_BUFFER_SIZE - socketArray[fd].lastWritten;
-        memcpy(socketArray[fd].sendBuff + socketArray[fd].lastWritten, buff, left);
-        if (left > writtenBytes) {
-            socketArray[fd].lastWritten = socketArray[fd].lastWritten + writtenBytes;
-        } else if (left == writtenBytes) {
+        uint8_t i = 0;
+
+        if (left < writtenBytes) {
             socketArray[fd].type = WRAP;
-            socketArray[fd].lastWritten = 0;
-        } else {
-            socketArray[fd].type = WRAP;
-            memcpy(socketArray[fd].sendBuff, buff + left, writtenBytes - left);
-            socketArray[fd].lastWritten = writtenBytes - left;
+        }
+
+        for (; i < writtenBytes; i++) {
+            socketArray[fd].sendBuff[socketArray[fd].lastWritten] =  *(buff + i);
+            socketArray[fd].lastWritten = (socketArray[fd].lastWritten + 1) % SOCKET_BUFFER_SIZE;
         }
 
         if (socketArray[fd].remain == 0) {
@@ -170,6 +169,7 @@ implementation {
         } else {
             socketArray[fd].remain = socketArray[fd].remain + writtenBytes;
         }
+
         return writtenBytes;
     }
 
@@ -383,12 +383,6 @@ implementation {
 
         if (socketArray[fd].state != ESTABLISHED)
             return;
-
-        if (socketArray[fd].pending_seq == 0 || tcp_pkt->seq == socketArray[fd].pending_seq) {
-            makeTCPPkt(&reply_pkt, socketArray[fd].src, socketArray[fd].dest, socketArray[fd].ISN, socketArray[fd].nextExpected, ACK, socketArray[fd].effectiveWindow, (uint8_t*) &empty_payload, 1);
-            call IP.send(r_pkt.from, PROTOCOL_TCP, 50, (uint8_t*)&reply_pkt, TCP_HEADER_LENDTH);
-            return;
-        }
 
         if (tcp_pkt->ack_num == socketArray[fd].ISN + 1) {
             socketArray[fd].ISN = socketArray[fd].ISN + 1;
